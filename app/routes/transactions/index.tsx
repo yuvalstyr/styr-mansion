@@ -1,5 +1,5 @@
 import { Transaction } from "@prisma/client"
-import { Link, LoaderFunction, useLoaderData } from "remix"
+import { Link, LoaderFunction, useLoaderData, useMatches } from "remix"
 import { db } from "~/utils/db.server"
 import { GrEdit } from "react-icons/gr"
 import { HStack, Text, VStack } from "@chakra-ui/layout"
@@ -21,7 +21,7 @@ export const loader: LoaderFunction = async () => {
 
 export default function TransactionsListRoute() {
   const { transactions } = useLoaderData<LoaderData>()
-
+  console.log("useMatches() :>> ", useMatches())
   return (
     <VStack>
       <HStack spacing={8}>

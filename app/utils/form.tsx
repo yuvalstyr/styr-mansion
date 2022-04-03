@@ -5,7 +5,18 @@ import {
 } from "@prisma/client"
 import { format, getYear } from "date-fns"
 
+export const months = Array.from(new Array(12), (_, i) =>
+  format(new Date(2022, i, 1), "LLLL")
+)
+
+export const itemsYear = ["2020", "2021", "2022", "2023", "2024", "2025"]
+
 type TransactionsEnum = "ACTION" | "TYPE" | "OWNER" | "MONTH" | "YEAR"
+
+function monthStrToInt(month: string): number {
+  return months.indexOf(month) + 1
+}
+
 function getOptions(enumType: TransactionsEnum) {
   switch (enumType) {
     case "ACTION":
@@ -54,4 +65,4 @@ function getOptions(enumType: TransactionsEnum) {
   }
 }
 
-export { getOptions }
+export { getOptions, monthStrToInt }
