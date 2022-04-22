@@ -3,24 +3,24 @@ import { Transaction } from "@prisma/client"
 import { Link, useLoaderData } from "@remix-run/react"
 import { GrEdit } from "react-icons/gr"
 import { LoaderFunction } from "remix"
+import invariant from "tiny-invariant"
 import {
   getAllTransactions,
   getTransactionsListByYearMonth,
 } from "~/models/transactions.server"
-import { monthStrToInt } from "~/utils/form"
 
 type LoaderData = {
   transactions: Transaction[]
 }
 
-export const loader: LoaderFunction = async ({ request }) => {
-  const url = new URL(request.url)
-  const month = url.searchParams.get("month")
-  const monthInt = month ? monthStrToInt(month) : undefined
-  const year = url.searchParams.get("year")
+export const loader: LoaderFunction = async ({ request, params }) => {
+  const { time } = params
+  invariant(typeof time === "string", "time must be a string")
+  const [year, month] = time.split("-")
+
   const transactions =
-    monthInt && year
-      ? await getTransactionsListByYearMonth(year, monthInt)
+    month && year
+      ? await getTransactionsListByYearMonth(year, Number(month))
       : await getAllTransactions()
   //   check if got transactions
   if (!transactions) {

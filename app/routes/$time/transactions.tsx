@@ -1,21 +1,5 @@
 import { Box } from "@chakra-ui/react"
-import { LoaderFunction, Outlet } from "remix"
-import invariant from "tiny-invariant"
-import { getFormTitle } from "~/utils/form"
-
-type LoaderData = {
-  title: string
-}
-
-export const loader: LoaderFunction = async ({ request, params }) => {
-  const { time } = params
-  invariant(typeof time === "string", "time must be a string")
-  const [year, month] = time.split("-")
-  const formDate = new Date(+year, month)
-  const title = getFormTitle({ year, month })
-
-  return { title }
-}
+import { Outlet } from "remix"
 
 export default function StatisticRoute() {
   return (
