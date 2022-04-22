@@ -36,7 +36,8 @@ model Transaction {
   type        TransactionType
   action      TransactionAction
   owner       TransactionOwner
-  timePeriod  String
+  month       String
+  year        String
   createdAt   DateTime          @default(now())
   updatedAt   DateTime          @updatedAt
 }

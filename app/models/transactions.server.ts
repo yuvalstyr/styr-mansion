@@ -2,13 +2,13 @@ import { Transaction } from "@prisma/client"
 import { db } from "~/utils/db.server"
 
 export function getTransactionsListByYearMonth(
-  year: string,
-  month: number
+  year: string | undefined,
+  month: string | undefined
 ): Promise<Transaction[]> {
   return db.transaction.findMany({
     where: {
       month: month,
-      year: Number(year),
+      year: year,
     },
   })
 }
@@ -28,8 +28,8 @@ export function createTransaction(data: TransactionInput) {
       owner,
       amount: Number(amount),
       description,
-      month: Number(month),
-      year: Number(year),
+      month: month,
+      year: year,
     },
   })
 }
@@ -49,8 +49,8 @@ export function updateTransaction(input: TransactionUpdateInput) {
       owner,
       amount: Number(amount),
       description,
-      month: Number(month),
-      year: Number(year),
+      month: month,
+      year: year,
     },
     where,
   })

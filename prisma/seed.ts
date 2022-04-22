@@ -6,14 +6,21 @@ import {
 } from "@prisma/client"
 const db = new PrismaClient()
 
-const timePeriods = [
-  "jan-feb",
-  "mar-apr",
-  "may-jun",
-  "jul-aug",
-  "sep-oct",
-  "nov-dec",
-]
+//  function that return random odd number between 1 to 12
+function getRandomOddNumber(): string {
+  const randomNumber = Math.floor(Math.random() * 12) + 1
+  if (randomNumber % 2 === 0) {
+    return getRandomOddNumber()
+  }
+  return String(randomNumber)
+}
+
+// function that return a year between current year to current year + 3
+function getRandomYear() {
+  const currentYear = new Date().getFullYear()
+  const randomYear = Math.floor(Math.random() * 1) + currentYear
+  return String(randomYear)
+}
 
 function getActionEnum(action: string) {
   const enumFields = Object.keys(TransactionAction)
@@ -58,7 +65,8 @@ async function seed() {
           description: t.description,
           type: getTypeEnum(t.type),
           owner: getOwnerEnum(t.owner),
-          timePeriod: timePeriods[Math.floor(Math.random() * 6) + 1],
+          year: getRandomYear(),
+          month: getRandomOddNumber(),
         },
       })
     })

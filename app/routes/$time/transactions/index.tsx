@@ -4,10 +4,7 @@ import { Link, useLoaderData } from "@remix-run/react"
 import { GrEdit } from "react-icons/gr"
 import { LoaderFunction } from "remix"
 import invariant from "tiny-invariant"
-import {
-  getAllTransactions,
-  getTransactionsListByYearMonth,
-} from "~/models/transactions.server"
+import { getTransactionsListByYearMonth } from "~/models/transactions.server"
 
 type LoaderData = {
   transactions: Transaction[]
@@ -17,11 +14,15 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const { time } = params
   invariant(typeof time === "string", "time must be a string")
   const [year, month] = time.split("-")
+  const yearFixed = year === "00" ? undefined : String(Number(year) + 2000)
+  const monthFixed = month === "00" ? undefined : String(Number(month))
+  console.log("params: ", { time, yearFixed, monthFixed })
+  console.log("condition:", month && year)
+  const transactions = await getTransactionsListByYearMonth(
+    yearFixed,
+    monthFixed
+  )
 
-  const transactions =
-    month && year
-      ? await getTransactionsListByYearMonth(year, Number(month))
-      : await getAllTransactions()
   //   check if got transactions
   if (!transactions) {
     throw new Response("No transactions found", { status: 404 })

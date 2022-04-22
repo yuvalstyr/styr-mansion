@@ -4,5 +4,9 @@
     "titleBar.activeBackground": "#590CAD",
     "titleBar.activeForeground": "#FDFBFF"
   },
-  "cSpell.words": ["Chakra", "esbuild", "vercel", "Yuval"]
+  "cSpell.words": ["Chakra", "esbuild", "vercel", "Yuval"],
+  "editor.formatOnSave": true,
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  }
 }
