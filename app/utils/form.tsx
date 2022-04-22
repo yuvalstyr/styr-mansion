@@ -8,7 +8,7 @@ import { format, getYear } from "date-fns"
 export const monthObj = {
   1: "january-february",
   3: "march-april",
-  4: "may-june",
+  5: "may-june",
   7: "july-august",
   9: "september-october",
   11: "november-december",
@@ -22,12 +22,18 @@ export function getTimePeriodList() {
   return Object.values(monthObj)
 }
 
-export function getMonthValueByName(monthInput: string) {
-  Object.entries(monthObj).forEach(([value, name]) => {
-    if (name === monthInput) {
-      return value
-    }
-  })
+function hasOwnProperty<X extends {}, Y extends PropertyKey>(
+  obj: X,
+  prop: Y
+): obj is X & Record<Y, unknown> {
+  return obj.hasOwnProperty(prop)
+}
+
+export function getMonthValueByName(monthInput: M) {
+  if (hasOwnProperty(monthObj, monthInput)) {
+    return monthObj[monthInput]
+  }
+  return undefined
 }
 
 export const itemsYear = ["2020", "2021", "2022", "2023", "2024", "2025"]

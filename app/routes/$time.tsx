@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Text, VStack } from "@chakra-ui/react"
+import { Box, Button, HStack, Select, Text, VStack } from "@chakra-ui/react"
 import { BsPerson } from "react-icons/bs"
 import { FiServer } from "react-icons/fi"
 import { GoLocation } from "react-icons/go"
@@ -11,12 +11,13 @@ import {
   useLoaderData,
 } from "remix"
 import invariant from "tiny-invariant"
-import { Autocomplete } from "~/components/Autocomplete"
 import { StatsCard } from "~/components/StatsCard"
+import { debugRemix } from "~/utils/debug"
 import {
   FormTitleResponse,
   getFormTitle,
   getMonthValueByName,
+  getOptions,
 } from "~/utils/form"
 
 type LoaderData = {
@@ -39,6 +40,7 @@ export const loader: LoaderFunction = async ({ params }) => {
 }
 
 export const action: ActionFunction = async ({ request }) => {
+  debugRemix()
   const form = await request.formData()
   const month = form.get("month") as string
   const year = form.get("year") as string
@@ -63,12 +65,16 @@ export default function StatisticRoute() {
       <Form method="post">
         <HStack border={"2px"} p={5}>
           <label>
-            Month:
-            <Autocomplete name="month" />
+            Time Period:
+            <Select placeholder=" " name="month">
+              {getOptions("MONTH")}
+            </Select>
           </label>
           <label>
             Year:
-            <Autocomplete name="year" value={yearInput} />
+            <Select placeholder=" " name="year" defaultValue={yearInput}>
+              {getOptions("YEAR")}
+            </Select>
           </label>
           <Button type="submit">OK</Button>
           <Text>{title ?? "no title"}</Text>
