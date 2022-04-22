@@ -16,6 +16,7 @@ import {
   TransactionType,
 } from "@prisma/client"
 import { ActionFunction, Form, Link, redirect } from "remix"
+import invariant from "tiny-invariant"
 import { createTransaction } from "~/models/transactions.server"
 import { getOptions } from "~/utils/form"
 
@@ -26,8 +27,10 @@ export const action: ActionFunction = async ({ request }) => {
   const owner = form.get("owner") as TransactionOwner
   const amount = form.get("amount")
   const description = form.get("description")
-  const month = form.get("month") ?? 0
-  const year = form.get("year") ?? 0
+  const month = form.get("month")
+  const year = form.get("year")
+  invariant(typeof month === "string", "month must be a string")
+  invariant(typeof year === "string", "year must be a string")
   if (typeof amount !== "string" || typeof description !== "string") {
     return `Form not submitted correctly.`
   }
@@ -38,8 +41,8 @@ export const action: ActionFunction = async ({ request }) => {
     owner,
     amount: Number(amount),
     description,
-    month: Number(month),
-    year: Number(year),
+    month: month,
+    year: year,
   })
   return redirect("/transactions")
 }
