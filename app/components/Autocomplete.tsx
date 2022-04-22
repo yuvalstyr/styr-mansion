@@ -3,14 +3,14 @@ import { useCombobox } from "downshift"
 import * as React from "react"
 import { getTimePeriodList, itemsYear } from "~/utils/form"
 
-export type ItemsTypes = {
-  month: string[]
-  year: string[]
-}
-
 const itemsObj: ItemsTypes = {
   month: getTimePeriodList(),
   year: itemsYear,
+}
+
+export type ItemsTypes = {
+  month: string[]
+  year: string[]
 }
 
 type IPropsAutocomplete = {
