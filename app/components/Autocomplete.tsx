@@ -1,23 +1,29 @@
-import { Box } from "@chakra-ui/layout"
-import { Input, List, ListItem } from "@chakra-ui/react"
-import { format } from "date-fns"
+import { Box, Input, List, ListItem } from "@chakra-ui/react"
 import { useCombobox } from "downshift"
 import * as React from "react"
-import { itemsYear, months } from "~/utils/form"
+import { getTimePeriodList, itemsYear } from "~/utils/form"
 
 export type ItemsTypes = {
-  MONTH: string[]
-  YEAR: string[]
+  month: string[]
+  year: string[]
 }
 
 const itemsObj: ItemsTypes = {
-  MONTH: months,
-  YEAR: itemsYear,
+  month: getTimePeriodList(),
+  year: itemsYear,
 }
 
-export function Autocomplete({ name }: { name: keyof ItemsTypes }) {
+type IPropsAutocomplete = {
+  name: keyof ItemsTypes
+  value?: string
+}
+
+export function Autocomplete({ name, value }: IPropsAutocomplete) {
   const items = itemsObj[name]
   const [inputItems, setInputItems] = React.useState(items)
+  React.useEffect(() => {
+    value ? setInputValue(value) : undefined
+  }, [])
   const {
     getInputProps,
     isOpen,
@@ -26,20 +32,25 @@ export function Autocomplete({ name }: { name: keyof ItemsTypes }) {
     getItemProps,
     highlightedIndex,
     setInputValue,
-    selectedItem,
+    openMenu,
+    closeMenu,
+    selectItem,
   } = useCombobox({
     id: "downshift-multiple",
     items: inputItems,
-    onInputValueChange: ({ inputValue }) => {
+    onInputValueChange: ({ inputValue, selectedItem }) => {
       if (!inputValue) {
-        console.log({ inputValue })
         return
       }
       const filteredItems = items.filter((item) =>
-        item.toLowerCase().includes(inputValue.toLowerCase())
+        item.toLowerCase().startsWith(inputValue.toLowerCase())
       )
-      if (filteredItems.length == 1) {
-        setInputValue(filteredItems[0])
+      if (filteredItems.length === 1) {
+        selectItem(filteredItems[0])
+        closeMenu()
+      }
+      if (filteredItems.length === 0 && selectedItem) {
+        setInputValue(selectedItem)
       }
       setInputItems(filteredItems)
     },
@@ -48,7 +59,7 @@ export function Autocomplete({ name }: { name: keyof ItemsTypes }) {
   return (
     <Box position="relative">
       <Box {...getComboboxProps()}>
-        <Input {...getInputProps()} name={name} />
+        <Input {...getInputProps({ onFocus: openMenu })} name={name} />
         <List {...getMenuProps()} position="absolute">
           {isOpen &&
             inputItems?.map((item, index: number) => {

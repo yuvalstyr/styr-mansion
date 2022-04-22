@@ -5,16 +5,70 @@ import {
 } from "@prisma/client"
 import { format, getYear } from "date-fns"
 
-export const months = Array.from(new Array(12), (_, i) =>
-  format(new Date(2022, i, 1), "LLLL")
-)
+export const monthObj = {
+  1: "january-february",
+  3: "march-april",
+  4: "may-june",
+  7: "july-august",
+  9: "september-october",
+  11: "november-december",
+}
+
+export const months = Array.from(new Array(6), (_, i) => {
+  return format(new Date(2022, i * 2, 1), "LLLL")
+})
+
+export function getTimePeriodList() {
+  return Object.values(monthObj)
+}
+
+export function getMonthValueByName(monthInput: string) {
+  Object.entries(monthObj).forEach(([value, name]) => {
+    if (name === monthInput) {
+      return value
+    }
+  })
+}
 
 export const itemsYear = ["2020", "2021", "2022", "2023", "2024", "2025"]
 
-type TransactionsEnum = "ACTION" | "TYPE" | "OWNER" | "MONTH" | "YEAR"
+export type TransactionsEnum = "ACTION" | "TYPE" | "OWNER" | "MONTH" | "YEAR"
 
 function monthStrToInt(month: string): number {
   return months.indexOf(month) + 1
+}
+
+type FormProps = {
+  month: string
+  year: string
+}
+
+export type FormTitleResponse = {
+  title: string
+  yearInput: string | undefined
+}
+
+function getFormTitle({ month, year }: FormProps): FormTitleResponse {
+  const yearInput = year === "00" ? undefined : 20 + year
+  const monthInput = month === "00" ? "01" : month
+  let title = `${year}: ${month}`
+  const date = new Date(yearInput ? Number(yearInput) : 2022, +monthInput, 1)
+
+  if (month === "00" && year === "00") {
+    title = "All"
+  }
+  if (month !== "00" && year !== "00") {
+    title = format(date, "MMMM yyyy")
+  }
+
+  if (year === "00") {
+    title = format(date, "MMMM")
+  }
+  if (month === "00") {
+    title = format(date, "yyyy")
+  }
+
+  return { title, yearInput }
 }
 
 function getOptions(enumType: TransactionsEnum) {
@@ -38,14 +92,10 @@ function getOptions(enumType: TransactionsEnum) {
         </option>
       ))
     case "MONTH":
-      const monthArray = Array.from({ length: 12 }, (_, i) => i + 1)
-      return monthArray.map((month) => {
-        const date = new Date(2020, month, 0)
-        const monthName = format(date, "LLLL")
-
+      return Object.entries(monthObj).map(([value, month]) => {
         return (
-          <option key={month} value={month}>
-            {monthName}
+          <option key={month} value={value}>
+            {month}
           </option>
         )
       })
@@ -65,4 +115,4 @@ function getOptions(enumType: TransactionsEnum) {
   }
 }
 
-export { getOptions, monthStrToInt }
+export { getOptions, monthStrToInt, getFormTitle }

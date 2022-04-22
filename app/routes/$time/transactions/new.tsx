@@ -1,23 +1,23 @@
-import { Button } from "@chakra-ui/button"
-import { Input } from "@chakra-ui/input"
-import { Heading, VStack } from "@chakra-ui/layout"
 import {
+  Button,
+  Heading,
+  Input,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
-} from "@chakra-ui/number-input"
-import { Select } from "@chakra-ui/select"
+  Select,
+  VStack,
+} from "@chakra-ui/react"
 import {
   TransactionAction,
   TransactionOwner,
   TransactionType,
 } from "@prisma/client"
-import { ActionFunction, redirect, json, Form, Link } from "remix"
+import { ActionFunction, Form, Link, redirect } from "remix"
 import { createTransaction } from "~/models/transactions.server"
-import { db } from "~/utils/db.server"
-import { getOptions } from "../../utils/form"
+import { getOptions } from "~/utils/form"
 
 export const action: ActionFunction = async ({ request }) => {
   const form = await request.formData()

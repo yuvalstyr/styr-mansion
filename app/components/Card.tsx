@@ -1,11 +1,11 @@
-import {Box, Text, VStack} from "@chakra-ui/layout";
+import { Box, Text, VStack } from "@chakra-ui/react"
 
 type CardProps = {
-  children: React.ReactNode;
-  type: "Cost" | "Income";
-};
+  children: React.ReactNode
+  type: "Cost" | "Income"
+}
 
-export function Card({children, type}: CardProps) {
+export function Card({ children, type }: CardProps) {
   return (
     <VStack boxShadow={"2xl"} rounded={"md"} w="90%">
       <Box bgColor="GrayText" w="full">
@@ -13,5 +13,5 @@ export function Card({children, type}: CardProps) {
       </Box>
       {children}
     </VStack>
-  );
+  )
 }

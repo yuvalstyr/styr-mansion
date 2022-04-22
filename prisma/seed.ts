@@ -6,6 +6,15 @@ import {
 } from "@prisma/client"
 const db = new PrismaClient()
 
+const timePeriods = [
+  "jan-feb",
+  "mar-apr",
+  "may-jun",
+  "jul-aug",
+  "sep-oct",
+  "nov-dec",
+]
+
 function getActionEnum(action: string) {
   const enumFields = Object.keys(TransactionAction)
 
@@ -49,8 +58,7 @@ async function seed() {
           description: t.description,
           type: getTypeEnum(t.type),
           owner: getOwnerEnum(t.owner),
-          month: Math.floor(Math.random() * 12) + 1,
-          year: Math.floor(Math.random() * 2) + 2020,
+          timePeriod: timePeriods[Math.floor(Math.random() * 6) + 1],
         },
       })
     })

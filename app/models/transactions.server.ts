@@ -1,12 +1,14 @@
 import { Transaction } from "@prisma/client"
 import { db } from "~/utils/db.server"
 
-export function getTransactionsListByYearMonth(yearMonth: string) {
-  const [year, month] = yearMonth.split("-")
+export function getTransactionsListByYearMonth(
+  year: string,
+  month: number
+): Promise<Transaction[]> {
   return db.transaction.findMany({
     where: {
-      month: Number(month),
-      year: Number("20" + year),
+      month: month,
+      year: Number(year),
     },
   })
 }

@@ -21,6 +21,7 @@ import {
   Form,
   Link,
   LoaderFunction,
+  Outlet,
   redirect,
   useLoaderData,
   useTransition,
@@ -33,6 +34,9 @@ type LoaderData = { transactions: Transaction }
 export const loader: LoaderFunction = async ({ params }) => {
   const id = params.transactionID
   const transactions = await db.transaction.findFirst({ where: { id } })
+  if (!transactions) {
+    return { transactions: null }
+  }
   return { transactions }
 }
 
@@ -65,13 +69,20 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   return redirect("/transactions")
 }
-// todo change form inputs to be generic: if have a default value or not will be the only difference
-// between the two forms: update and new
+// todo change form inputs to be generic: if have a default value or not will be the only difference between the two forms: update and new
+// todo check how to make error boundary as outlet
+
 export default function UpdateTransactionRoute() {
   const data = useLoaderData<LoaderData>()
   const { state } = useTransition()
-  console.log("state :>> ", state)
   const { transactions: t } = data
+  if (!t) {
+    return (
+      <VStack>
+        <Heading>Transaction not found</Heading>
+      </VStack>
+    )
+  }
   return (
     <VStack>
       <Heading>Update Transactions</Heading>
@@ -134,6 +145,7 @@ export default function UpdateTransactionRoute() {
           <Button>Back</Button>
         </Link>
       </Form>
+      <Outlet />
     </VStack>
   )
 }
