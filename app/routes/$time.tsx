@@ -13,12 +13,7 @@ import {
 import invariant from "tiny-invariant"
 import { StatsCard } from "~/components/StatsCard"
 import { debugRemix } from "~/utils/debug"
-import {
-  FormTitleResponse,
-  getFormTitle,
-  getMonthValueByName,
-  getOptions,
-} from "~/utils/form"
+import { FormTitleResponse, getFormTitle, getOptions } from "~/utils/form"
 
 type LoaderData = {
   month: string
@@ -46,14 +41,11 @@ export const action: ActionFunction = async ({ request }) => {
   const year = form.get("year") as string
   invariant(typeof month === "string", "month must be a string")
   invariant(typeof year === "string", "year must be a string")
-  const monthInt = String(getMonthValueByName(month))
-  console.log("monthInt :>> ", monthInt)
-  const monthAsNumber = month != "" ? monthInt : "0"
+
+  const monthFixed = month ? (Number(month) < 10 ? `0${month}` : month) : "00"
 
   return redirect(
-    `/${year !== "" ? year.slice(2, 4) : "00"}-${
-      monthAsNumber.length < 2 ? 0 + monthAsNumber : monthAsNumber
-    }/transactions`
+    `/${year !== "" ? year.slice(2, 4) : "00"}-${monthFixed}/transactions`
   )
 }
 

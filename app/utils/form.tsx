@@ -3,7 +3,7 @@ import {
   TransactionOwner,
   TransactionType,
 } from "@prisma/client"
-import { format, getYear } from "date-fns"
+import { add, format } from "date-fns"
 
 export const monthObj = {
   1: "january-february",
@@ -18,10 +18,6 @@ export const months = Array.from(new Array(6), (_, i) => {
   return format(new Date(2022, i * 2, 1), "LLLL")
 })
 
-export function getTimePeriodList() {
-  return Object.values(monthObj)
-}
-
 function hasOwnProperty<X extends {}, Y extends PropertyKey>(
   obj: X,
   prop: Y
@@ -35,8 +31,6 @@ export function getMonthValueByName(monthInput: M) {
   }
   return undefined
 }
-
-export const itemsYear = ["2020", "2021", "2022", "2023", "2024", "2025"]
 
 export type TransactionsEnum = "ACTION" | "TYPE" | "OWNER" | "MONTH" | "YEAR"
 
@@ -58,23 +52,31 @@ function getFormTitle({ month, year }: FormProps): FormTitleResponse {
   const yearInput = year === "00" ? undefined : 20 + year
   const monthInput = month === "00" ? "01" : month
   let title = `${year}: ${month}`
-  const date = new Date(yearInput ? Number(yearInput) : 2022, +monthInput, 1)
+  const date = new Date(yearInput ? Number(yearInput) : 2022, +monthInput, 0)
 
   if (month === "00" && year === "00") {
-    title = "All"
+    return { title: "all", yearInput }
   }
   if (month !== "00" && year !== "00") {
-    title = format(date, "MMMM yyyy")
+    const nextMonthFormat = format(add(date, { months: 1 }), "MMMM")
+    const thisMonthFormat = format(date, "MMMM")
+    title = `${thisMonthFormat}&${nextMonthFormat} ${year} Summary`
+    return { title, yearInput }
   }
 
   if (year === "00") {
-    title = format(date, "MMMM")
+    const nextMonthFormat = format(add(date, { months: 1 }), "MMMM")
+    const thisMonthFormat = format(date, "MMMM")
+    title = `${thisMonthFormat}&${nextMonthFormat}  Summary for all years`
+
+    return { title, yearInput }
   }
   if (month === "00") {
-    title = format(date, "yyyy")
+    title = `${year} Summary`
+    return { title, yearInput }
   }
 
-  return { title, yearInput }
+  return { title: "No good", yearInput }
 }
 
 function getOptions(enumType: TransactionsEnum) {
@@ -106,7 +108,7 @@ function getOptions(enumType: TransactionsEnum) {
         )
       })
     case "YEAR":
-      const currentYear = getYear(new Date())
+      const currentYear = new Date().getFullYear()
       const length = currentYear - 2020
       const yearArray = Array.from({ length }, (_, i) => i + 2022)
       return yearArray.map((year) => {
