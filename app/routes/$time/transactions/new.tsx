@@ -15,7 +15,7 @@ import {
   TransactionOwner,
   TransactionType,
 } from "@prisma/client"
-import { ActionFunction, Form, Link, redirect } from "remix"
+import { ActionFunction, Form, redirect, useNavigate } from "remix"
 import invariant from "tiny-invariant"
 import { createTransaction } from "~/models/transactions.server"
 import { getOptions } from "~/utils/form"
@@ -44,10 +44,14 @@ export const action: ActionFunction = async ({ request }) => {
     month: month,
     year: year,
   })
-  return redirect("/transactions")
+  return redirect(`${year.slice(2, 4)}-${month}/transactions`)
 }
 
 export default function NewTransactionRoute() {
+  let navigate = useNavigate()
+  function onBack() {
+    navigate(-1)
+  }
   return (
     <VStack>
       <Heading>Add Transactions</Heading>
@@ -96,9 +100,8 @@ export default function NewTransactionRoute() {
           Description: <Input name="description" placeholder="Description" />
         </label>
         <Button type="submit">Add</Button>
-        <Link to="/transactions">
-          <Button>Back 👈</Button>
-        </Link>
+
+        <Button onClick={onBack}>Back 👈</Button>
       </Form>
     </VStack>
   )

@@ -57,6 +57,7 @@ function getFormTitle({ month, year }: FormProps): FormTitleResponse {
   if (month === "00" && year === "00") {
     return { title: "all", yearInput }
   }
+  console.log("month :>> ", { month, year })
   if (month !== "00" && year !== "00") {
     const nextMonthFormat = format(add(date, { months: 1 }), "MMMM")
     const thisMonthFormat = format(date, "MMMM")
