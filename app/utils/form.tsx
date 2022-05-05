@@ -5,7 +5,14 @@ import {
 } from "@prisma/client"
 import { add, format } from "date-fns"
 
-export const monthObj = {
+function hasOwnProperty<X extends {}, Y extends PropertyKey>(
+  obj: X,
+  prop: Y
+): obj is X & Record<Y, unknown> {
+  return obj.hasOwnProperty(prop)
+}
+
+export const monthsPeriodObj = {
   1: "january-february",
   3: "march-april",
   5: "may-june",
@@ -14,25 +21,30 @@ export const monthObj = {
   11: "november-december",
 }
 
-export const months = Array.from(new Array(6), (_, i) => {
+function getMonthsPeriodByMonth(month: string) {
+  const monthInt = monthStrToInt(month)
+
+  return getMonthValueByName(month)
+}
+
+export const months = Array.from(new Array(12), (_, i) => {
   return format(new Date(2022, i * 2, 1), "LLLL")
 })
 
-function hasOwnProperty<X extends {}, Y extends PropertyKey>(
-  obj: X,
-  prop: Y
-): obj is X & Record<Y, unknown> {
-  return obj.hasOwnProperty(prop)
-}
-
-export function getMonthValueByName(monthInput: M) {
-  if (hasOwnProperty(monthObj, monthInput)) {
-    return monthObj[monthInput]
+export function getMonthValueByName(monthInput: string) {
+  if (hasOwnProperty(monthsPeriodObj, monthInput)) {
+    return monthsPeriodObj[monthInput]
   }
   return undefined
 }
 
-export type TransactionsEnum = "ACTION" | "TYPE" | "OWNER" | "MONTH" | "YEAR"
+export type TransactionsEnum =
+  | "ACTION"
+  | "TYPE"
+  | "OWNER"
+  | "MONTH"
+  | "YEAR"
+  | "MONTH_PERIOD"
 
 function monthStrToInt(month: string): number {
   return months.indexOf(month) + 1
@@ -46,23 +58,23 @@ type FormProps = {
 export type FormTitleResponse = {
   title: string
   yearInput: string | undefined
+  monthInput: string | undefined
 }
 
-function getFormTitle({ month, year }: FormProps): FormTitleResponse {
+function getTimeSelectFormProps({ month, year }: FormProps): FormTitleResponse {
   const yearInput = year === "00" ? undefined : 20 + year
   const monthInput = month === "00" ? "01" : month
   let title = `${year}: ${month}`
   const date = new Date(yearInput ? Number(yearInput) : 2022, +monthInput, 0)
 
   if (month === "00" && year === "00") {
-    return { title: "all", yearInput }
+    return { title: "all", yearInput, monthInput }
   }
-  console.log("month :>> ", { month, year })
   if (month !== "00" && year !== "00") {
     const nextMonthFormat = format(add(date, { months: 1 }), "MMMM")
     const thisMonthFormat = format(date, "MMMM")
     title = `${thisMonthFormat}&${nextMonthFormat} ${year} Summary`
-    return { title, yearInput }
+    return { title, yearInput, monthInput: thisMonthFormat }
   }
 
   if (year === "00") {
@@ -70,14 +82,14 @@ function getFormTitle({ month, year }: FormProps): FormTitleResponse {
     const thisMonthFormat = format(date, "MMMM")
     title = `${thisMonthFormat}&${nextMonthFormat}  Summary for all years`
 
-    return { title, yearInput }
+    return { title, yearInput, monthInput: thisMonthFormat }
   }
   if (month === "00") {
     title = `${year} Summary`
-    return { title, yearInput }
+    return { title, yearInput, monthInput: undefined }
   }
 
-  return { title: "No good", yearInput }
+  return { title: "No good", yearInput: undefined, monthInput: undefined }
 }
 
 function getOptions(enumType: TransactionsEnum) {
@@ -100,11 +112,20 @@ function getOptions(enumType: TransactionsEnum) {
           {key}
         </option>
       ))
-    case "MONTH":
-      return Object.entries(monthObj).map(([value, month]) => {
+    case "MONTH_PERIOD":
+      return Object.entries(monthsPeriodObj).map(([value, month]) => {
         return (
           <option key={month} value={value}>
             {month}
+          </option>
+        )
+      })
+    case "MONTH":
+      // loop over number of months and return month name
+      return Array.from({ length: 12 }, (_, i) => i).map((month) => {
+        return (
+          <option key={month} value={month}>
+            {format(new Date(2022, month, 1), "MMMM")}
           </option>
         )
       })
@@ -124,4 +145,4 @@ function getOptions(enumType: TransactionsEnum) {
   }
 }
 
-export { getOptions, monthStrToInt, getFormTitle }
+export { getOptions, monthStrToInt, getTimeSelectFormProps }

@@ -71,8 +71,8 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   return redirect(`/${year.slice(2, 4)}-${month}/transactions`)
 }
-// todo change form inputs to be generic: if have a default value or not will be the only difference between the two forms: update and new
-// todo check how to make error boundary as outlet
+// TODO change form inputs to be generic: if have a default value or not will be the only difference between the two forms: update and new
+// TODO check how to make error boundary as outlet
 
 export default function UpdateTransactionRoute() {
   const data = useLoaderData<LoaderData>()

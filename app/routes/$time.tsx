@@ -1,10 +1,9 @@
-import { Box, Button, HStack, Select, Text, VStack } from "@chakra-ui/react"
+import { Box, VStack } from "@chakra-ui/react"
 import { BsPerson } from "react-icons/bs"
 import { FiServer } from "react-icons/fi"
 import { GoLocation } from "react-icons/go"
 import {
   ActionFunction,
-  Form,
   LoaderFunction,
   Outlet,
   redirect,
@@ -12,8 +11,9 @@ import {
 } from "remix"
 import invariant from "tiny-invariant"
 import { StatsCard } from "~/components/StatsCard"
+import { TimeSelectBar } from "~/components/TimeSelectBar"
 import { debugRemix } from "~/utils/debug"
-import { FormTitleResponse, getFormTitle, getOptions } from "~/utils/form"
+import { FormTitleResponse, getTimeSelectFormProps } from "~/utils/form"
 
 type LoaderData = {
   month: string
@@ -29,9 +29,12 @@ export const loader: LoaderFunction = async ({ params }) => {
   const { time } = params
   invariant(typeof time === "string", "time must be a string")
   const [year, month] = time.split("-")
-  const { title, yearInput } = getFormTitle({ year, month })
+  const { title, yearInput, monthInput } = getTimeSelectFormProps({
+    year,
+    month,
+  })
 
-  return { title, yearInput }
+  return { title, yearInput, monthInput }
 }
 
 export const action: ActionFunction = async ({ request }) => {
@@ -50,28 +53,15 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 export default function StatisticRoute() {
-  const { title, yearInput } = useLoaderData<FormTitleResponse>()
+  const { title, yearInput, monthInput } = useLoaderData<FormTitleResponse>()
 
   return (
     <Box maxW="7xl" mx={"auto"} pt={5} px={{ base: 2, sm: 12, md: 17 }}>
-      <Form method="post">
-        <HStack border={"2px"} p={5}>
-          <label>
-            Time Period:
-            <Select placeholder=" " name="month">
-              {getOptions("MONTH")}
-            </Select>
-          </label>
-          <label>
-            Year:
-            <Select placeholder=" " name="year" defaultValue={yearInput}>
-              {getOptions("YEAR")}
-            </Select>
-          </label>
-          <Button type="submit">OK</Button>
-          <Text>{title ?? "no title"}</Text>
-        </HStack>
-      </Form>
+      <TimeSelectBar
+        yearInput={yearInput}
+        title={title}
+        monthInput={monthInput}
+      />
       <VStack>
         <StatsCard
           title={"Cost"}

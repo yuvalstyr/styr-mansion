@@ -1,6 +1,7 @@
 import { Box, Button, HStack, Text, VStack } from "@chakra-ui/react"
 import { Transaction } from "@prisma/client"
 import { Link, useLoaderData } from "@remix-run/react"
+import { format } from "date-fns"
 import { GrEdit } from "react-icons/gr"
 import { LoaderFunction } from "remix"
 import invariant from "tiny-invariant"
@@ -16,8 +17,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const [year, month] = time.split("-")
   const yearFixed = year === "00" ? undefined : String(Number(year) + 2000)
   const monthFixed = month === "00" ? undefined : String(Number(month))
-  console.log("params: ", { time, yearFixed, monthFixed })
-  console.log("condition:", month && year)
+
   const transactions = await getTransactionsListByYearMonth(
     yearFixed,
     monthFixed
@@ -42,7 +42,7 @@ export default function TransactionsListRoute() {
         </Link>
       </HStack>
       {transactions?.map((transaction) => {
-        const { id, action, type, owner, amount, description, timePeriod } =
+        const { id, action, type, owner, amount, description, month } =
           transaction
         return (
           <HStack key={id}>
@@ -51,7 +51,7 @@ export default function TransactionsListRoute() {
             <Text>{owner}</Text>
             <Text>{amount}</Text>
             <Text>{description}</Text>
-            <Text>{timePeriod}</Text>
+            <Text>{format(new Date(2022, Number(month), 1), "MMMM")}</Text>
             <Link to={id}>
               <Box my={"auto"} color={"gray.800"} alignContent={"center"}>
                 <GrEdit />
