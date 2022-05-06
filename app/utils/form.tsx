@@ -27,6 +27,10 @@ export function getMonthsPeriodByMonth(monthInput: string) {
   return getMonthValueByName(month)
 }
 
+export function formatMonth(month: string): string {
+  return format(new Date(2022, Number(month) - 1, 1), "MMMM")
+}
+
 export const months = Array.from(new Array(12), (_, i) => {
   return format(new Date(2022, i * 2, 1), "LLLL")
 })
@@ -66,7 +70,10 @@ export function convertMonthIntToStr(month: string) {
   return month ? (Number(month) < 10 ? `0${month}` : month) : "00"
 }
 
-function getTimeSelectFormProps({ month, year }: FormProps): FormTitleResponse {
+export function getTimeSelectFormProps({
+  month,
+  year,
+}: FormProps): FormTitleResponse {
   const yearInput = year === "00" ? undefined : 20 + year
   const monthInput = month === "00" ? undefined : month
   let title = `${year}: ${month}`
@@ -101,7 +108,7 @@ function getTimeSelectFormProps({ month, year }: FormProps): FormTitleResponse {
   return { title: "No good", yearInput: undefined, monthInput: undefined }
 }
 
-function getOptions(enumType: TransactionsEnum) {
+export function getOptions(enumType: TransactionsEnum) {
   switch (enumType) {
     case "ACTION":
       return Object.values(TransactionAction).map((key) => (
@@ -133,7 +140,7 @@ function getOptions(enumType: TransactionsEnum) {
       // loop over number of months and return month name
       return Array.from({ length: 12 }, (_, i) => i).map((month) => {
         return (
-          <option key={month} value={month}>
+          <option key={month} value={month + 1}>
             {format(new Date(2022, month, 1), "MMMM")}
           </option>
         )
@@ -153,5 +160,3 @@ function getOptions(enumType: TransactionsEnum) {
       break
   }
 }
-
-export { getOptions, monthStrToInt, getTimeSelectFormProps }

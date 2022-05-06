@@ -1,11 +1,11 @@
 import { Box, Button, HStack, Text, VStack } from "@chakra-ui/react"
 import { Transaction } from "@prisma/client"
 import { Link, useLoaderData } from "@remix-run/react"
-import { format } from "date-fns"
 import { GrEdit } from "react-icons/gr"
 import { LoaderFunction } from "remix"
 import invariant from "tiny-invariant"
 import { getTransactionsListByYearMonth } from "~/models/transactions.server"
+import { formatMonth } from "~/utils/form"
 
 type LoaderData = {
   transactions: Transaction[]
@@ -51,7 +51,7 @@ export default function TransactionsListRoute() {
             <Text>{owner}</Text>
             <Text>{amount}</Text>
             <Text>{description}</Text>
-            <Text>{format(new Date(2022, Number(month), 1), "MMMM")}</Text>
+            <Text>{formatMonth(month)}</Text>
             <Link to={id}>
               <Box my={"auto"} color={"gray.800"} alignContent={"center"}>
                 <GrEdit />
