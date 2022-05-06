@@ -21,9 +21,9 @@ export const monthsPeriodObj = {
   11: "november-december",
 }
 
-function getMonthsPeriodByMonth(month: string) {
-  const monthInt = monthStrToInt(month)
-
+export function getMonthsPeriodByMonth(monthInput: string) {
+  const monthInt = Number(monthInput)
+  const month = monthInt % 2 === 0 ? monthInt - 1 : monthInt
   return getMonthValueByName(month)
 }
 
@@ -31,9 +31,10 @@ export const months = Array.from(new Array(12), (_, i) => {
   return format(new Date(2022, i * 2, 1), "LLLL")
 })
 
-export function getMonthValueByName(monthInput: string) {
+export function getMonthValueByName(monthInput: number) {
   if (hasOwnProperty(monthsPeriodObj, monthInput)) {
-    return monthsPeriodObj[monthInput]
+    const month = monthsPeriodObj[monthInput] as string
+    return month
   }
   return undefined
 }
@@ -61,32 +62,40 @@ export type FormTitleResponse = {
   monthInput: string | undefined
 }
 
+export function convertMonthIntToStr(month: string) {
+  return month ? (Number(month) < 10 ? `0${month}` : month) : "00"
+}
+
 function getTimeSelectFormProps({ month, year }: FormProps): FormTitleResponse {
   const yearInput = year === "00" ? undefined : 20 + year
-  const monthInput = month === "00" ? "01" : month
+  const monthInput = month === "00" ? undefined : month
   let title = `${year}: ${month}`
-  const date = new Date(yearInput ? Number(yearInput) : 2022, +monthInput, 0)
+  // if year or month are undefined, give them a default value
+  const date = new Date(
+    yearInput ? Number(yearInput) : 2022,
+    Number(monthInput ?? 1),
+    0
+  )
 
-  if (month === "00" && year === "00") {
+  if (!monthInput && !yearInput) {
     return { title: "all", yearInput, monthInput }
   }
-  if (month !== "00" && year !== "00") {
+  if (monthInput && yearInput) {
     const nextMonthFormat = format(add(date, { months: 1 }), "MMMM")
     const thisMonthFormat = format(date, "MMMM")
     title = `${thisMonthFormat}&${nextMonthFormat} ${year} Summary`
-    return { title, yearInput, monthInput: thisMonthFormat }
+    return { title, yearInput, monthInput }
   }
-
-  if (year === "00") {
+  if (!yearInput) {
     const nextMonthFormat = format(add(date, { months: 1 }), "MMMM")
     const thisMonthFormat = format(date, "MMMM")
     title = `${thisMonthFormat}&${nextMonthFormat}  Summary for all years`
 
-    return { title, yearInput, monthInput: thisMonthFormat }
+    return { title, yearInput, monthInput }
   }
-  if (month === "00") {
+  if (!monthInput) {
     title = `${year} Summary`
-    return { title, yearInput, monthInput: undefined }
+    return { title, yearInput, monthInput }
   }
 
   return { title: "No good", yearInput: undefined, monthInput: undefined }

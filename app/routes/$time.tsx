@@ -13,7 +13,11 @@ import invariant from "tiny-invariant"
 import { StatsCard } from "~/components/StatsCard"
 import { TimeSelectBar } from "~/components/TimeSelectBar"
 import { debugRemix } from "~/utils/debug"
-import { FormTitleResponse, getTimeSelectFormProps } from "~/utils/form"
+import {
+  convertMonthIntToStr,
+  FormTitleResponse,
+  getTimeSelectFormProps,
+} from "~/utils/form"
 
 type LoaderData = {
   month: string
@@ -45,7 +49,7 @@ export const action: ActionFunction = async ({ request }) => {
   invariant(typeof month === "string", "month must be a string")
   invariant(typeof year === "string", "year must be a string")
 
-  const monthFixed = month ? (Number(month) < 10 ? `0${month}` : month) : "00"
+  const monthFixed = convertMonthIntToStr(month)
 
   return redirect(
     `/${year !== "" ? year.slice(2, 4) : "00"}-${monthFixed}/transactions`

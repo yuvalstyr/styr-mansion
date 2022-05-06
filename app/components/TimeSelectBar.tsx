@@ -12,7 +12,11 @@ export function TimeSelectBar({
       <HStack border={"2px"} p={5}>
         <label>
           Time Period:
-          <Select placeholder=" " name="month" defaultValue={1}>
+          <Select
+            placeholder=" "
+            name="month"
+            defaultValue={Number(monthInput)}
+          >
             {getOptions("MONTH_PERIOD")}
           </Select>
         </label>

@@ -18,7 +18,7 @@ import {
 import { ActionFunction, Form, redirect, useNavigate } from "remix"
 import invariant from "tiny-invariant"
 import { createTransaction } from "~/models/transactions.server"
-import { getOptions } from "~/utils/form"
+import { convertMonthIntToStr, getOptions } from "~/utils/form"
 
 export const action: ActionFunction = async ({ request }) => {
   const form = await request.formData()
@@ -44,7 +44,11 @@ export const action: ActionFunction = async ({ request }) => {
     month: month,
     year: year,
   })
-  return redirect(`${year.slice(2, 4)}-${month}/transactions`)
+  const monthFix = Number(month) % 2 ? month : String(Number(month) - 1)
+
+  return redirect(
+    `${year.slice(2, 4)}-${convertMonthIntToStr(monthFix)}/transactions`
+  )
 }
 
 export default function NewTransactionRoute() {
