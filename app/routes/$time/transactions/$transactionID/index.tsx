@@ -1,15 +1,4 @@
-import {
-  Button,
-  Heading,
-  Input,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  Select,
-  VStack,
-} from "@chakra-ui/react"
+import { Heading, VStack } from "@chakra-ui/react"
 import {
   Transaction,
   TransactionAction,
@@ -18,17 +7,16 @@ import {
 } from "@prisma/client"
 import {
   ActionFunction,
-  Form,
   LoaderFunction,
   Outlet,
   redirect,
   useLoaderData,
-  useNavigate,
 } from "remix"
 import invariant from "tiny-invariant"
+import { TransactionsForm } from "~/components/Form"
 import { updateTransaction } from "~/models/transactions.server"
 import { db } from "~/utils/db.server"
-import { convertMonthIntToStr, getOptions } from "~/utils/form"
+import { convertMonthIntToStr } from "~/utils/form"
 
 type LoaderData = { transactions: Transaction }
 export const loader: LoaderFunction = async ({ params }) => {
@@ -78,10 +66,6 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 export default function UpdateTransactionRoute() {
   const data = useLoaderData<LoaderData>()
-  const navigate = useNavigate()
-  function onBack() {
-    navigate(-1)
-  }
   const { transactions: t } = data
   if (!t) {
     return (
@@ -93,64 +77,7 @@ export default function UpdateTransactionRoute() {
   return (
     <VStack>
       <Heading>Update Transactions</Heading>
-      <Form method="post">
-        <label>
-          Type:
-          <Select placeholder=" " name="type" defaultValue={t.type}>
-            {getOptions("TYPE")}
-          </Select>
-        </label>
-        <label>
-          Action:
-          <Select placeholder=" " name="action" defaultValue={t.action}>
-            {getOptions("ACTION")}
-          </Select>
-        </label>
-        <label>
-          Owner:
-          <Select placeholder=" " name="owner" defaultValue={t.owner}>
-            {getOptions("OWNER")}
-          </Select>
-        </label>
-        <label>
-          Amount (🇮🇱 NIS ₪) :
-          <NumberInput
-            precision={2}
-            step={1}
-            name="amount"
-            defaultValue={t.amount}
-          >
-            <NumberInputField />
-            <NumberInputStepper>
-              <NumberIncrementStepper />
-              <NumberDecrementStepper />
-            </NumberInputStepper>
-          </NumberInput>
-        </label>
-        <label>
-          Description:
-          <Input
-            name="description"
-            defaultValue={t.description}
-            placeholder="Description"
-          />
-        </label>
-        <label>
-          Month:
-          <Select placeholder=" " name="month" defaultValue={t.month}>
-            {getOptions("MONTH")}
-          </Select>
-        </label>
-        <label>
-          Year:
-          <Select placeholder=" " name="year" defaultValue={t.year}>
-            {getOptions("YEAR")}
-          </Select>
-        </label>
-        <Button type="submit">Update</Button>
-
-        <Button onClick={onBack}>Back</Button>
-      </Form>
+      <TransactionsForm transactions={t} />
       <Outlet />
     </VStack>
   )

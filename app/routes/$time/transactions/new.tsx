@@ -1,24 +1,14 @@
-import {
-  Button,
-  Heading,
-  Input,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  Select,
-  VStack,
-} from "@chakra-ui/react"
+import { Heading, VStack } from "@chakra-ui/react"
 import {
   TransactionAction,
   TransactionOwner,
   TransactionType,
 } from "@prisma/client"
-import { ActionFunction, Form, redirect, useNavigate } from "remix"
+import { ActionFunction, redirect } from "remix"
 import invariant from "tiny-invariant"
+import { TransactionsForm } from "~/components/Form"
 import { createTransaction } from "~/models/transactions.server"
-import { convertMonthIntToStr, getOptions } from "~/utils/form"
+import { convertMonthIntToStr } from "~/utils/form"
 
 export const action: ActionFunction = async ({ request }) => {
   const form = await request.formData()
@@ -52,61 +42,10 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 export default function NewTransactionRoute() {
-  let navigate = useNavigate()
-  function onBack() {
-    navigate(-1)
-  }
   return (
     <VStack>
       <Heading>Add Transactions</Heading>
-      <Form method="post">
-        <label>
-          Type:
-          <Select placeholder=" " name="type">
-            {getOptions("TYPE")}
-          </Select>
-        </label>
-        <label>
-          Action:
-          <Select placeholder=" " name="action">
-            {getOptions("ACTION")}
-          </Select>
-        </label>
-        <label>
-          Owner:
-          <Select placeholder=" " name="owner">
-            {getOptions("OWNER")}
-          </Select>
-        </label>
-        <label>
-          Month:
-          <Select placeholder=" " name="month">
-            {getOptions("MONTH")}
-          </Select>
-        </label>
-        <label>
-          Year:
-          <Select placeholder=" " name="year">
-            {getOptions("YEAR")}
-          </Select>
-        </label>
-        <label>
-          Amount (🇮🇱 NIS ₪) :
-          <NumberInput defaultValue={0} precision={2} step={1} name="amount">
-            <NumberInputField />
-            <NumberInputStepper>
-              <NumberIncrementStepper />
-              <NumberDecrementStepper />
-            </NumberInputStepper>
-          </NumberInput>
-        </label>
-        <label>
-          Description: <Input name="description" placeholder="Description" />
-        </label>
-        <Button type="submit">Add</Button>
-
-        <Button onClick={onBack}>Back 👈</Button>
-      </Form>
+      <TransactionsForm />
     </VStack>
   )
 }
