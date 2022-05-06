@@ -24,12 +24,11 @@ import {
   redirect,
   useLoaderData,
   useNavigate,
-  useTransition,
 } from "remix"
 import invariant from "tiny-invariant"
 import { updateTransaction } from "~/models/transactions.server"
 import { db } from "~/utils/db.server"
-import { getOptions } from "~/utils/form"
+import { convertMonthIntToStr, getOptions } from "~/utils/form"
 
 type LoaderData = { transactions: Transaction }
 export const loader: LoaderFunction = async ({ params }) => {
@@ -68,8 +67,11 @@ export const action: ActionFunction = async ({ request, params }) => {
     },
     where: { id: id ?? "" },
   })
-
-  return redirect(`/${year.slice(2, 4)}-${month}/transactions`)
+  const monthFix = Number(month) % 2 ? month : String(Number(month) - 1)
+  console.log({ monthFix, month })
+  return redirect(
+    `/${year.slice(2, 4)}-${convertMonthIntToStr(monthFix)}/transactions`
+  )
 }
 // TODO change form inputs to be generic: if have a default value or not will be the only difference between the two forms: update and new
 // TODO check how to make error boundary as outlet
@@ -80,7 +82,6 @@ export default function UpdateTransactionRoute() {
   function onBack() {
     navigate(-1)
   }
-  const { state } = useTransition()
   const { transactions: t } = data
   if (!t) {
     return (
