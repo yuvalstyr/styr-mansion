@@ -13,7 +13,7 @@ import {
   useLoaderData,
 } from "remix"
 import invariant from "tiny-invariant"
-import { TransactionsForm } from "~/components/Form"
+import { TransactionsForm } from "~/components/TransactionsForm"
 import { updateTransaction } from "~/models/transactions.server"
 import { db } from "~/utils/db.server"
 import { convertMonthIntToStr } from "~/utils/form"
@@ -56,7 +56,6 @@ export const action: ActionFunction = async ({ request, params }) => {
     where: { id: id ?? "" },
   })
   const monthFix = Number(month) % 2 ? month : String(Number(month) - 1)
-  console.log({ monthFix, month })
   return redirect(
     `/${year.slice(2, 4)}-${convertMonthIntToStr(monthFix)}/transactions`
   )

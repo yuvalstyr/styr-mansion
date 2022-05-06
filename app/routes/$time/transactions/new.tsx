@@ -6,7 +6,7 @@ import {
 } from "@prisma/client"
 import { ActionFunction, redirect } from "remix"
 import invariant from "tiny-invariant"
-import { TransactionsForm } from "~/components/Form"
+import { TransactionsForm } from "~/components/TransactionsForm"
 import { createTransaction } from "~/models/transactions.server"
 import { convertMonthIntToStr } from "~/utils/form"
 
