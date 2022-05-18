@@ -5,7 +5,10 @@ export function getTransactionsListByYearMonth(
   year: string | undefined,
   month: string | undefined
 ): Promise<Transaction[]> {
-  const months = month == null ? [] : [month, String(Number(month) + 1)]
+  const months =
+    month == undefined
+      ? Array.from({ length: 12 }, (_, i) => String(i + 1))
+      : [month, String(Number(month) + 1)]
   return db.transaction.findMany({
     where: {
       month: { in: months },
