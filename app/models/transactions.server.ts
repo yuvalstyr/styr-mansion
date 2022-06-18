@@ -59,3 +59,7 @@ export function updateTransaction(input: TransactionUpdateInput) {
     where,
   })
 }
+
+export function deleteTransaction(id: string) {
+  return db.transaction.delete({ where: { id } })
+}

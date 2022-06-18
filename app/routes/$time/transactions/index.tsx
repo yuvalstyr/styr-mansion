@@ -1,10 +1,13 @@
 import { Box, Button, HStack, Text, VStack } from "@chakra-ui/react"
 import { Transaction } from "@prisma/client"
-import { Link, useLoaderData } from "@remix-run/react"
-import { GrEdit } from "react-icons/gr"
-import { LoaderFunction } from "remix"
+import { Form, Link, useLoaderData } from "@remix-run/react"
+import { GrEdit, GrTrash } from "react-icons/gr"
+import { ActionFunction, LoaderFunction } from "remix"
 import invariant from "tiny-invariant"
-import { getTransactionsListByYearMonth } from "~/models/transactions.server"
+import {
+  deleteTransaction,
+  getTransactionsListByYearMonth,
+} from "~/models/transactions.server"
 import { formatMonth } from "~/utils/time"
 
 type LoaderData = {
@@ -29,6 +32,14 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   }
   return { transactions }
 }
+// todo add pending UI
+export const action: ActionFunction = async ({ request, params }) => {
+  const form = await request.formData()
+  const id = form.get("id") as string
+  invariant(typeof id === "string", "id must be a string")
+  const transaction = await deleteTransaction(id)
+  return transaction
+}
 
 export default function TransactionsListRoute() {
   const { transactions } = useLoaderData<LoaderData>()
@@ -41,23 +52,32 @@ export default function TransactionsListRoute() {
           </Button>
         </Link>
       </HStack>
+
       {transactions?.map((transaction) => {
         const { id, action, type, owner, amount, description, month } =
           transaction
         return (
-          <HStack key={id}>
-            <Text>{type}</Text>
-            <Text>{action}</Text>
-            <Text>{owner}</Text>
-            <Text>{amount}</Text>
-            <Text>{description}</Text>
-            <Text>{formatMonth(month)}</Text>
-            <Link to={id}>
-              <Box my={"auto"} color={"gray.800"} alignContent={"center"}>
-                <GrEdit />
-              </Box>
-            </Link>
-          </HStack>
+          <Form method="post">
+            <HStack key={id}>
+              <input type="hidden" name="id" value={id} />
+              <Text>{type}</Text>
+              <Text>{action}</Text>
+              <Text>{owner}</Text>
+              <Text>{amount}</Text>
+              <Text>{description}</Text>
+              <Text>{formatMonth(month)}</Text>
+              <Link to={id}>
+                <Box my={"auto"} color={"gray.800"} alignContent={"center"}>
+                  <Button>
+                    <GrEdit />
+                  </Button>
+                </Box>
+              </Link>
+              <Button type="submit">
+                <GrTrash />
+              </Button>
+            </HStack>
+          </Form>
         )
       })}
     </VStack>
