@@ -39,13 +39,13 @@ export function TransactionsForm(props: IProps) {
         </Select>
       </label>
       <label>
-        Owner:
+        Transaction Owner:
         <Select placeholder=" " name="owner" defaultValue={t?.owner}>
           {getOptions("OWNER")}
         </Select>
       </label>
       <label>
-        Amount (🇮🇱 NIS ₪) :
+        Amount (🇮🇱 NIS ₪):
         <NumberInput
           precision={2}
           step={1}

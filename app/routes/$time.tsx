@@ -18,6 +18,7 @@ import {
   FormTitleResponse,
   getTimeSelectFormProps,
 } from "~/utils/form"
+import { getTransactionsStats } from "~/utils/transactionsStat"
 
 type LoaderData = {
   month: string
@@ -37,8 +38,9 @@ export const loader: LoaderFunction = async ({ params }) => {
     year,
     month,
   })
-
-  return { title, yearInput, monthInput }
+  const stats = await getTransactionsStats()
+  console.log("stats-be :>> ", stats)
+  return { title, yearInput, monthInput, stats }
 }
 
 export const action: ActionFunction = async ({ request }) => {
@@ -58,7 +60,6 @@ export const action: ActionFunction = async ({ request }) => {
 
 export default function StatisticRoute() {
   const { title, yearInput, monthInput } = useLoaderData<FormTitleResponse>()
-
   return (
     <Box maxW="7xl" mx={"auto"} pt={5} px={{ base: 2, sm: 12, md: 17 }}>
       <TimeSelectBar

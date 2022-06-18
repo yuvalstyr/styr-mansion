@@ -7,6 +7,7 @@ export function TimeSelectBar({
   yearInput,
   monthInput,
 }: FormTitleResponse) {
+  console.log({ title, yearInput, monthInput })
   return (
     <Form method="post">
       <HStack border={"2px"} p={5}>
@@ -15,7 +16,7 @@ export function TimeSelectBar({
           <Select
             placeholder=" "
             name="month"
-            defaultValue={Number(monthInput)}
+            defaultValue={Number(monthInput ?? 0)}
           >
             {getOptions("MONTH_PERIOD")}
           </Select>

@@ -5,7 +5,7 @@ import { GrEdit } from "react-icons/gr"
 import { LoaderFunction } from "remix"
 import invariant from "tiny-invariant"
 import { getTransactionsListByYearMonth } from "~/models/transactions.server"
-import { formatMonth } from "~/utils/form"
+import { formatMonth } from "~/utils/time"
 
 type LoaderData = {
   transactions: Transaction[]
