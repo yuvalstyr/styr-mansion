@@ -1,5 +1,5 @@
 import { Box, Heading } from "@chakra-ui/react"
-import { LoaderFunction, redirect } from "remix"
+import { LoaderFunction, redirect } from "@remix-run/node"
 
 export const loader: LoaderFunction = async ({}) => {
   const currentYear = new Date().getFullYear().toString()

@@ -4,7 +4,7 @@ import { FiServer } from "react-icons/fi"
 import { GoLocation } from "react-icons/go"
 import {
   ActionFunction,
-  LoaderFunction,
+  LoaderArgs,
   Outlet,
   redirect,
   useLoaderData,
@@ -12,39 +12,31 @@ import {
 import invariant from "tiny-invariant"
 import { StatsCard } from "~/components/StatsCard"
 import { TimeSelectBar } from "~/components/TimeSelectBar"
-import { debugRemix } from "~/utils/debug"
-import {
-  convertMonthIntToStr,
-  FormTitleResponse,
-  getTimeSelectFormProps,
-} from "~/utils/form"
-import { getTransactionsStats } from "~/utils/transactionsStat"
+import { getPeriodBalance } from "~/logic/cost-balancer"
+import { getTransactionsStats } from "~/models/transactions.server"
+import { convertMonthIntToStr, getTimeSelectFormProps } from "~/utils/form"
 
-type LoaderData = {
-  month: string
-  year: string
-}
-
-type ActionData = {
-  month: string
-  year: string
-}
-
-export const loader: LoaderFunction = async ({ params }) => {
+export async function loader({ params }: LoaderArgs) {
   const { time } = params
   invariant(typeof time === "string", "time must be a string")
   const [year, month] = time.split("-")
+  const yearFixed = year === "00" ? undefined : String(Number(year) + 2000)
+  const monthFixed = month === "00" ? undefined : String(Number(month))
+  const months = monthFixed
+    ? [monthFixed, String(Number(monthFixed + 1))]
+    : undefined
   const { title, yearInput, monthInput } = getTimeSelectFormProps({
     year,
     month,
   })
+  const balance = await getPeriodBalance({ year: yearFixed, months })
+
   const stats = await getTransactionsStats()
-  console.log("stats-be :>> ", stats)
-  return { title, yearInput, monthInput, stats }
+
+  return { title, yearInput, monthInput, balance }
 }
 
 export const action: ActionFunction = async ({ request }) => {
-  debugRemix()
   const form = await request.formData()
   const month = form.get("month") as string
   const year = form.get("year") as string
@@ -59,7 +51,8 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 export default function StatisticRoute() {
-  const { title, yearInput, monthInput } = useLoaderData<FormTitleResponse>()
+  const { title, yearInput, monthInput, balance } =
+    useLoaderData<typeof loader>()
   return (
     <Box maxW="7xl" mx={"auto"} pt={5} px={{ base: 2, sm: 12, md: 17 }}>
       <TimeSelectBar
@@ -70,7 +63,7 @@ export default function StatisticRoute() {
       <VStack>
         <StatsCard
           title={"Cost"}
-          stat={"5,000"}
+          stat={""}
           icon={<BsPerson size={"3em"} />}
           type="Cost"
         />
@@ -81,11 +74,12 @@ export default function StatisticRoute() {
           type="Cost"
         />
         <StatsCard
-          title={"Datacenters"}
-          stat={"7"}
+          title={"Rent"}
+          stat={String(balance.tenantBalance.total_profit)}
           icon={<GoLocation size={"3em"} />}
           type="Income"
         />
+        <pre>{JSON.stringify(balance, null, 2)}</pre>
         {/* <ChartCard title="dsa" /> */}
         <Outlet />
       </VStack>

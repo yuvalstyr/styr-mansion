@@ -13,6 +13,7 @@ datasource db {
 enum TransactionType {
   DEPOSIT
   WITHDRAWAL
+  EXPENSE
 }
 
 enum TransactionAction {
@@ -27,6 +28,7 @@ enum TransactionOwner {
   Ran
   Moran
   Yuval
+  Tenant
 }
 
 model Transaction {

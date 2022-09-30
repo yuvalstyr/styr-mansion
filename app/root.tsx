@@ -1,9 +1,8 @@
 // root.tsx
-import React, { useContext, useEffect } from "react"
-import { withEmotionCache } from "@emotion/react"
 import { ChakraProvider } from "@chakra-ui/react"
+import { withEmotionCache } from "@emotion/react"
+import React, { useContext, useEffect } from "react"
 
-import { ServerStyleContext, ClientStyleContext } from "./context"
 import {
   Links,
   LiveReload,
@@ -11,7 +10,8 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-} from "remix"
+} from "@remix-run/react"
+import { ClientStyleContext, ServerStyleContext } from "./context"
 
 interface DocumentProps {
   children: React.ReactNode

@@ -1,22 +1,6 @@
 import { Transaction } from "@prisma/client"
 import { db } from "~/utils/db.server"
 
-export function getTransactionsListByYearMonth(
-  year: string | undefined,
-  month: string | undefined
-): Promise<Transaction[]> {
-  const months =
-    month == undefined
-      ? Array.from({ length: 12 }, (_, i) => String(i + 1))
-      : [month, String(Number(month) + 1)]
-  return db.transaction.findMany({
-    where: {
-      month: { in: months },
-      year: year,
-    },
-  })
-}
-
 export function getAllTransactions() {
   return db.transaction.findMany()
 }
@@ -62,4 +46,50 @@ export function updateTransaction(input: TransactionUpdateInput) {
 
 export function deleteTransaction(id: string) {
   return db.transaction.delete({ where: { id } })
+}
+
+export function getTransactionsListByYearMonth({
+  year,
+  months,
+}: {
+  year: string | undefined
+  months: string[] | undefined
+}) {
+  return db.transaction.findMany({
+    where: {
+      month: { in: months },
+      year: year,
+    },
+  })
+}
+
+export function getTransactionsListByYearMonthGrouped({
+  year,
+  months,
+}: {
+  year: string | undefined
+  months: string[] | undefined
+}) {
+  return db.transaction.groupBy({
+    where: {
+      month: { in: months },
+      year: year,
+    },
+    by: ["owner", "type", "action"],
+    _sum: {
+      amount: true,
+    },
+  })
+}
+
+export async function getTransactionsStats() {
+  const transactions = await db.transaction.findMany()
+  const costs = transactions
+    .filter((t) => t.type === "WITHDRAWAL")
+    .reduce((acc, t) => acc + t.amount, 0)
+  const income = transactions
+    .filter((t) => t.type === "DEPOSIT")
+    .reduce((acc, t) => acc + t.amount, 0)
+
+  return { costs, income }
 }
