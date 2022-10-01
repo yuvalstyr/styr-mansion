@@ -2,7 +2,6 @@ import { CacheProvider } from "@emotion/react"
 import { RemixBrowser } from "@remix-run/react"
 import React, { useState } from "react"
 import { hydrate } from "react-dom"
-
 import { ClientStyleContext } from "./context"
 import createEmotionCache from "./createEmotionCache"
 
@@ -24,9 +23,4 @@ function ClientCacheProvider({ children }: ClientCacheProviderProps) {
   )
 }
 
-hydrate(
-  <ClientCacheProvider>
-    <RemixBrowser />
-  </ClientCacheProvider>,
-  document
-)
+hydrate(<RemixBrowser />, document)

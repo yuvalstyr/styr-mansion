@@ -1,5 +1,5 @@
 import { Heading, VStack } from "@chakra-ui/react"
-import { Outlet } from "remix"
+import { Outlet } from "@remix-run/react"
 
 // todo change form inputs to be generic: if have a default value or not will be the only difference between the two forms: update and new
 // todo check how to make error boundary as outlet

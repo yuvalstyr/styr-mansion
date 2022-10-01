@@ -7,10 +7,11 @@
   "scripts": {
     "build": "remix build",
     "dev": "remix dev --debug",
-    "postinstall": "remix setup node"
+    "postinstall": "remix setup node",
+    "typecheck": "tsc -b"
   },
   "dependencies": {
-    "@chakra-ui/react": "^2.3.4",
+    "@chakra-ui/react": "^1.8.9",
     "@emotion/cache": "^11.10.3",
     "@emotion/react": "^11.10.4",
     "@emotion/server": "^11.10.0",
@@ -19,25 +20,22 @@
     "@remix-run/node": "^1.7.2",
     "@remix-run/react": "^1.7.2",
     "@remix-run/serve": "^1.7.2",
-    "@remix-run/vercel": "^1.7.2",
     "date-fns": "^2.29.3",
     "downshift": "^6.1.12",
-    "framer-motion": "^7.4.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "framer-motion": "^6.5.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-icons": "^4.4.0",
-    "remix": "^1.7.2",
     "tiny-invariant": "^1.2.0"
   },
   "devDependencies": {
-    "@remix-run/dev": "^1.7.2",
-    "@remix-run/eslint-config": "^1.7.2",
-    "@types/react": "^18.0.21",
-    "@types/react-dom": "^18.0.6",
-    "esbuild-register": "^3.3.3",
-    "eslint": "^8.24.0",
+    "@remix-run/dev": "*",
+    "@remix-run/eslint-config": "*",
+    "@types/react": "^17.0.39",
+    "@types/react-dom": "^17.0.13",
+    "eslint": "^8.10.0",
     "prisma": "^4.3.1",
-    "typescript": "^4.8.3"
+    "typescript": "^4.7.4"
   },
   "engines": {
     "node": ">=14"

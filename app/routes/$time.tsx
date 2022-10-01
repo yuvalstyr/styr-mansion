@@ -1,14 +1,9 @@
-import { Box, VStack } from "@chakra-ui/react"
+import { Grid, GridItem, HStack, VStack } from "@chakra-ui/react"
+import { ActionFunction, LoaderArgs, redirect } from "@remix-run/node"
+import { Outlet, useLoaderData } from "@remix-run/react"
 import { BsPerson } from "react-icons/bs"
 import { FiServer } from "react-icons/fi"
 import { GoLocation } from "react-icons/go"
-import {
-  ActionFunction,
-  LoaderArgs,
-  Outlet,
-  redirect,
-  useLoaderData,
-} from "remix"
 import invariant from "tiny-invariant"
 import { StatsCard } from "~/components/StatsCard"
 import { TimeSelectBar } from "~/components/TimeSelectBar"
@@ -50,41 +45,63 @@ export const action: ActionFunction = async ({ request }) => {
   )
 }
 
-export default function StatisticRoute() {
+const gridTemplateAreas = `"bar bar bar"
+                           "dashboard dashboard dashboard"
+                           "transactions transactions transactions"`
+
+export default function PeriodSummaryRoute() {
   const { title, yearInput, monthInput, balance } =
     useLoaderData<typeof loader>()
   return (
-    <Box maxW="7xl" mx={"auto"} pt={5} px={{ base: 2, sm: 12, md: 17 }}>
-      <TimeSelectBar
-        yearInput={yearInput}
-        title={title}
-        monthInput={monthInput}
-      />
-      <VStack>
-        <StatsCard
-          title={"Cost"}
-          stat={""}
-          icon={<BsPerson size={"3em"} />}
-          type="Cost"
+    <Grid
+      gridTemplateAreas={gridTemplateAreas}
+      gridTemplateRows={"10vh 20vh 1fr"}
+      h="80vh"
+      maxH={"80vh"}
+    >
+      <GridItem pl="2" bg="orange.300" area="bar">
+        <TimeSelectBar
+          yearInput={yearInput}
+          title={title}
+          monthInput={monthInput}
         />
-        <StatsCard
-          title={"Servers"}
-          stat={"1,000"}
-          icon={<FiServer size={"3em"} />}
-          type="Cost"
-        />
-        <StatsCard
-          title={"Rent"}
-          stat={String(balance.tenantBalance.total_profit)}
-          icon={<GoLocation size={"3em"} />}
-          type="Income"
-        />
-        <pre>{JSON.stringify(balance, null, 2)}</pre>
-        {/* <ChartCard title="dsa" /> */}
-        <Outlet />
-      </VStack>
-    </Box>
+      </GridItem>
+      <GridItem pl="2" bg="blue.300" area="dashboard">
+        <VStack>
+          <StatsCard
+            title={"Cost"}
+            stat={""}
+            icon={<BsPerson size={"3em"} />}
+            type="Cost"
+            key={"das"}
+          />
+          <StatsCard
+            title={"Servers"}
+            stat={"1,000"}
+            icon={<FiServer size={"3em"} />}
+            type="Cost"
+            key={"das1"}
+          />
+          <StatsCard
+            title={"Rent"}
+            stat={"dasd"}
+            icon={<GoLocation size={"3em"} />}
+            type="Income"
+            key={"das2"}
+          />
+        </VStack>
+      </GridItem>
+      <GridItem pl="2" bg="red.300" area="transactions">
+        <PeriodSummary>
+          <Outlet />
+        </PeriodSummary>
+      </GridItem>
+    </Grid>
   )
+}
+
+function PeriodSummary({ children }: { children: React.ReactNode }) {
+  return <HStack>{children}</HStack>
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {

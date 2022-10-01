@@ -9,7 +9,7 @@ import {
   Select,
 } from "@chakra-ui/react"
 import { Transaction } from "@prisma/client"
-import { Form, useNavigate, useTransition } from "remix"
+import { Form, useNavigate, useTransition } from "@remix-run/react"
 import { getOptions } from "~/utils/form"
 
 type IProps = {
@@ -79,7 +79,12 @@ export function TransactionsForm(props: IProps) {
           placeholder="Description"
         />
       </label>
-      <Button type="submit" disabled={isSubmitting}>
+      <Button
+        type="submit"
+        disabled={isSubmitting}
+        name="intent"
+        value="create-transaction"
+      >
         {isSubmitting ? "Submitting..." : t ? "Update" : "Create"}
       </Button>
 

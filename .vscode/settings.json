@@ -4,7 +4,14 @@
     "titleBar.activeBackground": "#590CAD",
     "titleBar.activeForeground": "#FDFBFF"
   },
-  "cSpell.words": ["Chakra", "esbuild", "moranran", "vercel", "Yuval"],
+  "cSpell.words": [
+    "Chakra",
+    "esbuild",
+    "moranran",
+    "typecheck",
+    "vercel",
+    "Yuval"
+  ],
   "editor.formatOnSave": true,
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"

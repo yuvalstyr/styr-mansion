@@ -5,13 +5,8 @@ import {
   TransactionOwner,
   TransactionType,
 } from "@prisma/client"
-import {
-  ActionFunction,
-  LoaderFunction,
-  Outlet,
-  redirect,
-  useLoaderData,
-} from "remix"
+import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node"
+import { Outlet, useLoaderData } from "@remix-run/react"
 import invariant from "tiny-invariant"
 import { TransactionsForm } from "~/components/TransactionsForm"
 import { updateTransaction } from "~/models/transactions.server"
