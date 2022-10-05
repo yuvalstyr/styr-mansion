@@ -10,7 +10,7 @@ export function TimeSelectBar({
   console.log({ title, yearInput, monthInput })
   return (
     <Form method="post">
-      <HStack border={"2px"} p={5}>
+      <HStack border={"2px"} p={5} flex={1}>
         <label>
           Time Period:
           <Select

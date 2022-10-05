@@ -1,22 +1,22 @@
 import {
   Box,
+  HStack,
   Stat,
+  StatHelpText,
   StatLabel,
   StatNumber,
-  HStack,
-  StatHelpText,
-} from "@chakra-ui/react";
-import {Card} from "~/components/Card";
+} from "@chakra-ui/react"
+import { Card } from "~/components/Card"
 
 export interface StatsCardProps {
-  title: string;
-  stat: string;
-  type: "Cost" | "Income";
-  icon: React.ReactNode;
+  title: string
+  stat: string
+  type: "Cost" | "Income"
+  icon: React.ReactNode
 }
 
 export function StatsCard(props: StatsCardProps) {
-  const {title, stat, icon, type} = props;
+  const { title, stat, icon, type } = props
   return (
     <Card type={type}>
       <HStack>
@@ -30,5 +30,5 @@ export function StatsCard(props: StatsCardProps) {
         </Box>
       </HStack>
     </Card>
-  );
+  )
 }

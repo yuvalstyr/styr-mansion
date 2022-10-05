@@ -29,7 +29,7 @@ function Document({
         <title>{title}</title>
         <Links />
       </head>
-      <body>
+      <body style={{ height: "100vh" }}>
         {children}
         <ScrollRestoration />
         <Scripts />
@@ -40,8 +40,6 @@ function Document({
 }
 
 export default function App() {
-  // throw new Error("💣💥 Booooom");
-
   return (
     <Document>
       <ChakraProvider>

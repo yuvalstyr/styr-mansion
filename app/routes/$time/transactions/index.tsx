@@ -1,20 +1,20 @@
-import { Box, Button, Heading, HStack, Text, VStack } from "@chakra-ui/react"
+import { GridItem, Heading, VStack } from "@chakra-ui/react"
 import {
+  Transaction,
   TransactionAction,
   TransactionOwner,
   TransactionType,
 } from "@prisma/client"
 import { ActionFunction, json, LoaderArgs } from "@remix-run/node"
-import { Form, Link, useLoaderData, useTransition } from "@remix-run/react"
-import { GrEdit, GrTrash } from "react-icons/gr"
+import { useLoaderData, useTransition } from "@remix-run/react"
 import invariant from "tiny-invariant"
+import { TransactionItem } from "~/components/TransactionItem"
 import { TransactionsForm } from "~/components/TransactionsForm"
 import {
   createTransaction,
   deleteTransaction,
   getTransactionsListByYearMonth,
 } from "~/models/transactions.server"
-import { formatMonth } from "~/utils/time"
 
 export async function loader({ params }: LoaderArgs) {
   const { time } = params
@@ -85,50 +85,30 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 export default function TransactionsListRoute() {
-  const { transactions } = useLoaderData<typeof loader>()
+  const data = useLoaderData<typeof loader>()
   const transition = useTransition()
   const isBusy = transition.state === "submitting"
 
   return (
-    <HStack overflow={"hidden"}>
-      <VStack overflow={"scroll"}>
-        {transactions?.map((transaction) => {
-          const { id, action, type, owner, amount, description, month } =
-            transaction
-          return (
-            <Form method="post">
-              <HStack key={id}>
-                <input type="hidden" name="id" value={id} />
-                <Text>{type}</Text>
-                <Text>{action}</Text>
-                <Text>{owner}</Text>
-                <Text>{amount}</Text>
-                <Text>{description}</Text>
-                <Text>{formatMonth(month)}</Text>
-                <Link to={id}>
-                  <Box my={"auto"} color={"gray.800"} alignContent={"center"}>
-                    <Button disabled={isBusy}>
-                      <GrEdit />
-                    </Button>
-                  </Box>
-                </Link>
-                <Button
-                  type="submit"
-                  disabled={isBusy}
-                  name="intent"
-                  value="delete-transaction"
-                >
-                  <GrTrash />
-                </Button>
-              </HStack>
-            </Form>
-          )
-        })}
-      </VStack>
-      <VStack>
-        <Heading>Add Transactions</Heading>
-        <TransactionsForm />
-      </VStack>
-    </HStack>
+    <>
+      <GridItem area={"list"} bg={"red"} overflowY={"auto"}>
+        <VStack>
+          {data.transactions?.map((t) => {
+            const transaction: Transaction = {
+              ...t,
+              createdAt: new Date(t.createdAt),
+              updatedAt: new Date(t.updatedAt),
+            }
+            return <TransactionItem isBusy={isBusy} transaction={transaction} />
+          })}
+        </VStack>
+      </GridItem>
+      <GridItem area={"form"}>
+        <VStack height={"100%"}>
+          <Heading>Add Transactions</Heading>
+          <TransactionsForm />
+        </VStack>
+      </GridItem>
+    </>
   )
 }

@@ -1,11 +1,8 @@
-import { Grid, GridItem, HStack, VStack } from "@chakra-ui/react"
+import { Grid, GridItem } from "@chakra-ui/react"
 import { ActionFunction, LoaderArgs, redirect } from "@remix-run/node"
 import { Outlet, useLoaderData } from "@remix-run/react"
-import { BsPerson } from "react-icons/bs"
-import { FiServer } from "react-icons/fi"
-import { GoLocation } from "react-icons/go"
 import invariant from "tiny-invariant"
-import { StatsCard } from "~/components/StatsCard"
+import { StatsCardList } from "~/components/StatsCardList"
 import { TimeSelectBar } from "~/components/TimeSelectBar"
 import { getPeriodBalance } from "~/logic/cost-balancer"
 import { getTransactionsStats } from "~/models/transactions.server"
@@ -45,9 +42,9 @@ export const action: ActionFunction = async ({ request }) => {
   )
 }
 
-const gridTemplateAreas = `"bar bar bar"
-                           "dashboard dashboard dashboard"
-                           "transactions transactions transactions"`
+const gridTemplateAreas = `"header header"
+                           "stats stats"
+                           "list form"`
 
 export default function PeriodSummaryRoute() {
   const { title, yearInput, monthInput, balance } =
@@ -55,53 +52,23 @@ export default function PeriodSummaryRoute() {
   return (
     <Grid
       gridTemplateAreas={gridTemplateAreas}
-      gridTemplateRows={"10vh 20vh 1fr"}
-      h="80vh"
-      maxH={"80vh"}
+      gridTemplateColumns={"1fr 1fr"}
+      gridTemplateRows={"auto auto 1fr"}
+      maxH={"100vh"}
     >
-      <GridItem pl="2" bg="orange.300" area="bar">
+      <GridItem area={"header"}>
         <TimeSelectBar
           yearInput={yearInput}
           title={title}
           monthInput={monthInput}
         />
       </GridItem>
-      <GridItem pl="2" bg="blue.300" area="dashboard">
-        <VStack>
-          <StatsCard
-            title={"Cost"}
-            stat={""}
-            icon={<BsPerson size={"3em"} />}
-            type="Cost"
-            key={"das"}
-          />
-          <StatsCard
-            title={"Servers"}
-            stat={"1,000"}
-            icon={<FiServer size={"3em"} />}
-            type="Cost"
-            key={"das1"}
-          />
-          <StatsCard
-            title={"Rent"}
-            stat={"dasd"}
-            icon={<GoLocation size={"3em"} />}
-            type="Income"
-            key={"das2"}
-          />
-        </VStack>
+      <GridItem area={"stats"}>
+        <StatsCardList />
       </GridItem>
-      <GridItem pl="2" bg="red.300" area="transactions">
-        <PeriodSummary>
-          <Outlet />
-        </PeriodSummary>
-      </GridItem>
+      <Outlet />
     </Grid>
   )
-}
-
-function PeriodSummary({ children }: { children: React.ReactNode }) {
-  return <HStack>{children}</HStack>
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
