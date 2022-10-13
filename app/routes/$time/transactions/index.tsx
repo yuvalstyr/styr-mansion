@@ -1,4 +1,4 @@
-import { GridItem, Heading, VStack } from "@chakra-ui/react"
+import { Center, GridItem, Heading, VStack } from "@chakra-ui/react"
 import {
   Transaction,
   TransactionAction,
@@ -23,8 +23,9 @@ export async function loader({ params }: LoaderArgs) {
   const yearFixed = year === "00" ? undefined : String(Number(year) + 2000)
   const monthFixed = month === "00" ? undefined : String(Number(month))
   const months = monthFixed
-    ? [monthFixed, String(Number(monthFixed + 1))]
+    ? [monthFixed, String(Number(monthFixed) + 1)]
     : undefined
+
   const transactions = await getTransactionsListByYearMonth({
     year: yearFixed,
     months,
@@ -71,8 +72,7 @@ export const action: ActionFunction = async ({ request }) => {
       return new Response("ok")
 
     case "delete-transaction":
-      const form = await request.formData()
-      const id = form.get("id") as string
+      const id = formData.get("id") as string
       invariant(typeof id === "string", "id must be a string")
       const transaction = await deleteTransaction(id)
 
@@ -91,8 +91,17 @@ export default function TransactionsListRoute() {
 
   return (
     <>
-      <GridItem area={"list"} bg={"red"} overflowY={"auto"}>
-        <VStack>
+      <GridItem area={"list"} overflowY={"auto"}>
+        <VStack alignItems={"center"}>
+          <Heading
+            position={"sticky"}
+            top="0"
+            width={"100%"}
+            bg={"white"}
+            zIndex={99}
+          >
+            <Center>Transactions</Center>
+          </Heading>
           {data.transactions?.map((t) => {
             const transaction: Transaction = {
               ...t,

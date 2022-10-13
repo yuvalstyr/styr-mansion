@@ -1,25 +1,26 @@
 import { TransactionOwner, TransactionType } from "@prisma/client"
 import { getTransactionsListByYearMonthGrouped } from "~/models/transactions.server"
 
-const MORAN_RAN = TransactionOwner.Moran + "+" + TransactionOwner.Ran
+export const MORAN_RAN = TransactionOwner.Moran + "+" + TransactionOwner.Ran
 
-export type TenantBalance = {
+export type TenantSummary = {
   total_profit: number
   Tenant: {
     total_rent: number
     total_expenses: number
   }
 }
-export type StyrBalance = {
+export type StyrSummary = {
   [x: string]: {
     profit: number
+    balance: number
     withdrawal: number
     expense: number
     remains: number
   }
 }
 
-export async function getPeriodBalance({
+export async function getPeriodSummary({
   year,
   months,
 }: {
@@ -27,56 +28,60 @@ export async function getPeriodBalance({
   months: string[] | undefined
 }) {
   //  get all transaction per period
-  const balanceMap = await getTotalsPerPeriodMap(year, months)
+  const summaryMap = await getTotalsPerPeriodMap(year, months)
   //  cost per period
   const costPerPeriod =
-    balanceMap.EXPENSE[MORAN_RAN] +
-    balanceMap.EXPENSE[TransactionOwner.Yuval] +
-    balanceMap.EXPENSE[TransactionOwner.Tenant]
-  const profit = balanceMap.DEPOSIT.all - costPerPeriod
-
-  // todo check the proportion
+    summaryMap.EXPENSE[MORAN_RAN] +
+    summaryMap.EXPENSE[TransactionOwner.Yuval] +
+    summaryMap.EXPENSE[TransactionOwner.Tenant]
+  const profit = summaryMap.DEPOSIT.all - costPerPeriod
 
   //  balance expenses between yuval and moranran
-  const balanceMoranRan = balanceMap.EXPENSE[MORAN_RAN] * 0.413
-  const balanceYuval = balanceMap.EXPENSE[TransactionOwner.Yuval] * 0.587
+  const expenseMoranRan = summaryMap.EXPENSE[MORAN_RAN] * 0.41
+  const expenseYuval = summaryMap.EXPENSE[TransactionOwner.Yuval] * 0.59
 
   //  balance withdrawal between yuval and moranran
-  const difference = balanceYuval - balanceMoranRan
+  const yuvalBalance = expenseYuval - expenseMoranRan
+  const moranRanBalance = yuvalBalance * -1
 
-  const profitYuval = profit * 0.413 + difference
-  const profitMoranRan = profit * 0.587 - difference
+  const profitYuval = profit * 0.413
+  const profitMoranRan = profit * 0.587
 
-  const styrBalance: StyrBalance = {
+  const styrSummary: StyrSummary = {
     [MORAN_RAN]: {
       profit: profitMoranRan,
-      withdrawal: balanceMap.WITHDRAWAL[MORAN_RAN],
-      expense: balanceMap.EXPENSE[MORAN_RAN],
-      remains: profitMoranRan - balanceMap.WITHDRAWAL[MORAN_RAN],
+      balance: moranRanBalance,
+      withdrawal: summaryMap.WITHDRAWAL[MORAN_RAN],
+      expense: summaryMap.EXPENSE[MORAN_RAN],
+      remains:
+        profitMoranRan + moranRanBalance - summaryMap.WITHDRAWAL[MORAN_RAN],
     },
     [TransactionOwner.Yuval]: {
       profit: profitYuval,
-      withdrawal: balanceMap.WITHDRAWAL[TransactionOwner.Yuval],
-      expense: balanceMap.EXPENSE[TransactionOwner.Yuval],
-      remains: profitYuval - balanceMap.WITHDRAWAL[TransactionOwner.Yuval],
+      balance: yuvalBalance,
+      withdrawal: summaryMap.WITHDRAWAL[TransactionOwner.Yuval],
+      expense: summaryMap.EXPENSE[TransactionOwner.Yuval],
+      remains:
+        profitYuval +
+        yuvalBalance -
+        summaryMap.WITHDRAWAL[TransactionOwner.Yuval],
     },
   }
-  const tenantBalance: TenantBalance = {
+  const tenantSummary: TenantSummary = {
     total_profit: profit,
     [TransactionOwner.Tenant]: {
-      total_rent: balanceMap.DEPOSIT.all,
-      total_expenses: balanceMap.EXPENSE[TransactionOwner.Tenant],
+      total_rent: summaryMap.DEPOSIT.all,
+      total_expenses: summaryMap.EXPENSE[TransactionOwner.Tenant],
     },
   }
 
-  return { styrBalance, tenantBalance }
+  return { styrSummary, tenantSummary }
 }
 
-type Balance = {
+type Summary = {
   [key in TransactionType]: { [key: string]: number }
 }
 
-type Sum = { [key: string]: number }
 async function getTotalsPerPeriodMap(
   year: string | undefined,
   months: string[] | undefined
@@ -86,7 +91,7 @@ async function getTotalsPerPeriodMap(
     months,
   })
 
-  const balanceMap: Balance = transactions.reduce(
+  const summaryMap: Summary = transactions.reduce(
     (balance, transaction) => {
       const amount = transaction._sum.amount
       if (!amount) return balance
@@ -104,7 +109,8 @@ async function getTotalsPerPeriodMap(
           return balance
         case "EXPENSE":
           switch (transaction.owner) {
-            case (TransactionOwner.Moran, TransactionOwner.Ran):
+            case TransactionOwner.Moran:
+            case TransactionOwner.Ran:
               balance.EXPENSE[MORAN_RAN] += amount
               return balance
             case TransactionOwner.Yuval:
@@ -124,7 +130,7 @@ async function getTotalsPerPeriodMap(
         [TransactionOwner.Tenant]: 0,
       },
       WITHDRAWAL: { [MORAN_RAN]: 0, [TransactionOwner.Yuval]: 0 },
-    } as Balance
+    } as Summary
   )
-  return balanceMap
+  return summaryMap
 }

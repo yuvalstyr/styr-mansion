@@ -4,8 +4,7 @@ import { Outlet, useLoaderData } from "@remix-run/react"
 import invariant from "tiny-invariant"
 import { StatsCardList } from "~/components/StatsCardList"
 import { TimeSelectBar } from "~/components/TimeSelectBar"
-import { getPeriodBalance } from "~/logic/cost-balancer"
-import { getTransactionsStats } from "~/models/transactions.server"
+import { getPeriodSummary } from "~/logic/cost-balancer"
 import { convertMonthIntToStr, getTimeSelectFormProps } from "~/utils/form"
 
 export async function loader({ params }: LoaderArgs) {
@@ -15,15 +14,13 @@ export async function loader({ params }: LoaderArgs) {
   const yearFixed = year === "00" ? undefined : String(Number(year) + 2000)
   const monthFixed = month === "00" ? undefined : String(Number(month))
   const months = monthFixed
-    ? [monthFixed, String(Number(monthFixed + 1))]
+    ? [monthFixed, String(Number(monthFixed) + 1)]
     : undefined
   const { title, yearInput, monthInput } = getTimeSelectFormProps({
     year,
     month,
   })
-  const balance = await getPeriodBalance({ year: yearFixed, months })
-
-  const stats = await getTransactionsStats()
+  const balance = await getPeriodSummary({ year: yearFixed, months })
 
   return { title, yearInput, monthInput, balance }
 }
@@ -64,7 +61,10 @@ export default function PeriodSummaryRoute() {
         />
       </GridItem>
       <GridItem area={"stats"}>
-        <StatsCardList />
+        <StatsCardList
+          styrBalance={balance.styrSummary}
+          tenantBalance={balance.tenantSummary}
+        />
       </GridItem>
       <Outlet />
     </Grid>

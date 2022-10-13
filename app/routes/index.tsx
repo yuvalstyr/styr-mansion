@@ -1,9 +1,12 @@
 import { Box, Heading } from "@chakra-ui/react"
 import { LoaderFunction, redirect } from "@remix-run/node"
+import { convertMonthToMonthPeriod } from "~/utils/time"
 
 export const loader: LoaderFunction = async ({}) => {
   const currentYear = new Date().getFullYear().toString()
-  return redirect(`/${currentYear.slice(2, 4)}-00/transactions`)
+  const currentMonth = new Date(2022, 10, 1).getMonth()
+  const currentMonthStr = convertMonthToMonthPeriod(currentMonth)
+  return redirect(`/${currentYear.slice(2, 4)}-${currentMonthStr}/transactions`)
 }
 
 export default function StatisticRoute() {

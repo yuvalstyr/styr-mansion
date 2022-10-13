@@ -2,7 +2,7 @@ import { Box, Text, VStack } from "@chakra-ui/react"
 
 type CardProps = {
   children: React.ReactNode
-  type: "Cost" | "Income"
+  type: string
 }
 
 export function Card({ children, type }: CardProps) {

@@ -28,6 +28,15 @@ export type FormTitleResponse = {
 export function convertMonthIntToStr(month: string) {
   return month ? (Number(month) < 10 ? `0${month}` : month) : "00"
 }
+//  get current year
+export function getCurrentYear() {
+  return format(new Date(), "yyyy")
+}
+
+//  get current month
+export function getCurrentMonth() {
+  return format(new Date(), "MM")
+}
 
 export function getTimeSelectFormProps({
   month,

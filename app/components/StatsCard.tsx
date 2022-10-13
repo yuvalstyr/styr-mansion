@@ -1,34 +1,50 @@
 import {
-  Box,
-  HStack,
   Stat,
-  StatHelpText,
+  StatGroup,
   StatLabel,
   StatNumber,
+  VStack,
 } from "@chakra-ui/react"
 import { Card } from "~/components/Card"
 
 export interface StatsCardProps {
-  title: string
-  stat: string
-  type: "Cost" | "Income"
-  icon: React.ReactNode
+  profit: number
+  withdrawal: number
+  expense: number
+  remains: number
+  name: string
 }
 
 export function StatsCard(props: StatsCardProps) {
-  const { title, stat, icon, type } = props
+  const { profit, expense, remains, withdrawal, name } = props
   return (
-    <Card type={type}>
-      <HStack>
+    <Card type={name}>
+      <StatGroup w={"100%"}>
         <Stat>
-          <StatLabel>{title}</StatLabel>
-          <StatNumber>{stat}</StatNumber>
-          <StatHelpText>Feb 12 - Feb 28</StatHelpText>
+          <VStack>
+            <StatLabel>Profit</StatLabel>
+            <StatNumber>{profit}</StatNumber>
+          </VStack>
         </Stat>
-        <Box my={"auto"} color={"gray.800"} alignContent={"center"}>
-          {icon}
-        </Box>
-      </HStack>
+        <Stat alignSelf={"center"}>
+          <VStack>
+            <StatLabel>Expense</StatLabel>
+            <StatNumber>{expense}</StatNumber>
+          </VStack>
+        </Stat>
+        <Stat alignSelf={"center"}>
+          <VStack>
+            <StatLabel>Withdrawal</StatLabel>
+            <StatNumber>{withdrawal}</StatNumber>
+          </VStack>
+        </Stat>
+        <Stat alignSelf={"center"}>
+          <VStack>
+            <StatLabel>Remains</StatLabel>
+            <StatNumber>{remains}</StatNumber>
+          </VStack>
+        </Stat>
+      </StatGroup>
     </Card>
   )
 }

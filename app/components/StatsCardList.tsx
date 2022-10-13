@@ -1,32 +1,41 @@
 import { HStack } from "@chakra-ui/react"
-import { BsPerson } from "react-icons/bs"
-import { FiServer } from "react-icons/fi"
-import { GoLocation } from "react-icons/go"
+import { TransactionOwner } from "@prisma/client"
+import { MORAN_RAN, StyrSummary, TenantSummary } from "~/logic/cost-balancer"
 import { StatsCard } from "./StatsCard"
 
-export function StatsCardList() {
+type StatsCardListProps = {
+  styrBalance: StyrSummary
+  tenantBalance: TenantSummary
+}
+
+// round to 2 decimals
+function round(value: number) {
+  return Math.round(value * 100) / 100
+}
+
+export function StatsCardList({
+  styrBalance,
+  tenantBalance,
+}: StatsCardListProps) {
+  const ranMoran = styrBalance?.[MORAN_RAN]
+  const yuval = styrBalance?.[TransactionOwner.Yuval]
   return (
     <HStack alignItems={"stretch"}>
       <StatsCard
-        title={"Cost"}
-        stat={""}
-        icon={<BsPerson size={"3em"} />}
-        type="Cost"
-        key={"das"}
+        expense={round(ranMoran.expense)}
+        profit={round(ranMoran.profit)}
+        remains={round(ranMoran.remains)}
+        withdrawal={round(ranMoran.withdrawal)}
+        key={MORAN_RAN}
+        name={MORAN_RAN}
       />
       <StatsCard
-        title={"Servers"}
-        stat={"1,000"}
-        icon={<FiServer size={"3em"} />}
-        type="Cost"
-        key={"das1"}
-      />
-      <StatsCard
-        title={"Rent"}
-        stat={"dasd"}
-        icon={<GoLocation size={"3em"} />}
-        type="Income"
-        key={"das2"}
+        expense={round(yuval.expense)}
+        profit={round(yuval.profit)}
+        remains={round(yuval.remains)}
+        withdrawal={round(yuval.withdrawal)}
+        key={TransactionOwner.Yuval}
+        name={TransactionOwner.Yuval}
       />
     </HStack>
   )

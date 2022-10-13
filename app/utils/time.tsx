@@ -20,6 +20,11 @@ export const monthsPeriodObj = {
   11: "november-december",
 }
 
+export function convertMonthToMonthPeriod(month: number): string {
+  const checkedMonth = month % 2 === 0 ? month - 1 : month
+  return checkedMonth < 10 ? `0${checkedMonth}` : `${checkedMonth}`
+}
+
 export function getMonthsPeriodByMonth(monthInput: string) {
   const monthInt = Number(monthInput)
   const month = monthInt % 2 === 0 ? monthInt - 1 : monthInt
