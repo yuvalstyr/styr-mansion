@@ -25,6 +25,10 @@ export type FormTitleResponse = {
   monthInput: string | undefined
 }
 
+export function convertYearIntToFullYearStr(year: string | undefined) {
+  return year ? String(Number(year) + 2000) : getCurrentYear()
+}
+
 export function convertMonthIntToStr(month: string) {
   return month ? (Number(month) < 10 ? `0${month}` : month) : "00"
 }
