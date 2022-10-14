@@ -38,6 +38,15 @@ export function getCurrentMonth() {
   return format(new Date(), "MM")
 }
 
+//  get month or if month null return current month
+export function getMonthIndex(month: string | undefined) {
+  const monthName = month
+    ? format(new Date(`2021-${month}-01`), "M")
+    : format(new Date(), "M")
+
+  return monthName
+}
+
 export function getTimeSelectFormProps({
   month,
   year,

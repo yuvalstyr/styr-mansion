@@ -15,7 +15,7 @@ export function TransactionItem({
 
   return (
     <Form method="post">
-      <HStack key={id}>
+      <HStack>
         <input type="hidden" name="id" value={id} />
         <Text>{type}</Text>
         <Text>{action}</Text>

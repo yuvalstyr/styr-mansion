@@ -7,7 +7,6 @@ export function TimeSelectBar({
   yearInput,
   monthInput,
 }: FormTitleResponse) {
-  console.log("inputs :>> ", { yearInput, monthInput })
   return (
     <Form method="post">
       <HStack border={"2px"} p={5} flex={1}>

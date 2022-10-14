@@ -51,9 +51,10 @@ export const action: ActionFunction = async ({ request, params }) => {
     where: { id: id ?? "" },
   })
   const monthFix = Number(month) % 2 ? month : String(Number(month) - 1)
-  return redirect(
-    `/${year.slice(2, 4)}-${convertMonthIntToStr(monthFix)}/transactions`
-  )
+  const redirectURL = `/${year.slice(2, 4)}-${convertMonthIntToStr(
+    monthFix
+  )}/transactions`
+  return redirect(redirectURL)
 }
 // TODO change form inputs to be generic: if have a default value or not will be the only difference between the two forms: update and new
 // TODO check how to make error boundary as outlet

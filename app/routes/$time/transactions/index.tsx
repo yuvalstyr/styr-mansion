@@ -5,7 +5,7 @@ import {
   TransactionOwner,
   TransactionType,
 } from "@prisma/client"
-import { ActionFunction, json, LoaderArgs } from "@remix-run/node"
+import { ActionFunction, json, LoaderArgs, redirect } from "@remix-run/node"
 import { useLoaderData, useTransition } from "@remix-run/react"
 import invariant from "tiny-invariant"
 import { TransactionItem } from "~/components/TransactionItem"
@@ -15,6 +15,7 @@ import {
   deleteTransaction,
   getTransactionsListByYearMonth,
 } from "~/models/transactions.server"
+import { convertMonthIntToStr } from "~/utils/form"
 
 export async function loader({ params }: LoaderArgs) {
   const { time } = params
@@ -35,7 +36,7 @@ export async function loader({ params }: LoaderArgs) {
   if (!transactions) {
     throw new Response("No transactions found", { status: 404 })
   }
-  return json({ transactions })
+  return json({ transactions, year, month })
 }
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData()
@@ -68,8 +69,12 @@ export const action: ActionFunction = async ({ request }) => {
         month: month,
         year: year,
       })
+      const monthFix = Number(month) % 2 ? month : String(Number(month) - 1)
+      const redirectURL = `/${year.slice(2, 4)}-${convertMonthIntToStr(
+        monthFix
+      )}/transactions`
 
-      return new Response("ok")
+      return redirect(redirectURL)
 
     case "delete-transaction":
       const id = formData.get("id") as string
@@ -108,14 +113,20 @@ export default function TransactionsListRoute() {
               createdAt: new Date(t.createdAt),
               updatedAt: new Date(t.updatedAt),
             }
-            return <TransactionItem isBusy={isBusy} transaction={transaction} />
+            return (
+              <TransactionItem
+                isBusy={isBusy}
+                transaction={transaction}
+                key={t.id}
+              />
+            )
           })}
         </VStack>
       </GridItem>
       <GridItem area={"form"}>
         <VStack height={"100%"}>
           <Heading>Add Transactions</Heading>
-          <TransactionsForm />
+          <TransactionsForm year={data.year} month={data.month} />
         </VStack>
       </GridItem>
     </>

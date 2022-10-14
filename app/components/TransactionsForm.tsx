@@ -10,23 +10,26 @@ import {
 } from "@chakra-ui/react"
 import { Transaction } from "@prisma/client"
 import { Form, useNavigate, useTransition } from "@remix-run/react"
-import { getCurrentMonth, getCurrentYear, getOptions } from "~/utils/form"
+import { getCurrentYear, getMonthIndex, getOptions } from "~/utils/form"
 
 type IProps = {
   transactions?: Transaction
+  year?: string
+  month?: string
 }
 
 export function TransactionsForm(props: IProps) {
-  const { transactions: t } = props
+  const { transactions: t, year, month } = props
   let navigate = useNavigate()
   const transition = useTransition()
+  // get month name from month number
 
   const isSubmitting = Boolean(transition.submission)
   function onBack() {
     navigate(-1)
   }
   return (
-    <Form method="post">
+    <Form method="post" action={`/${year}-${month}/transactions?index`}>
       <label>
         Type:
         <Select placeholder=" " name="type" defaultValue={t?.type}>
@@ -65,7 +68,7 @@ export function TransactionsForm(props: IProps) {
         <Select
           placeholder=" "
           name="month"
-          defaultValue={t?.month ?? getCurrentMonth()}
+          defaultValue={getMonthIndex(month)}
         >
           {getOptions("MONTH")}
         </Select>
@@ -75,7 +78,7 @@ export function TransactionsForm(props: IProps) {
         <Select
           placeholder=" "
           name="year"
-          defaultValue={t?.year ?? getCurrentYear()}
+          defaultValue={t?.year ?? year ?? getCurrentYear()}
         >
           {getOptions("YEAR")}
         </Select>
