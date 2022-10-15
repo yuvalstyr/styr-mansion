@@ -1,11 +1,10 @@
 import { Heading, VStack } from "@chakra-ui/react"
 import {
-  Transaction,
   TransactionAction,
   TransactionOwner,
   TransactionType,
 } from "@prisma/client"
-import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node"
+import { ActionFunction, LoaderArgs, redirect } from "@remix-run/node"
 import { Outlet, useLoaderData } from "@remix-run/react"
 import invariant from "tiny-invariant"
 import { TransactionsForm } from "~/components/TransactionsForm"
@@ -13,14 +12,13 @@ import { updateTransaction } from "~/models/transactions.server"
 import { db } from "~/utils/db.server"
 import { convertMonthIntToStr } from "~/utils/form"
 
-type LoaderData = { transactions: Transaction }
-export const loader: LoaderFunction = async ({ params }) => {
+export async function loader({ params }: LoaderArgs) {
   const id = params.transactionID
-  const transactions = await db.transaction.findFirst({ where: { id } })
-  if (!transactions) {
-    return { transactions: null }
+  const transaction = await db.transaction.findFirst({ where: { id } })
+  if (!transaction) {
+    return { transaction: null }
   }
-  return { transactions }
+  return { transaction }
 }
 
 export const action: ActionFunction = async ({ request, params }) => {
@@ -60,19 +58,24 @@ export const action: ActionFunction = async ({ request, params }) => {
 // TODO check how to make error boundary as outlet
 
 export default function UpdateTransactionRoute() {
-  const data = useLoaderData<LoaderData>()
-  const { transactions: t } = data
-  if (!t) {
+  const data = useLoaderData<typeof loader>()
+  const { transaction } = data
+  if (!transaction) {
     return (
       <VStack>
         <Heading>Transaction not found</Heading>
       </VStack>
     )
   }
+  const t = {
+    ...transaction,
+    createdAt: new Date(transaction.createdAt),
+    updatedAt: new Date(transaction.updatedAt),
+  }
   return (
     <VStack>
       <Heading>Update Transactions</Heading>
-      <TransactionsForm transactions={t} />
+      <TransactionsForm transaction={t} />
       <Outlet />
     </VStack>
   )

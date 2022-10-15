@@ -1,4 +1,4 @@
-import { Center, GridItem, Heading, VStack } from "@chakra-ui/react"
+import { GridItem, VStack } from "@chakra-ui/react"
 import {
   Transaction,
   TransactionAction,
@@ -6,10 +6,9 @@ import {
   TransactionType,
 } from "@prisma/client"
 import { ActionFunction, json, LoaderArgs, redirect } from "@remix-run/node"
-import { useLoaderData, useTransition } from "@remix-run/react"
+import { Outlet, useLoaderData, useTransition } from "@remix-run/react"
 import invariant from "tiny-invariant"
-import { TransactionItem } from "~/components/TransactionItem"
-import { TransactionsForm } from "~/components/TransactionsForm"
+import { TransactionsList } from "~/components/TransactionsList"
 import {
   createTransaction,
   deleteTransaction,
@@ -89,44 +88,28 @@ export const action: ActionFunction = async ({ request }) => {
   }
 }
 
-export default function TransactionsListRoute() {
+export default function TransactionsRoute() {
   const data = useLoaderData<typeof loader>()
   const transition = useTransition()
   const isBusy = transition.state === "submitting"
 
+  // covert transactions serialized to model
+  const transactions = data.transactions?.map((t) => {
+    const transaction: Transaction = {
+      ...t,
+      createdAt: new Date(t.createdAt),
+      updatedAt: new Date(t.updatedAt),
+    }
+    return transaction
+  })
   return (
     <>
       <GridItem area={"list"} overflowY={"auto"}>
-        <VStack alignItems={"center"}>
-          <Heading
-            position={"sticky"}
-            top="0"
-            width={"100%"}
-            bg={"white"}
-            zIndex={99}
-          >
-            <Center>Transactions</Center>
-          </Heading>
-          {data.transactions?.map((t) => {
-            const transaction: Transaction = {
-              ...t,
-              createdAt: new Date(t.createdAt),
-              updatedAt: new Date(t.updatedAt),
-            }
-            return (
-              <TransactionItem
-                isBusy={isBusy}
-                transaction={transaction}
-                key={t.id}
-              />
-            )
-          })}
-        </VStack>
+        <TransactionsList isBusy={isBusy} transactions={transactions} />
       </GridItem>
       <GridItem area={"form"}>
         <VStack height={"100%"}>
-          <Heading>Add Transactions</Heading>
-          <TransactionsForm year={data.year} month={data.month} />
+          <Outlet />
         </VStack>
       </GridItem>
     </>

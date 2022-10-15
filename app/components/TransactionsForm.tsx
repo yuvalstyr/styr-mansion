@@ -9,30 +9,29 @@ import {
   Select,
 } from "@chakra-ui/react"
 import { Transaction } from "@prisma/client"
-import { Form, useNavigate, useTransition } from "@remix-run/react"
-import {
-  convertYearIntToFullYearStr,
-  getMonthIndex,
-  getOptions,
-} from "~/utils/form"
+import { Link, useFetcher, useNavigate, useTransition } from "@remix-run/react"
+import { getOptions } from "~/utils/form"
 
 type IProps = {
-  transactions?: Transaction
+  transaction?: Transaction
   year?: string
   month?: string
 }
 
 export function TransactionsForm(props: IProps) {
-  const { transactions: t, year, month } = props
+  const { transaction: t, year, month } = props
+  console.log({ year, month })
+  //  remix hooks
   let navigate = useNavigate()
   const transition = useTransition()
+  const fetcher = useFetcher()
 
   const isSubmitting = Boolean(transition.submission)
   function onBack() {
     navigate(-1)
   }
   return (
-    <Form method="post" action={`/${year}-${month}/transactions?index`}>
+    <fetcher.Form method="post" action={`/${year}-${month}/transactions`}>
       <label>
         Type:
         <Select placeholder=" " name="type" defaultValue={t?.type}>
@@ -68,21 +67,13 @@ export function TransactionsForm(props: IProps) {
       </label>
       <label>
         Month:
-        <Select
-          placeholder=" "
-          name="month"
-          defaultValue={getMonthIndex(month)}
-        >
+        <Select placeholder=" " name="month" defaultValue={t?.month}>
           {getOptions("MONTH")}
         </Select>
       </label>
       <label>
         Year:
-        <Select
-          placeholder=" "
-          name="year"
-          defaultValue={t?.year ?? convertYearIntToFullYearStr(year)}
-        >
+        <Select placeholder=" " name="year" defaultValue={t?.year}>
           {getOptions("YEAR")}
         </Select>
       </label>
@@ -102,10 +93,9 @@ export function TransactionsForm(props: IProps) {
       >
         {isSubmitting ? "Submitting..." : t ? "Update" : "Create"}
       </Button>
-
-      <Button onClick={onBack} disabled={isSubmitting}>
-        Back
-      </Button>
-    </Form>
+      <Link to={`/${year}-${month}/transactions/new`}>
+        <Button disabled={isSubmitting}>Back</Button>
+      </Link>
+    </fetcher.Form>
   )
 }
