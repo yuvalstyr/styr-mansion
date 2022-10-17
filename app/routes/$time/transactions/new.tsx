@@ -13,7 +13,7 @@ import {
   deleteTransaction,
   getTransactionsListByYearMonth,
 } from "~/models/transactions.server"
-import { convertMonthIntToStr } from "~/utils/form"
+import { convertMonthStrTo2CharStr } from "~/utils/form"
 
 export async function loader({ params }: LoaderArgs) {
   const { time } = params
@@ -68,7 +68,7 @@ export const action: ActionFunction = async ({ request }) => {
         year: year,
       })
       const monthFix = Number(month) % 2 ? month : String(Number(month) - 1)
-      const redirectURL = `/${year.slice(2, 4)}-${convertMonthIntToStr(
+      const redirectURL = `/${year.slice(2, 4)}-${convertMonthStrTo2CharStr(
         monthFix
       )}/transactions`
 

@@ -5,7 +5,7 @@ import invariant from "tiny-invariant"
 import { StatsCardList } from "~/components/StatsCardList"
 import { TimeSelectBar } from "~/components/TimeSelectBar"
 import { getPeriodSummary } from "~/logic/cost-balancer"
-import { convertMonthIntToStr, getTimeSelectFormProps } from "~/utils/form"
+import { convertMonthStrTo2CharStr, getTimeSelectFormProps } from "~/utils/form"
 
 export async function loader({ params }: LoaderArgs) {
   const { time } = params
@@ -32,7 +32,7 @@ export const action: ActionFunction = async ({ request }) => {
   invariant(typeof month === "string", "month must be a string")
   invariant(typeof year === "string", "year must be a string")
 
-  const monthFixed = convertMonthIntToStr(month)
+  const monthFixed = convertMonthStrTo2CharStr(month)
 
   return redirect(
     `/${year !== "" ? year.slice(2, 4) : "00"}-${monthFixed}/transactions`

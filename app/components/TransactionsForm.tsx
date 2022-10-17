@@ -9,8 +9,8 @@ import {
   Select,
 } from "@chakra-ui/react"
 import { Transaction } from "@prisma/client"
-import { Link, useFetcher, useNavigate, useTransition } from "@remix-run/react"
-import { getOptions } from "~/utils/form"
+import { Form, Link, useNavigate, useTransition } from "@remix-run/react"
+import { convertMonthIntToFirstPeriodMonth, getOptions } from "~/utils/form"
 
 type IProps = {
   transaction?: Transaction
@@ -19,19 +19,24 @@ type IProps = {
 }
 
 export function TransactionsForm(props: IProps) {
-  const { transaction: t, year, month } = props
-  console.log({ year, month })
+  const { transaction: t } = props
+
   //  remix hooks
   let navigate = useNavigate()
   const transition = useTransition()
-  const fetcher = useFetcher()
 
   const isSubmitting = Boolean(transition.submission)
   function onBack() {
-    navigate(-1)
+    if (t) {
+      const fixYear = String(t.year).slice(2, 4)
+      const fixMonth = convertMonthIntToFirstPeriodMonth(t.month)
+      navigate(`/${fixYear}-${fixMonth}/transactions/new`)
+    }
+    throw new Error("back button without a transaction provided")
   }
+
   return (
-    <fetcher.Form method="post" action={`/${year}-${month}/transactions`}>
+    <Form method="post">
       <label>
         Type:
         <Select placeholder=" " name="type" defaultValue={t?.type}>
@@ -93,9 +98,13 @@ export function TransactionsForm(props: IProps) {
       >
         {isSubmitting ? "Submitting..." : t ? "Update" : "Create"}
       </Button>
-      <Link to={`/${year}-${month}/transactions/new`}>
-        <Button disabled={isSubmitting}>Back</Button>
-      </Link>
-    </fetcher.Form>
+      {t ? (
+        <Link to={"../../new"}>
+          <Button onClick={onBack} disabled={isSubmitting}>
+            Back
+          </Button>
+        </Link>
+      ) : null}
+    </Form>
   )
 }

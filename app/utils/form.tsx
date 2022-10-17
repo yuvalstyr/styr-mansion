@@ -25,11 +25,23 @@ export type FormTitleResponse = {
   monthInput: string | undefined
 }
 
+//  function convert month number to first string of a period
+export function convertMonthIntToFirstPeriodMonth(month: string) {
+  const monthInt = Number(month)
+  const monthPeriod = monthInt % 2 === 0 ? monthInt - 1 : monthInt
+
+  return convertMonthIntTo2CharStr(monthPeriod)
+}
+
+export function convertMonthIntTo2CharStr(month: number) {
+  return month < 10 ? `0${month}` : month
+}
+
 export function convertYearIntToFullYearStr(year: string | undefined) {
   return year ? String(Number(year) + 2000) : getCurrentYear()
 }
 
-export function convertMonthIntToStr(month: string) {
+export function convertMonthStrTo2CharStr(month: string) {
   return month ? (Number(month) < 10 ? `0${month}` : month) : "00"
 }
 //  get current year

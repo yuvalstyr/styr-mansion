@@ -1,5 +1,5 @@
 import { Box, ChakraProvider, Heading } from "@chakra-ui/react"
-import type { MetaFunction } from "@remix-run/node"
+import type { LinksFunction, MetaFunction } from "@remix-run/node"
 import {
   Links,
   LiveReload,
@@ -9,6 +9,11 @@ import {
   ScrollRestoration,
   useCatch,
 } from "@remix-run/react"
+import styles from "./styles/app.css"
+
+export const links: LinksFunction = () => {
+  return [{ rel: "stylesheet", href: styles }]
+}
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -29,7 +34,7 @@ function Document({
         <title>{title}</title>
         <Links />
       </head>
-      <body style={{ height: "100vh" }}>
+      <body style={{ height: "100vh" }} className="bg-teal-700 text-white">
         {children}
         <ScrollRestoration />
         <Scripts />
