@@ -1,24 +1,12 @@
 import {
-  Box,
-  Button,
-  Heading,
-  Input,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  Select,
-  VStack,
-} from "@chakra-ui/react"
-import {
   TransactionAction,
   TransactionOwner,
   TransactionType,
 } from "@prisma/client"
 import { ActionFunction, LoaderArgs, redirect } from "@remix-run/node"
-import { Form, Link, Outlet, useLoaderData } from "@remix-run/react"
+import { Link, Outlet, useFetcher, useLoaderData } from "@remix-run/react"
 import invariant from "tiny-invariant"
+import { LabelText } from "~/components"
 import { updateTransaction } from "~/models/transactions.server"
 import { db } from "~/utils/db.server"
 import { convertMonthStrTo2CharStr, getOptions } from "~/utils/form"
@@ -70,11 +58,13 @@ export const action: ActionFunction = async ({ request, params }) => {
 export default function UpdateTransactionRoute() {
   const data = useLoaderData<typeof loader>()
   const { transaction } = data
+  const fetcher = useFetcher()
+
   if (!transaction) {
     return (
-      <VStack>
-        <Heading>Transaction not found</Heading>
-      </VStack>
+      <div>
+        <div>Transaction not found</div>
+      </div>
     )
   }
   const t = {
@@ -82,89 +72,142 @@ export default function UpdateTransactionRoute() {
     createdAt: new Date(transaction.createdAt),
     updatedAt: new Date(transaction.updatedAt),
   }
-  console.log("transaction :>> ", t)
+
   return (
-    <VStack>
-      <Heading>Update Transactions {`${t.id}`}</Heading>
-      <Form method="post">
-        <label>
-          Type:
-          <Box>
-            <input
-              type="text"
-              placeholder="Type here"
-              className="input input-bordered input-primary w-full max-w-xs"
-            />
-          </Box>
-        </label>
-        <label>
-          Type:
-          <Select placeholder=" " name="type" defaultValue={t?.type}>
+    <div className="relative p-10">
+      <div className="text-[length:32px] font-bold">Update Transactions</div>
+      <fetcher.Form
+        method="post"
+        className="grid grid-cols-1 gap-x-4 gap-y-2 lg:grid-cols-2"
+      >
+        <div className="min-w-[100px]">
+          <div className="flex flex-wrap items-center gap-1">
+            <LabelText>
+              <label> Type:</label>
+            </LabelText>
+          </div>
+          <select
+            placeholder=" "
+            name="type"
+            className="select w-full max-w-xs text-black bg-white"
+            key={t?.id ?? "new"}
+          >
             {getOptions("TYPE")}
-          </Select>
-        </label>
-        <label>
-          Action:
-          <Select placeholder=" " name="action" defaultValue={t?.action}>
+          </select>
+        </div>
+        <div className="min-w-[100px]">
+          <div className="flex flex-wrap items-center gap-1">
+            <LabelText>
+              <label>Action:</label>
+            </LabelText>
+          </div>
+          <select
+            key={t?.id ?? "new"}
+            placeholder=" "
+            name="action"
+            className="select w-full max-w-xs text-black bg-white"
+            defaultValue={t?.action}
+          >
             {getOptions("ACTION")}
-          </Select>
-        </label>
-        <label>
-          Transaction Owner:
-          <Select placeholder=" " name="owner" defaultValue={t?.owner}>
+          </select>
+        </div>
+        <div className="min-w-[100px]">
+          <div className="flex flex-wrap items-center gap-1">
+            <LabelText>
+              <label>Transaction Owner:</label>
+            </LabelText>
+          </div>
+          <select
+            placeholder=" "
+            name="owner"
+            defaultValue={t?.owner}
+            key={t?.id ?? "new"}
+            className="select w-full max-w-xs text-black bg-white"
+          >
             {getOptions("OWNER")}
-          </Select>
-        </label>
-        <label>
-          Amount (🇮🇱 NIS ₪):
-          <NumberInput
-            precision={2}
-            step={1}
+          </select>
+        </div>
+        <div className="min-w-[100px]">
+          <div className="flex flex-wrap items-center gap-1">
+            <LabelText>
+              <label>Amount (🇮🇱 NIS ₪):</label>
+            </LabelText>
+          </div>
+          <input
+            type="number"
             name="amount"
             defaultValue={t?.amount}
+            className={"input w-full max-w-xs text-black bg-white"}
+          />
+        </div>
+        <div className="min-w-[100px]">
+          <div className="flex flex-wrap items-center gap-1">
+            <LabelText>
+              <label>Month:</label>
+            </LabelText>
+          </div>
+          <select
+            placeholder=" "
+            name="month"
+            className="select w-full max-w-xs text-black bg-white"
+            key={t?.id ?? "new"}
+            defaultValue={t?.month}
           >
-            <NumberInputField />
-            <NumberInputStepper>
-              <NumberIncrementStepper />
-              <NumberDecrementStepper />
-            </NumberInputStepper>
-          </NumberInput>
-        </label>
-        <label>
-          Month:
-          <Select placeholder=" " name="month" defaultValue={t?.month}>
             {getOptions("MONTH")}
-          </Select>
-        </label>
-        <label>
-          Year:
-          <Select placeholder=" " name="year" defaultValue={t?.year}>
+          </select>
+        </div>
+        <div className="min-w-[100px]">
+          <div className="flex flex-wrap items-center gap-1">
+            <LabelText>
+              <label>Year:</label>
+            </LabelText>
+          </div>
+          <select
+            placeholder=" "
+            name="year"
+            key={t?.id ?? "new"}
+            className="select w-full max-w-xs text-black bg-white"
+          >
             {getOptions("YEAR")}
-          </Select>
-        </label>
-        <label>
-          Description:
-          <Input
+          </select>
+        </div>
+        <div className="min-w-[100px]">
+          <div className="flex flex-wrap items-center gap-1">
+            <LabelText>
+              <label>Description:</label>
+            </LabelText>
+          </div>
+          <input
             name="description"
             defaultValue={t?.description}
+            key={t?.id ?? "new"}
             placeholder="Description"
+            className="input w-full max-w-xs text-black bg-white"
           />
-        </label>
-        <Button
-          type="submit"
-          disabled={false}
-          name="intent"
-          value="create-transaction"
-        >
-          {false ? "Submitting..." : t ? "Update" : "Create"}
-        </Button>
-        {t ? (
-          <Link to={"../../new"}>
-            <Button disabled={false}>Back</Button>
-          </Link>
-        ) : null}
-      </Form>
+        </div>
+        <div className="col-span-1 lg:col-span-2">
+          <div className="grid justify-center grid-cols-2 gap-2">
+            <button
+              type="submit"
+              disabled={false}
+              name="intent"
+              value="create-transaction"
+              className="justify-self-end btn btn-primary max-w-[150px] min-w-[150px]"
+            >
+              {false ? "Submitting..." : t ? "Update" : "Create"}
+            </button>
+            {t ? (
+              <button
+                disabled={false}
+                className={"btn btn-primary max-w-[150px] min-w-[150px]"}
+              >
+                <Link to={"../../new"}>Back</Link>
+              </button>
+            ) : null}
+          </div>
+        </div>
+      </fetcher.Form>
       <Outlet />
-    </VStack>
+    </div>
   )
 }

@@ -1,4 +1,3 @@
-import { Box, Heading } from "@chakra-ui/react"
 import { LoaderFunction, redirect } from "@remix-run/node"
 import { convertMonthToMonthPeriod } from "~/utils/time"
 
@@ -11,9 +10,9 @@ export const loader: LoaderFunction = async ({}) => {
 
 export default function StatisticRoute() {
   return (
-    <Box maxW="7xl" mx={"auto"} pt={5} px={{ base: 2, sm: 12, md: 17 }}>
-      <Heading>You are not suppose to be here!!!!! 🤔🤔🤔🤔🛑🛑🛑</Heading>
-    </Box>
+    <div>
+      <h1>You are not suppose to be here!!!!! 🤔🤔🤔🤔🛑🛑🛑</h1>
+    </div>
   )
 }
 

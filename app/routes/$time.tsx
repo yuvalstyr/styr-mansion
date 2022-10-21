@@ -1,4 +1,3 @@
-import { Grid, GridItem } from "@chakra-ui/react"
 import { ActionFunction, LoaderArgs, redirect } from "@remix-run/node"
 import { Outlet, useLoaderData } from "@remix-run/react"
 import invariant from "tiny-invariant"
@@ -39,35 +38,26 @@ export const action: ActionFunction = async ({ request }) => {
   )
 }
 
-const gridTemplateAreas = `"header header"
-                           "stats stats"
-                           "list form"`
-
 export default function PeriodSummaryRoute() {
   const { title, yearInput, monthInput, balance } =
     useLoaderData<typeof loader>()
   return (
-    <Grid
-      gridTemplateAreas={gridTemplateAreas}
-      gridTemplateColumns={"1fr 1fr"}
-      gridTemplateRows={"auto auto 1fr"}
-      maxH={"100vh"}
-    >
-      <GridItem area={"header"}>
+    <main className="flex flex-col h-screen overflow-auto">
+      <header className="bg-orange-600">
         <TimeSelectBar
           yearInput={yearInput}
           title={title}
           monthInput={monthInput}
         />
-      </GridItem>
-      <GridItem area={"stats"}>
+      </header>
+      <div className="bg-blue-400">
         <StatsCardList
           styrBalance={balance.styrSummary}
           tenantBalance={balance.tenantSummary}
         />
-      </GridItem>
+      </div>
       <Outlet />
-    </Grid>
+    </main>
   )
 }
 

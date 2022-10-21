@@ -1,4 +1,3 @@
-import { GridItem, VStack } from "@chakra-ui/react"
 import {
   Transaction,
   TransactionAction,
@@ -103,15 +102,13 @@ export default function TransactionsRoute() {
     return transaction
   })
   return (
-    <>
-      <GridItem area={"list"} overflowY={"auto"}>
+    <section className="flex flex-1 max-h-[90vh]">
+      <div className="flex-1 bg-purple-400 overflow-auto">
         <TransactionsList isBusy={isBusy} transactions={transactions} />
-      </GridItem>
-      <GridItem area={"form"}>
-        <VStack height={"100%"}>
-          <Outlet />
-        </VStack>
-      </GridItem>
-    </>
+      </div>
+      <div className="flex-1 bg-emerald-500 overflow-auto">
+        <Outlet />
+      </div>
+    </section>
   )
 }

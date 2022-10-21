@@ -133,7 +133,7 @@ export function getOptions(enumType: TransactionsEnum) {
       // loop over number of months and return month name
       return Array.from({ length: 12 }, (_, i) => i).map((month) => {
         return (
-          <option key={month} value={month + 1}>
+          <option key={month + 1} value={month + 1}>
             {format(new Date(2022, month, 1), "MMMM")}
           </option>
         )
