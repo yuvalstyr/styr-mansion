@@ -1,4 +1,3 @@
-import { HStack } from "@chakra-ui/react"
 import { TransactionOwner } from "@prisma/client"
 import { MORAN_RAN, StyrSummary, TenantSummary } from "~/logic/cost-balancer"
 import { StatsCard } from "./StatsCard"
@@ -20,7 +19,7 @@ export function StatsCardList({
   const ranMoran = styrBalance?.[MORAN_RAN]
   const yuval = styrBalance?.[TransactionOwner.Yuval]
   return (
-    <HStack alignItems={"stretch"}>
+    <div className="grid grid-rows-2 lg:grid-rows-1 lg:grid-cols-2 ">
       <StatsCard
         expense={round(ranMoran.expense)}
         profit={round(ranMoran.profit)}
@@ -37,6 +36,6 @@ export function StatsCardList({
         key={TransactionOwner.Yuval}
         name={TransactionOwner.Yuval}
       />
-    </HStack>
+    </div>
   )
 }

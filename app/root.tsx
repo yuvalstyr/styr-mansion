@@ -27,7 +27,7 @@ function Document({
   title?: string
 }) {
   return (
-    <html lang="en" data-theme="halloween">
+    <html lang="en" data-theme="dark">
       <head>
         <Meta />
         <title>{title}</title>

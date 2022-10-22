@@ -42,20 +42,20 @@ export default function PeriodSummaryRoute() {
   const { title, yearInput, monthInput, balance } =
     useLoaderData<typeof loader>()
   return (
-    <main className="flex flex-col h-screen overflow-auto">
-      <header className="bg-orange-600">
+    <main className="glass flex flex-col h-screen overflow-auto">
+      <header>
         <TimeSelectBar
           yearInput={yearInput}
           title={title}
           monthInput={monthInput}
         />
       </header>
-      <div className="bg-blue-400">
+      <>
         <StatsCardList
           styrBalance={balance.styrSummary}
           tenantBalance={balance.tenantSummary}
         />
-      </div>
+      </>
       <Outlet />
     </main>
   )

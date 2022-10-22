@@ -74,7 +74,8 @@ export default function UpdateTransactionRoute() {
   }
 
   return (
-    <div className="relative p-10">
+    <div className="relative p-10 m-6 bg-base-100 rounded-box">
+      !tw
       <div className="text-[length:32px] font-bold">Update Transactions</div>
       <fetcher.Form
         method="post"

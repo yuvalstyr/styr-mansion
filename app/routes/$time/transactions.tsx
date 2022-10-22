@@ -103,10 +103,10 @@ export default function TransactionsRoute() {
   })
   return (
     <section className="flex flex-1 max-h-[90vh]">
-      <div className="flex-1 bg-purple-400 overflow-auto">
+      <div className="flex-1  overflow-auto">
         <TransactionsList isBusy={isBusy} transactions={transactions} />
       </div>
-      <div className="flex-1 bg-emerald-500 overflow-auto">
+      <div className="flex-1 overflow-auto">
         <Outlet />
       </div>
     </section>
