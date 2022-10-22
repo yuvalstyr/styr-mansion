@@ -9,8 +9,8 @@ export function TimeSelectBar({
 }: FormTitleResponse) {
   return (
     <Form method="post">
-      <div className="grid grid-cols-2">
-        <div className="grid grid-cols-3 gap-2 items-center">
+      <div className="grid grid-cols-[4fr,2fr] border-base-content border-2 border-opacity-20">
+        <div className="grid grid-cols-3 gap-1 items-center lg:grid-cols-[1fr,1fr,4fr]">
           <div className="min-w-[100px]">
             <div className="flex flex-wrap items-center ">
               <LabelText>
@@ -21,7 +21,7 @@ export function TimeSelectBar({
               placeholder=" "
               name="month"
               defaultValue={Number(monthInput ?? 0)}
-              className="select w-full max-w-xs text-black bg-white"
+              className="select w-full max-w-xs input-ghost text-primary-content rounded-full"
             >
               {getOptions("MONTH_PERIOD")}
             </select>
@@ -37,7 +37,7 @@ export function TimeSelectBar({
               placeholder=" "
               name="year"
               defaultValue={yearInput}
-              className="select w-full max-w-xs text-black bg-white"
+              className="select w-full max-w-xs input-ghost text-primary-content rounded-full"
             >
               {getOptions("YEAR")}
             </select>

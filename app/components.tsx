@@ -9,7 +9,7 @@ export const dangerButtonClasses =
 
 export function LabelText({ children }: { children: React.ReactNode }) {
   return (
-    <div className="text-[12px] font-medium uppercase leading-[24px] text-white-400">
+    <div className="text-[12px] font-medium uppercase leading-[24px] text-primary-content">
       {children}
     </div>
   )
