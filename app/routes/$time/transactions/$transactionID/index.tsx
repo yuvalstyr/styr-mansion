@@ -201,7 +201,7 @@ export default function UpdateTransactionRoute() {
                 disabled={false}
                 className={"btn btn-primary max-w-[150px] min-w-[150px]"}
               >
-                <Link to={"../../new"}>Back</Link>
+                <Link to={"../.."}>Back</Link>
               </button>
             ) : null}
           </div>

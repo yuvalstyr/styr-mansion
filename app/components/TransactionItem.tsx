@@ -1,7 +1,6 @@
-import { Box, Button, HStack, Text } from "@chakra-ui/react"
 import { Transaction } from "@prisma/client"
 import { Form, Link } from "@remix-run/react"
-import { GrEdit, GrTrash } from "react-icons/gr"
+import { EditIcon, TrashIcon } from "~/components"
 import { formatMonth } from "~/utils/time"
 
 export function TransactionItem({
@@ -11,34 +10,38 @@ export function TransactionItem({
   transaction: Transaction
   isBusy: boolean
 }) {
-  const { id, action, type, owner, amount, description, month } = transaction
+  const { id, action, type, owner, amount, description, month, year } =
+    transaction
 
   return (
-    <Form method="post">
-      <HStack>
-        <input type="hidden" name="id" value={id} />
-        <Text>{type}</Text>
-        <Text>{action}</Text>
-        <Text>{owner}</Text>
-        <Text>{amount}</Text>
-        <Text>{description}</Text>
-        <Text>{formatMonth(month)}</Text>
-        <Link to={id}>
-          <Box my={"auto"} color={"gray.800"} alignContent={"center"}>
-            <Button disabled={isBusy}>
-              <GrEdit />
-            </Button>
-          </Box>
-        </Link>
-        <Button
-          type="submit"
-          disabled={isBusy}
-          name="intent"
-          value="delete-transaction"
-        >
-          <GrTrash />
-        </Button>
-      </HStack>
-    </Form>
+    <tr>
+      <td>{type}</td>
+      <td>{action}</td>
+      <td>{owner}</td>
+      <td>{amount}</td>
+      <td>{year}</td>
+      <td>{formatMonth(month)}</td>
+      <td>{description}</td>
+      <td>
+        <div className="flex">
+          <div>
+            <Link to={id}>
+              <EditIcon />
+            </Link>
+          </div>
+          <Form method="post">
+            <input type="hidden" name="id" value={id} />
+            <button
+              type="submit"
+              disabled={isBusy}
+              name="intent"
+              value="delete-transaction"
+            >
+              <TrashIcon />
+            </button>
+          </Form>
+        </div>
+      </td>
+    </tr>
   )
 }

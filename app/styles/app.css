@@ -1823,6 +1823,17 @@ html {
   cursor: auto;
 }
 
+.progress {
+  position: relative;
+  width: 100%;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  overflow: hidden;
+  height: 0.5rem;
+  border-radius: var(--rounded-box, 1rem);
+}
+
 .select {
   display: inline-flex;
   flex-shrink: 0;
@@ -1929,6 +1940,18 @@ html {
   place-items: center;
   text-align: center;
   min-width: 4rem;
+}
+
+.table {
+  position: relative;
+  text-align: left;
+}
+
+.table th:first-child {
+  position: sticky;
+  position: -webkit-sticky;
+  left: 0px;
+  z-index: 11;
 }
 
 .btn-outline.btn-primary .badge {
@@ -2183,6 +2206,36 @@ html {
   background-color: transparent;
 }
 
+.progress::-moz-progress-bar {
+  --tw-bg-opacity: 1;
+  background-color: hsl(var(--n) / var(--tw-bg-opacity));
+}
+
+.progress:indeterminate::after {
+  --tw-bg-opacity: 1;
+  background-color: hsl(var(--n) / var(--tw-bg-opacity));
+  content: "";
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: -40%;
+  width: 33.333333%;
+  border-radius: var(--rounded-box, 1rem);
+  animation: progress-loading 5s infinite ease-in-out;
+}
+
+.progress::-webkit-progress-bar {
+  background-color: hsl(var(--n) / var(--tw-bg-opacity));
+  --tw-bg-opacity: 0.2;
+  border-radius: var(--rounded-box, 1rem);
+}
+
+.progress::-webkit-progress-value {
+  --tw-bg-opacity: 1;
+  background-color: hsl(var(--nf, var(--n)) / var(--tw-bg-opacity));
+  border-radius: var(--rounded-box, 1rem);
+}
+
 @keyframes progress-loading {
   50% {
     left: 107%;
@@ -2299,6 +2352,64 @@ html {
 
 .steps .step[data-content]:after {
   content: attr(data-content);
+}
+
+.table :where(th, td) {
+  white-space: nowrap;
+  padding: 1rem;
+  vertical-align: middle;
+}
+
+.table tr.active th, 
+    .table tr.active td, 
+    .table tr.active:nth-child(even) th, 
+    .table tr.active:nth-child(even) td {
+  --tw-bg-opacity: 1;
+  background-color: hsl(var(--b3, var(--b2)) / var(--tw-bg-opacity));
+}
+
+.table tr.hover:hover th, 
+    .table tr.hover:hover td, 
+    .table tr.hover:nth-child(even):hover th, 
+    .table tr.hover:nth-child(even):hover td {
+  --tw-bg-opacity: 1;
+  background-color: hsl(var(--b3, var(--b2)) / var(--tw-bg-opacity));
+}
+
+.table:where(:not(.table-zebra)) :where(thead, tbody, tfoot) :where(tr:not(:last-child) :where(th, td)) {
+  border-bottom-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: hsl(var(--b2, var(--b1)) / var(--tw-border-opacity));
+}
+
+.table :where(thead, tfoot) :where(th, td) {
+  --tw-bg-opacity: 1;
+  background-color: hsl(var(--b2, var(--b1)) / var(--tw-bg-opacity));
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.table :where(tbody th, tbody td) {
+  --tw-bg-opacity: 1;
+  background-color: hsl(var(--b1) / var(--tw-bg-opacity));
+}
+
+:where(.table *:first-child) :where(*:first-child) :where(th, td):first-child {
+  border-top-left-radius: 0.5rem;
+}
+
+:where(.table *:first-child) :where(*:first-child) :where(th, td):last-child {
+  border-top-right-radius: 0.5rem;
+}
+
+:where(.table *:last-child) :where(*:last-child) :where(th, td):first-child {
+  border-bottom-left-radius: 0.5rem;
+}
+
+:where(.table *:last-child) :where(*:last-child) :where(th, td):last-child {
+  border-bottom-right-radius: 0.5rem;
 }
 
 @keyframes toast-pop {
@@ -2454,16 +2565,22 @@ html {
   margin-left: 50%;
 }
 
+.table-compact :where(th, td) {
+  padding: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.visible {
+  visibility: visible;
+}
+
 .invisible {
   visibility: hidden;
 }
 
 .relative {
   position: relative;
-}
-
-.sticky {
-  position: sticky;
 }
 
 .col-span-1 {
@@ -2474,12 +2591,20 @@ html {
   margin: 1.5rem;
 }
 
+.block {
+  display: block;
+}
+
 .inline-block {
   display: inline-block;
 }
 
 .flex {
   display: flex;
+}
+
+.table {
+  display: table;
 }
 
 .grid {
@@ -2545,6 +2670,10 @@ html {
 
 .flex-1 {
   flex: 1 1 0%;
+}
+
+.flex-auto {
+  flex: 1 1 auto;
 }
 
 .grid-cols-\[1fr\2c 7fr\] {
@@ -2618,6 +2747,10 @@ html {
 
 .overflow-auto {
   overflow: auto;
+}
+
+.overflow-x-auto {
+  overflow-x: auto;
 }
 
 .rounded {
@@ -2746,6 +2879,11 @@ html {
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
+.text-primary-content {
+  --tw-text-opacity: 1;
+  color: hsl(var(--pc) / var(--tw-text-opacity));
+}
+
 .text-accent-content {
   --tw-text-opacity: 1;
   color: hsl(var(--ac) / var(--tw-text-opacity));
@@ -2764,11 +2902,6 @@ html {
 .text-secondary {
   --tw-text-opacity: 1;
   color: hsl(var(--s) / var(--tw-text-opacity));
-}
-
-.text-primary-content {
-  --tw-text-opacity: 1;
-  color: hsl(var(--pc) / var(--tw-text-opacity));
 }
 
 .text-black {
@@ -2819,8 +2952,20 @@ html {
     visibility: visible;
   }
 
+  .lg\:invisible {
+    visibility: hidden;
+  }
+
   .lg\:col-span-2 {
     grid-column: span 2 / span 2;
+  }
+
+  .lg\:block {
+    display: block;
+  }
+
+  .lg\:hidden {
+    display: none;
   }
 
   .lg\:grid-cols-2 {

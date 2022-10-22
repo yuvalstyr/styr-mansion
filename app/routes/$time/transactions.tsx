@@ -5,7 +5,12 @@ import {
   TransactionType,
 } from "@prisma/client"
 import { ActionFunction, json, LoaderArgs, redirect } from "@remix-run/node"
-import { Outlet, useLoaderData, useTransition } from "@remix-run/react"
+import {
+  Outlet,
+  useLoaderData,
+  useLocation,
+  useTransition,
+} from "@remix-run/react"
 import invariant from "tiny-invariant"
 import { TransactionsList } from "~/components/TransactionsList"
 import {
@@ -15,7 +20,7 @@ import {
 } from "~/models/transactions.server"
 import { convertMonthStrTo2CharStr } from "~/utils/form"
 
-export async function loader({ params }: LoaderArgs) {
+export async function loader({ params, request }: LoaderArgs) {
   const { time } = params
   invariant(typeof time === "string", "time must be a string")
   const [year, month] = time.split("-")
@@ -24,7 +29,10 @@ export async function loader({ params }: LoaderArgs) {
   const months = monthFixed
     ? [monthFixed, String(Number(monthFixed) + 1)]
     : undefined
-
+  const url = new URL(request.url).pathname
+  const routes = url.split("/")
+  const isOnTransactions = routes[routes.length - 1] === "transactions"
+  console.log("request :>> ", isOnTransactions)
   const transactions = await getTransactionsListByYearMonth({
     year: yearFixed,
     months,
@@ -87,11 +95,23 @@ export const action: ActionFunction = async ({ request }) => {
   }
 }
 
+//  use for responsive design (hide transactions table when on mobile)
+function checkIfOnTransactionRoute(url: string) {
+  const routes = url.split("/")
+  let length = routes.length
+  routes[routes.length - 1] === "" ? --length : null
+  const isOnTransactions = routes[length - 1] === "transactions"
+
+  return isOnTransactions
+}
+
 export default function TransactionsRoute() {
   const data = useLoaderData<typeof loader>()
   const transition = useTransition()
   const isBusy = transition.state === "submitting"
+  const location = useLocation()
 
+  const isOnTransactions = checkIfOnTransactionRoute(location.pathname)
   // covert transactions serialized to model
   const transactions = data.transactions?.map((t) => {
     const transaction: Transaction = {
@@ -102,11 +122,15 @@ export default function TransactionsRoute() {
     return transaction
   })
   return (
-    <section className="flex flex-1 max-h-[90vh]">
-      <div className="flex-1  overflow-auto">
+    <section className="flex flex-1 max-h-[90vh] justify-center">
+      <div
+        className={`flex-1  overflow-auto ${
+          isOnTransactions ? "block" : "hidden lg:block"
+        }`}
+      >
         <TransactionsList isBusy={isBusy} transactions={transactions} />
       </div>
-      <div className="flex-1 overflow-auto">
+      <div className="overflow-auto">
         <Outlet />
       </div>
     </section>

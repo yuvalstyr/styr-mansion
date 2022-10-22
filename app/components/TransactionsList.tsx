@@ -1,4 +1,3 @@
-import { Center, Heading, VStack } from "@chakra-ui/react"
 import { Transaction } from "@prisma/client"
 import { TransactionItem } from "./TransactionItem"
 
@@ -9,30 +8,40 @@ type IProps = {
 
 export function TransactionsList({ transactions, isBusy }: IProps) {
   return (
-    <VStack alignItems={"center"}>
-      <Heading
-        position={"sticky"}
-        top="0"
-        width={"100%"}
-        bg={"white"}
-        zIndex={99}
-      >
-        <Center>Transactions</Center>
-      </Heading>
-      {transactions?.map((t) => {
-        const transaction: Transaction = {
-          ...t,
-          createdAt: new Date(t.createdAt),
-          updatedAt: new Date(t.updatedAt),
-        }
-        return (
-          <TransactionItem
-            isBusy={isBusy}
-            transaction={transaction}
-            key={t.id}
-          />
-        )
-      })}
-    </VStack>
+    <div>
+      <div className="text-[length:32px] font-bold">Transactions</div>
+      <div className="overflow-x-auto">
+        <table className="table table-compact w-full">
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Action</th>
+              <th>Owner</th>
+              <th>Amount</th>
+              <th>Month</th>
+              <th>Year</th>
+              <th>Description</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {transactions?.map((t) => {
+              const transaction: Transaction = {
+                ...t,
+                createdAt: new Date(t.createdAt),
+                updatedAt: new Date(t.updatedAt),
+              }
+              return (
+                <TransactionItem
+                  isBusy={isBusy}
+                  transaction={transaction}
+                  key={t.id}
+                />
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
   )
 }
