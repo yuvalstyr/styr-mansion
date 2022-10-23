@@ -5,7 +5,9 @@ export const loader: LoaderFunction = async ({}) => {
   const currentYear = new Date().getFullYear().toString()
   const currentMonth = new Date(2022, 10, 1).getMonth()
   const currentMonthStr = convertMonthToMonthPeriod(currentMonth)
-  return redirect(`/${currentYear.slice(2, 4)}-${currentMonthStr}/transactions`)
+  return redirect(
+    `/${currentYear.slice(2, 4)}-${currentMonthStr}/transactions/new`
+  )
 }
 
 export default function StatisticRoute() {

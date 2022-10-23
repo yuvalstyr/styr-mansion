@@ -101,5 +101,10 @@ export default function TransactionsRoute() {
     }
     return transaction
   })
-  return <TransactionsForm />
+  return (
+    <div className="relative p-10 m-6 bg-base-100 rounded-box">
+      <div className="text-[length:32px] font-bold">New Transaction</div>
+      <TransactionsForm />
+    </div>
+  )
 }

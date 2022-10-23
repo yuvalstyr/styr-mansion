@@ -31,7 +31,9 @@ export async function loader({ params, request }: LoaderArgs) {
     : undefined
   const url = new URL(request.url).pathname
   const routes = url.split("/")
-  const isOnTransactions = routes[routes.length - 1] === "transactions"
+  const isOnTransactions = ["transactions", "new"].includes(
+    routes[routes.length - 1]
+  )
   console.log("request :>> ", isOnTransactions)
   const transactions = await getTransactionsListByYearMonth({
     year: yearFixed,
@@ -96,7 +98,7 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 //  use for responsive design (hide transactions table when on mobile)
-function checkIfOnTransactionRoute(url: string) {
+export function checkIfOnPath(url: string, path: string) {
   const routes = url.split("/")
   let length = routes.length
   routes[routes.length - 1] === "" ? --length : null
@@ -111,7 +113,7 @@ export default function TransactionsRoute() {
   const isBusy = transition.state === "submitting"
   const location = useLocation()
 
-  const isOnTransactions = checkIfOnTransactionRoute(location.pathname)
+  const isOnTransactions = checkIfOnPath(location.pathname, "transactions")
   // covert transactions serialized to model
   const transactions = data.transactions?.map((t) => {
     const transaction: Transaction = {

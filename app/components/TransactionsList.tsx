@@ -1,4 +1,5 @@
 import { Transaction } from "@prisma/client"
+import { Link, useLocation } from "@remix-run/react"
 import { TransactionItem } from "./TransactionItem"
 
 type IProps = {
@@ -7,9 +8,25 @@ type IProps = {
 }
 
 export function TransactionsList({ transactions, isBusy }: IProps) {
+  const location = useLocation()
+  const isOnNew = location.pathname.includes("new")
   return (
-    <div>
-      <div className="text-[length:32px] font-bold">Transactions</div>
+    <div className="relative p-10 m-6 bg-base-100 rounded-box">
+      <div className="flex justify-between">
+        <div className="text-[length:32px] font-bold">Transactions</div>
+        {!isOnNew ? (
+          <Link to="new">
+            <button
+              type="submit"
+              name="intent"
+              value="create-transaction"
+              className="justify-self-end btn btn-primary max-w-[150px] min-w-[150px]"
+            >
+              Add
+            </button>
+          </Link>
+        ) : null}
+      </div>
       <div className="overflow-x-auto">
         <table className="table table-compact w-full">
           <thead>
