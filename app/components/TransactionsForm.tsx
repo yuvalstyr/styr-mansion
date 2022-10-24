@@ -1,6 +1,13 @@
 import { Transaction } from "@prisma/client"
-import { Form, Link, useNavigate, useTransition } from "@remix-run/react"
+import {
+  Form,
+  Link,
+  useLocation,
+  useNavigate,
+  useTransition,
+} from "@remix-run/react"
 import { LabelText } from "~/components"
+import { checkIfOnPath } from "~/routes/$time/transactions"
 import { convertMonthIntToFirstPeriodMonth, getOptions } from "~/utils/form"
 
 type IProps = {
@@ -11,7 +18,10 @@ type IProps = {
 
 export function TransactionsForm(props: IProps) {
   const { transaction: t } = props
+  const location = useLocation()
 
+  const isOnNew = checkIfOnPath(location.pathname, "new")
+  console.log("new :>> ", location, isOnNew)
   //  remix hooks
   let navigate = useNavigate()
   const transition = useTransition()
@@ -173,7 +183,19 @@ export function TransactionsForm(props: IProps) {
             >
               <Link to={"../../new"}>Back</Link>
             </button>
-          ) : null}
+          ) : (
+            <Link to={"../../transactions"}>
+              <button
+                type="reset"
+                disabled={false}
+                className={`btn btn-primary max-w-[150px] min-w-[150px] ${
+                  isOnNew ? "lg:hidden" : ""
+                }`}
+              >
+                Back
+              </button>
+            </Link>
+          )}
         </div>
       </div>
     </Form>

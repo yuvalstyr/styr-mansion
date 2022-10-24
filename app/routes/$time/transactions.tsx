@@ -102,7 +102,7 @@ export function checkIfOnPath(url: string, path: string) {
   const routes = url.split("/")
   let length = routes.length
   routes[routes.length - 1] === "" ? --length : null
-  const isOnTransactions = routes[length - 1] === "transactions"
+  const isOnTransactions = routes[length - 1] === path
 
   return isOnTransactions
 }

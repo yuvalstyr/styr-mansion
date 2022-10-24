@@ -12,8 +12,14 @@ export function StatsCard(props: StatsCardProps) {
   const { profit, expense, remains, withdrawal, name } = props
   return (
     <div className="p-2 grid grid-cols-[1fr,7fr]">
-      <div className="mask grid place-items-center bg-accent h-full rounded-box">
-        <h2 className=" text-accent-content  max-h-fit">{name}</h2>
+      <div className="avatar">
+        <div className="mask mask-decagon bg-base-100  p-">
+          <img
+            src={`${name === "Yuval" ? "/yuval.jpeg" : "/ran-moran.png"}`}
+            alt="Avatar Tailwind CSS Component"
+            className="mask mask-decagon"
+          />
+        </div>
       </div>
       <div className="stats shadow w-full">
         <div className="stat max-w-1/6">
