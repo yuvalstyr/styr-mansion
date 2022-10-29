@@ -1,19 +1,20 @@
-import { LoaderFunction, redirect } from "@remix-run/node"
+import { LoaderFunction } from "@remix-run/node"
 import { convertMonthToMonthPeriod } from "~/utils/time"
 
 export const loader: LoaderFunction = async ({}) => {
   const currentYear = new Date().getFullYear().toString()
   const currentMonth = new Date(2022, 10, 1).getMonth()
   const currentMonthStr = convertMonthToMonthPeriod(currentMonth)
-  return redirect(
-    `/${currentYear.slice(2, 4)}-${currentMonthStr}/transactions/new`
-  )
+  return null
 }
 
 export default function StatisticRoute() {
   return (
     <div>
-      <h1>You are not suppose to be here!!!!! 🤔🤔🤔🤔🛑🛑🛑</h1>
+      <h1>Welcome to Styr Mansion!!!</h1>
+      <div className="hero-content">
+        <img src="/house.png" />
+      </div>
     </div>
   )
 }

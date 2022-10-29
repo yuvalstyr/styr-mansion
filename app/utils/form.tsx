@@ -81,14 +81,14 @@ export function getTimeSelectFormProps({
     return { title: "all", yearInput, monthInput }
   }
   if (monthInput && yearInput) {
-    const nextMonthFormat = format(add(date, { months: 1 }), "MMMM")
-    const thisMonthFormat = format(date, "MMMM")
-    title = `${thisMonthFormat}&${nextMonthFormat} ${year} Summary`
+    const nextMonthFormat = format(add(date, { months: 1 }), "MMM")
+    const thisMonthFormat = format(date, "MMM")
+    title = `${thisMonthFormat}-${nextMonthFormat} Of ${year} Summary`
     return { title, yearInput, monthInput }
   }
   if (!yearInput) {
-    const nextMonthFormat = format(add(date, { months: 1 }), "MMMM")
-    const thisMonthFormat = format(date, "MMMM")
+    const nextMonthFormat = format(add(date, { months: 1 }), "MMM")
+    const thisMonthFormat = format(date, "MMM")
     title = `${thisMonthFormat}&${nextMonthFormat}  Summary for all years`
 
     return { title, yearInput, monthInput }
