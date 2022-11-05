@@ -18,6 +18,7 @@ export function StatsCardList({
 }: StatsCardListProps) {
   const ranMoran = styrBalance?.[MORAN_RAN]
   const yuval = styrBalance?.[TransactionOwner.Yuval]
+
   return (
     <div className="grid grid-rows-2 lg:grid-rows-1 lg:grid-cols-2 ">
       <StatsCard

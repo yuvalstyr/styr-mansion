@@ -1,11 +1,20 @@
 import { TransactionOwner } from "@prisma/client"
 import { json } from "@remix-run/node"
-import { Link, NavLink, useLoaderData } from "@remix-run/react"
+import { Link, useLoaderData } from "@remix-run/react"
 import { GoToIcon } from "~/components"
 import { getTotalsMap, MORAN_RAN } from "~/logic/cost-balancer"
 import { convertMonthToMonthPeriod, getMonthValueByName } from "~/utils/time"
+import { NavBar } from "../components/NavBar"
 
 export const loader = async () => {
+  // current link is /:year-:month/transactions
+  const currentFullYear = new Date().getFullYear().toString()
+  const currentYear = currentFullYear.slice(2, 4)
+  const currentMonth = new Date(2022, 10, 1).getMonth()
+  const currentMonthStr = convertMonthToMonthPeriod(currentMonth)
+  const currentLinkPath = `/${currentYear}-${currentMonthStr}/transactions`
+
+  //  calc remaining for all time
   const summaryMaps = await getTotalsMap()
   const unbalanced = []
   for (let summary of summaryMaps) {
@@ -32,43 +41,15 @@ export const loader = async () => {
     }
   }
 
-  const unbalancedByPeriod = unbalanced.reduce((acc, curr) => {
-    const period = `${curr.year.slice(2, 4)}/${getMonthValueByName(
-      Number(curr.month)
-    )}`
-    if (!period) {
-      return acc
-    }
-    if (!acc[period]) {
-      acc[period] = []
-    }
-    acc[period].push(curr)
-    return acc
-  }, {} as Record<string, any[]>)
-  console.log("unbalancedByPeriod :>> ", unbalancedByPeriod)
-  return json({ unbalanced })
+  return json({ unbalanced, currentLinkPath })
 }
 
 export default function StatisticRoute() {
-  const { unbalanced } = useLoaderData<typeof loader>()
+  const { unbalanced, currentLinkPath } = useLoaderData<typeof loader>()
 
   return (
     <div className="grid justify-items-center from-primary">
-      <nav className="navbar bg-base-100 sticky top-0 z-30">
-        <div className="flex-1 font-sans text-lg md:text-3xl">
-          <a className="btn btn-ghost normal-case text-xl">
-            <span className="text-primary">Styr</span>
-            <span className="text-base-content">Mansion</span>
-          </a>
-        </div>
-        <div>
-          <button className="btn-ghost normal-case text-xl">
-            <NavLink to="/transactions">
-              <span className="text-base-content">Transactions</span>
-            </NavLink>
-          </button>
-        </div>
-      </nav>
+      <NavBar transactionsLink={currentLinkPath} />
       <div className="w-screen h-[20vh] from-primary to-secondary bg-gradient-to-b"></div>
       <div className="text-primary-content text-2xl font-bold grid grid-cols-2 gap-4 p-6 glass w-9/12 -mt-20">
         <nav className="navbar  w-full sticky top-0 col-span-2">

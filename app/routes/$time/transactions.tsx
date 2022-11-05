@@ -114,6 +114,7 @@ export default function TransactionsRoute() {
   const location = useLocation()
 
   const isOnTransactions = checkIfOnPath(location.pathname, "transactions")
+
   // covert transactions serialized to model
   const transactions = data.transactions?.map((t) => {
     const transaction: Transaction = {

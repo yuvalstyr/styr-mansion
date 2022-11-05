@@ -1821,6 +1821,11 @@ html {
   border-radius: 0px;
 }
 
+.link {
+  cursor: pointer;
+  text-decoration-line: underline;
+}
+
 .mask {
   -webkit-mask-size: contain;
   mask-size: contain;
@@ -2226,6 +2231,16 @@ html {
   --tw-placeholder-opacity: 0.2;
 }
 
+.link:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.link:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
 .mask-decagon {
   -webkit-mask-image: url("data:image/svg+xml,%3csvg width='192' height='200' xmlns='http://www.w3.org/2000/svg'%3e%3cpath fill='black' d='m96 0 58.779 19.098 36.327 50v61.804l-36.327 50L96 200l-58.779-19.098-36.327-50V69.098l36.327-50z' fill-rule='evenodd'/%3e%3c/svg%3e");
   mask-image: url("data:image/svg+xml,%3csvg width='192' height='200' xmlns='http://www.w3.org/2000/svg'%3e%3cpath fill='black' d='m96 0 58.779 19.098 36.327 50v61.804l-36.327 50L96 200l-58.779-19.098-36.327-50V69.098l36.327-50z' fill-rule='evenodd'/%3e%3c/svg%3e");
@@ -2617,6 +2632,10 @@ html {
 
 .flex-1 {
   flex: 1 1 0%;
+}
+
+.resize {
+  resize: both;
 }
 
 .grid-cols-\[1fr\2c 7fr\] {

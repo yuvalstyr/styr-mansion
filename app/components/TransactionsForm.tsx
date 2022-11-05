@@ -19,9 +19,8 @@ type IProps = {
 export function TransactionsForm(props: IProps) {
   const { transaction: t } = props
   const location = useLocation()
-
   const isOnNew = checkIfOnPath(location.pathname, "new")
-  console.log("new :>> ", location, isOnNew)
+
   //  remix hooks
   let navigate = useNavigate()
   const transition = useTransition()
