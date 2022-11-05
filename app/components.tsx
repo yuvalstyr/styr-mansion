@@ -174,3 +174,21 @@ export function TrashIcon(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   )
 }
+
+export function GoToIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      stroke="currentColor"
+      fill="none"
+      strokeWidth="2"
+      viewBox="0 0 24 24"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      width={24}
+      height={24}
+      {...props}
+    >
+      <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
+    </svg>
+  )
+}

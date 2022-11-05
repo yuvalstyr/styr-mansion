@@ -1,5 +1,11 @@
 import { TransactionOwner, TransactionType } from "@prisma/client"
-import { getTransactionsListByYearMonthGrouped } from "~/models/transactions.server"
+import { StyrSummary } from "~/logic/cost-balancer"
+import {
+  getDBYearAndMonth,
+  getTransactionsListByYearMonthGrouped,
+  TransactionsGrouped,
+} from "~/models/transactions.server"
+import { debugRemix } from "~/utils/debug"
 
 export const MORAN_RAN = TransactionOwner.Moran + "+" + TransactionOwner.Ran
 
@@ -20,6 +26,15 @@ export type StyrSummary = {
   }
 }
 
+type Summary = {
+  [key in TransactionType]: { [key: string]: number }
+}
+
+export async function getAllTimeSummary() {
+  const summaryMap = await getTotalsMap()
+  return summaryMap
+}
+
 export async function getPeriodSummary({
   year,
   months,
@@ -30,6 +45,28 @@ export async function getPeriodSummary({
   //  get all transaction per period
   const summaryMap = await getTotalsPerPeriodMap(year, months)
   //  cost per period
+  const { profit, styrSummary }: { profit: number; styrSummary: StyrSummary } =
+    mapToStyrSummary(summaryMap)
+
+  const tenantSummary: TenantSummary = mapToTenantSummary(profit, summaryMap)
+
+  return { styrSummary, tenantSummary }
+}
+
+function mapToTenantSummary(
+  profit: number,
+  summaryMap: Summary
+): TenantSummary {
+  return {
+    total_profit: profit,
+    [TransactionOwner.Tenant]: {
+      total_rent: summaryMap.DEPOSIT.all,
+      total_expenses: summaryMap.EXPENSE[TransactionOwner.Tenant],
+    },
+  }
+}
+
+function mapToStyrSummary(summaryMap: Summary) {
   const costPerPeriod =
     summaryMap.EXPENSE[MORAN_RAN] +
     summaryMap.EXPENSE[TransactionOwner.Yuval] +
@@ -44,8 +81,8 @@ export async function getPeriodSummary({
   const yuvalBalance = expenseYuval - expenseMoranRan
   const moranRanBalance = yuvalBalance * -1
 
-  const profitYuval = profit * 0.413
-  const profitMoranRan = profit * 0.587
+  const profitYuval = profit * 0.41
+  const profitMoranRan = profit * 0.59
 
   const styrSummary: StyrSummary = {
     [MORAN_RAN]: {
@@ -67,31 +104,53 @@ export async function getPeriodSummary({
         summaryMap.WITHDRAWAL[TransactionOwner.Yuval],
     },
   }
-  const tenantSummary: TenantSummary = {
-    total_profit: profit,
-    [TransactionOwner.Tenant]: {
-      total_rent: summaryMap.DEPOSIT.all,
-      total_expenses: summaryMap.EXPENSE[TransactionOwner.Tenant],
-    },
-  }
-
-  return { styrSummary, tenantSummary }
-}
-
-type Summary = {
-  [key in TransactionType]: { [key: string]: number }
+  return { profit, styrSummary }
 }
 
 async function getTotalsPerPeriodMap(
   year: string | undefined,
   months: string[] | undefined
-) {
+): Promise<Summary> {
   const transactions = await getTransactionsListByYearMonthGrouped({
     year,
     months,
   })
 
-  const summaryMap: Summary = transactions.reduce(
+  const summaryMap: Summary = fromGroupTransactionsSummary(transactions)
+  return summaryMap
+}
+
+export async function getTotalsMap() {
+  debugRemix()
+  const dbTimes = await getDBYearAndMonth()
+
+  const neededPeriods = []
+  for (const dbTime of dbTimes) {
+    const { year } = dbTime
+    for (let i = 1; i <= 12; i = i + 2) {
+      neededPeriods.push({ year, months: [String(i), String(i + 1)] })
+    }
+  }
+  const promises = neededPeriods.map(async ({ year, months }) => {
+    const grouped = await getTransactionsListByYearMonthGrouped({
+      year: String(year),
+      months,
+    })
+    const summary = fromGroupTransactionsSummary(grouped)
+    const StyrSummary = mapToStyrSummary(summary)
+
+    return { year, months, summary, StyrSummary }
+  })
+
+  const summaryMaps = await Promise.all(promises)
+
+  return summaryMaps
+}
+
+function fromGroupTransactionsSummary(
+  transactions: TransactionsGrouped[]
+): Summary {
+  return transactions.reduce(
     (balance, transaction) => {
       const amount = transaction._sum.amount
       if (!amount) return balance
@@ -132,5 +191,4 @@ async function getTotalsPerPeriodMap(
       WITHDRAWAL: { [MORAN_RAN]: 0, [TransactionOwner.Yuval]: 0 },
     } as Summary
   )
-  return summaryMap
 }

@@ -1,11 +1,19 @@
-import { Transaction } from "@prisma/client"
+import { Prisma, Transaction } from "@prisma/client"
 import { db } from "~/utils/db.server"
+
+type TransactionInput = Omit<Transaction, "id" | "createdAt" | "updatedAt">
+export type TransactionsGrouped = Prisma.PickArray<
+  Prisma.TransactionGroupByOutputType,
+  ("type" | "action" | "owner")[]
+> & {
+  _sum: {
+    amount: number | null
+  }
+}
 
 export function getAllTransactions() {
   return db.transaction.findMany()
 }
-
-type TransactionInput = Omit<Transaction, "id" | "createdAt" | "updatedAt">
 
 export function createTransaction(data: TransactionInput) {
   const { action, type, owner, amount, description, month, year } = data
@@ -48,6 +56,14 @@ export function deleteTransaction(id: string) {
   return db.transaction.delete({ where: { id } })
 }
 
+export function getDBYearAndMonth() {
+  return db.transaction.findMany({
+    distinct: ["year"],
+    select: { year: true },
+    orderBy: { year: "asc" },
+  })
+}
+
 export function getTransactionsListByYearMonth({
   year,
   months,
@@ -75,6 +91,15 @@ export function getTransactionsListByYearMonthGrouped({
       month: { in: months },
       year: year,
     },
+    by: ["owner", "type", "action"],
+    _sum: {
+      amount: true,
+    },
+  })
+}
+
+export function getAllTransactionsGrouped() {
+  return db.transaction.groupBy({
     by: ["owner", "type", "action"],
     _sum: {
       amount: true,

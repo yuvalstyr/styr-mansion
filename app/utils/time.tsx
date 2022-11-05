@@ -12,12 +12,12 @@ function monthStrToInt(month: string): number {
 }
 
 export const monthsPeriodObj = {
-  1: "january-february",
-  3: "march-april",
-  5: "may-june",
-  7: "july-august",
-  9: "september-october",
-  11: "november-december",
+  1: "jan-feb",
+  3: "mar-apr",
+  5: "may-jun",
+  7: "jul-aug",
+  9: "sep-oct",
+  11: "nov-dec",
 }
 
 export function convertMonthToMonthPeriod(month: number): string {
