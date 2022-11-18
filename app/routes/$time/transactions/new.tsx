@@ -104,7 +104,7 @@ export default function TransactionsRoute() {
   return (
     <div className="relative p-10 m-6 bg-base-100 rounded-box">
       <div className="text-[length:32px] font-bold">New Transaction</div>
-      <TransactionsForm />
+      <TransactionsForm month={data.month} year={data.year} />
     </div>
   )
 }

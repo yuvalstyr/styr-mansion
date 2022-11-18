@@ -1,14 +1,8 @@
 import { Transaction } from "@prisma/client"
-import {
-  Form,
-  Link,
-  useLocation,
-  useNavigate,
-  useTransition,
-} from "@remix-run/react"
+import { Form, Link, useLocation, useTransition } from "@remix-run/react"
 import { LabelText } from "~/components"
 import { checkIfOnPath } from "~/routes/$time/transactions"
-import { convertMonthIntToFirstPeriodMonth, getOptions } from "~/utils/form"
+import { getOptions } from "~/utils/form"
 
 type IProps = {
   transaction?: Transaction
@@ -17,23 +11,14 @@ type IProps = {
 }
 
 export function TransactionsForm(props: IProps) {
-  const { transaction: t } = props
+  const { transaction: t, month, year } = props
   const location = useLocation()
   const isOnNew = checkIfOnPath(location.pathname, "new")
-
+  console.log({ month: Number(month), year })
   //  remix hooks
-  let navigate = useNavigate()
   const transition = useTransition()
 
   const isSubmitting = Boolean(transition.submission)
-  function onBack() {
-    if (t) {
-      const fixYear = String(t.year).slice(2, 4)
-      const fixMonth = convertMonthIntToFirstPeriodMonth(t.month)
-      navigate(`/${fixYear}-${fixMonth}/transactions/new`)
-    }
-    throw new Error("back button without a transaction provided")
-  }
 
   return (
     <Form
@@ -122,7 +107,7 @@ export function TransactionsForm(props: IProps) {
           name="month"
           className="select w-full max-w-xs bg-gray-300 text-black"
           key={t?.id ?? "new"}
-          defaultValue={t?.month}
+          defaultValue={t?.month || Number(month)}
         >
           <option value="" className="disabled">
             --Please choose Month--
@@ -141,7 +126,7 @@ export function TransactionsForm(props: IProps) {
           name="year"
           key={t?.id ?? "new"}
           className="select w-full max-w-xs bg-gray-300 text-black"
-          defaultValue={t?.year}
+          defaultValue={t?.year || Number(year) + 2000}
         >
           <option value="" className="disabled">
             --Please choose Year--
