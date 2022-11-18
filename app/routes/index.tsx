@@ -7,13 +7,12 @@ import { convertMonthToMonthPeriod, getMonthValueByName } from "~/utils/time"
 import { NavBar } from "../components/NavBar"
 
 export const loader = async () => {
-  // current link is /:year-:month/transactions
+  // current link is /{year}-{month}/transactions
   const currentFullYear = new Date().getFullYear().toString()
   const currentYear = currentFullYear.slice(2, 4)
-  const currentMonth = new Date(2022, 10, 1).getMonth()
+  const currentMonth = new Date().getMonth() + 1
   const currentMonthStr = convertMonthToMonthPeriod(currentMonth)
   const currentLinkPath = `/${currentYear}-${currentMonthStr}/transactions`
-
   //  calc remaining for all time
   const summaryMaps = await getTotalsMap()
   const unbalanced = []

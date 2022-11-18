@@ -34,7 +34,6 @@ export async function loader({ params, request }: LoaderArgs) {
   const isOnTransactions = ["transactions", "new"].includes(
     routes[routes.length - 1]
   )
-  console.log("request :>> ", isOnTransactions)
   const transactions = await getTransactionsListByYearMonth({
     year: yearFixed,
     months,
@@ -114,6 +113,7 @@ export default function TransactionsRoute() {
   const location = useLocation()
 
   const isOnTransactions = checkIfOnPath(location.pathname, "transactions")
+  const isOnRepeated = checkIfOnPath(location.pathname, "repeated")
 
   // covert transactions serialized to model
   const transactions = data.transactions?.map((t) => {
@@ -128,7 +128,7 @@ export default function TransactionsRoute() {
     <section className="flex flex-1 max-h-[90vh] justify-center">
       <div
         className={`flex-1  overflow-auto ${
-          isOnTransactions ? "block" : "hidden lg:block"
+          isOnTransactions || isOnRepeated ? "block" : "hidden lg:block"
         }`}
       >
         <TransactionsList isBusy={isBusy} transactions={transactions} />
