@@ -32,3 +32,15 @@ npm run dev
 Open up [http://localhost:3000](http://localhost:3000) and you should be ready to go!
 
 If you're used to using the `vercel dev` command provided by [Vercel CLI](https://vercel.com/cli) instead, you can also use that, but it's not needed.
+
+### Docker
+
+```bash
+docker run \
+  --name styr-dev \
+  -e POSTGRES_PASSWORD=postgres \
+  -e POSTGRES_USER=postgres \
+  -d \
+  -v styrVol:/var/lib/postgresql/data \
+  -p 5432:5432 postgres
+```

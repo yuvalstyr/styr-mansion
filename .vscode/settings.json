@@ -8,6 +8,7 @@
     "Chakra",
     "esbuild",
     "moranran",
+    "pgsql",
     "typecheck",
     "vercel",
     "Yuval"
