@@ -23,7 +23,10 @@ export const loader = async () => {
     const styrSummary = summary.StyrSummary.styrSummary
     const ranMoran = styrSummary[MORAN_RAN]
     const yuval = styrSummary[TransactionOwner.Yuval]
-    if (ranMoran.remains !== 0) {
+    const yuvalRemains = Number(yuval.remains.toFixed(0))
+    const moranRemains = Number(ranMoran.remains.toFixed(0))
+
+    if (moranRemains) {
       unbalanced.push({
         year,
         month,
@@ -31,7 +34,7 @@ export const loader = async () => {
         remains: ranMoran.remains.toFixed(0),
       })
     }
-    if (yuval.remains !== 0) {
+    if (yuvalRemains) {
       unbalanced.push({
         year,
         month,
