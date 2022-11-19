@@ -46,3 +46,11 @@ export function getMonthValueByName(monthInput: number) {
   }
   return undefined
 }
+
+export function getCurrentPeriodPath(path: string) {
+  const currentFullYear = new Date().getFullYear().toString()
+  const currentYear = currentFullYear.slice(2, 4)
+  const currentMonth = new Date().getMonth() + 1
+  const currentMonthStr = convertMonthToMonthPeriod(currentMonth)
+  return `/${currentYear}-${currentMonthStr}/${path}`
+}

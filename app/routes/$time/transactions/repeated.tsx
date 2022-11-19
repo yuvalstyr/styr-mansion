@@ -1,10 +1,10 @@
 import { Transaction } from "@prisma/client"
-import { ActionArgs, json, LoaderArgs } from "@remix-run/node"
+import { ActionArgs, json, LoaderArgs, redirect } from "@remix-run/node"
 import { Link, useLoaderData } from "@remix-run/react"
 import { v4 as uuid } from "uuid"
 import { RepeatedTransactionsList } from "~/components/RepeatedTransactionsList"
 import { db } from "~/utils/db.server"
-import { convertMonthToMonthPeriod } from "~/utils/time"
+import { convertMonthToMonthPeriod, getCurrentPeriodPath } from "~/utils/time"
 
 const repeatedTransactions: Transaction[] = [
   {
@@ -133,31 +133,30 @@ export async function action({ request }: ActionArgs) {
   const formData = await request.formData()
   const rows = getIncludeRows(formData)
   const transactions = rows.map((row) => {
-    const { type, action, owner, amount, description, month, year } = row
+    const { type, action, owner, amount, description, month, year } =
+      row as unknown as Transaction
     return {
       type,
       action,
       owner,
-      amount: parseInt(amount),
+      amount: +amount,
       description,
       month,
       year,
     }
   })
 
-  db.transaction.createMany({
+  const res = await db.transaction.createMany({
     data: transactions,
   })
-  return null
+  return redirect(getCurrentPeriodPath("transactions"))
 }
 
 export async function loader(data: LoaderArgs) {
-  //  create link
+  const currentLinkPath = getCurrentPeriodPath("transactions")
   const currentFullYear = new Date().getFullYear().toString()
-  const currentYear = currentFullYear.slice(2, 4)
   const currentMonth = new Date().getMonth() + 1
   const currentMonthStr = convertMonthToMonthPeriod(currentMonth)
-  const currentLinkPath = `/${currentYear}-${currentMonthStr}/transactions`
 
   // create transactions list
   const transactions = repeatedTransactions.map((t) => {

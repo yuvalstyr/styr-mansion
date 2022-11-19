@@ -17,7 +17,7 @@ export function RepeatedTransactionsFormRow(props: IProps) {
   const isSubmitting = Boolean(transition.submission)
   return (
     <>
-      <div className="min-w-[100px] mr-2 mt-2">
+      <div className="min-w-[100px] mr-2 mt-2 max-w-xs">
         <input
           type="checkbox"
           name="include"
