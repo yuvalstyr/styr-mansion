@@ -1,7 +1,10 @@
 import { Prisma, Transaction } from "@prisma/client"
 import { db } from "~/utils/db.server"
 
-type TransactionInput = Omit<Transaction, "id" | "createdAt" | "updatedAt">
+export type TransactionInput = Omit<
+  Transaction,
+  "id" | "createdAt" | "updatedAt"
+>
 export type TransactionsGrouped = Prisma.PickArray<
   Prisma.TransactionGroupByOutputType,
   ("type" | "action" | "owner")[]

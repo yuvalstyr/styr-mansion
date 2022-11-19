@@ -1,4 +1,4 @@
-import { CashIcon, DollarIcon, ScaleIcon } from "~/components"
+import { CashIcon, DollarIcon, ScaleIcon } from "~/components/components"
 
 export interface StatsCardProps {
   profit: number

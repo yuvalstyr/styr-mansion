@@ -1,7 +1,7 @@
 import { TransactionOwner } from "@prisma/client"
 import { json } from "@remix-run/node"
 import { Link, useLoaderData } from "@remix-run/react"
-import { GoToIcon } from "~/components"
+import { GoToIcon } from "~/components/components"
 import { getTotalsMap, MORAN_RAN } from "~/logic/cost-balancer"
 import { convertMonthToMonthPeriod, getMonthValueByName } from "~/utils/time"
 import { NavBar } from "../components/NavBar"

@@ -1,6 +1,6 @@
 import { Transaction } from "@prisma/client"
 import { Form, Link } from "@remix-run/react"
-import { EditIcon, TrashIcon } from "~/components"
+import { EditIcon, TrashIcon } from "~/components/components"
 import { formatMonth } from "~/utils/time"
 
 export function TransactionItem({

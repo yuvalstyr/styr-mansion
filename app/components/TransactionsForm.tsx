@@ -1,6 +1,6 @@
 import { Transaction } from "@prisma/client"
 import { Form, Link, useLocation, useTransition } from "@remix-run/react"
-import { LabelText } from "~/components"
+import { LabelText } from "~/components/components"
 import { checkIfOnPath } from "~/routes/$time/transactions"
 import { getOptions } from "~/utils/form"
 

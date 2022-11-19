@@ -1,5 +1,5 @@
 import { Form } from "@remix-run/react"
-import { LabelText } from "~/components"
+import { LabelText } from "~/components/components"
 import { FormTitleResponse, getOptions } from "~/utils/form"
 
 export function TimeSelectBar({
