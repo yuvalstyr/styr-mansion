@@ -1,9 +1,11 @@
 import {
+  Transaction,
   TransactionAction,
   TransactionOwner,
   TransactionType,
 } from "@prisma/client"
 import { add, format } from "date-fns"
+import { TransactionInput } from "~/models/transactions.server"
 import { monthsPeriodObj } from "./time"
 
 export type TransactionsEnum =
@@ -152,4 +154,57 @@ export function getOptions(enumType: TransactionsEnum) {
     default:
       break
   }
+}
+
+//  transform the big form to rows array per transaction
+export function getTransactionsFromFormData(
+  data: FormData
+): TransactionInput[] {
+  const rows = []
+  const includes = data.getAll("include")
+  const types = data.getAll("type")
+  const actions = data.getAll("action")
+  const owners = data.getAll("owner")
+  const amounts = data.getAll("amount")
+  const descriptions = data.getAll("description")
+  const months = data.getAll("month")
+  const years = data.getAll("year")
+
+  for (let i = 0; i < types.length; i++) {
+    const include = includes[i] === "on"
+    const type = types[i].toString()
+    const action = actions[i].toString()
+    const owner = owners[i].toString()
+    const amount = amounts[i].toString()
+    const description = descriptions[i].toString()
+    const month = months[i].toString()
+    const year = years[i].toString()
+    if (type && action && owner && amount && description) {
+      rows.push({
+        include,
+        type,
+        action,
+        owner,
+        amount,
+        description,
+        month,
+        year,
+      })
+    }
+  }
+  const filteredRows = rows.filter((row) => row.include)
+  const transactions = filteredRows.map((row) => {
+    const { type, action, owner, amount, description, month, year } =
+      row as unknown as Transaction
+    return {
+      type: type,
+      action: action,
+      owner: owner,
+      amount: amount,
+      description: description,
+      month: month,
+      year: year,
+    }
+  })
+  return transactions
 }
