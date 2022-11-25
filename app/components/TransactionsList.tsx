@@ -14,28 +14,30 @@ export function TransactionsList({ transactions, isBusy }: IProps) {
     <div className="relative p-10 m-6 bg-base-100 rounded-box">
       <div className="flex justify-between">
         <div className="text-[length:32px] font-bold">Transactions</div>
-        {!isOnNew ? (
-          <Link to="new">
+        <div className="grid grid-flow-col gap-2 mb-1">
+          {!isOnNew ? (
+            <Link to="new">
+              <button
+                type="submit"
+                name="intent"
+                value="create-transaction"
+                className="justify-self-end btn btn-primary max-w-[150px] min-w-[150px]"
+              >
+                Add
+              </button>
+            </Link>
+          ) : null}
+          <Link to="repeated">
             <button
               type="submit"
               name="intent"
               value="create-transaction"
               className="justify-self-end btn btn-primary max-w-[150px] min-w-[150px]"
             >
-              Add
+              Repeated
             </button>
           </Link>
-        ) : null}
-        <Link to="repeated">
-          <button
-            type="submit"
-            name="intent"
-            value="create-transaction"
-            className="justify-self-end btn btn-primary max-w-[150px] min-w-[150px]"
-          >
-            Repeated
-          </button>
-        </Link>
+        </div>
       </div>
       <div className="overflow-x-auto">
         <table className="table table-compact w-full">

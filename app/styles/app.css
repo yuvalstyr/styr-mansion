@@ -2729,6 +2729,10 @@ body[dir="rtl"] .checkbox:checked,
   margin-top: -5rem;
 }
 
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+
 .block {
   display: block;
 }
@@ -2832,6 +2836,14 @@ body[dir="rtl"] .checkbox:checked,
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
+}
+
+.grid-flow-row {
+  grid-auto-flow: row;
+}
+
+.grid-flow-col {
+  grid-auto-flow: column;
 }
 
 .grid-cols-\[30px\2c repeat\(5\2c 1fr\)\] {
