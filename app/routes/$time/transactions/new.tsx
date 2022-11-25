@@ -4,7 +4,7 @@ import {
   TransactionOwner,
   TransactionType,
 } from "@prisma/client"
-import { ActionFunction, json, LoaderArgs, redirect } from "@remix-run/node"
+import { ActionFunction, json, LoaderArgs } from "@remix-run/node"
 import { useLoaderData, useTransition } from "@remix-run/react"
 import invariant from "tiny-invariant"
 import { TransactionsForm } from "~/components/TransactionsForm"
@@ -14,19 +14,18 @@ import {
   getTransactionsListByYearMonth,
 } from "~/models/transactions.server"
 import { convertMonthStrTo2CharStr } from "~/utils/form"
+import { getLinkByTime } from "~/utils/time"
 
 export async function loader({ params }: LoaderArgs) {
   const { time } = params
   invariant(typeof time === "string", "time must be a string")
-  const [year, month] = time.split("-")
-  const yearFixed = year === "00" ? undefined : String(Number(year) + 2000)
-  const monthFixed = month === "00" ? undefined : String(Number(month))
-  const months = monthFixed
-    ? [monthFixed, String(Number(monthFixed) + 1)]
-    : undefined
+  const { fullYear, months, monthFixed, link } = getLinkByTime(
+    time,
+    "transactions"
+  )
 
   const transactions = await getTransactionsListByYearMonth({
-    year: yearFixed,
+    year: fullYear,
     months,
   })
 
@@ -34,11 +33,12 @@ export async function loader({ params }: LoaderArgs) {
   if (!transactions) {
     throw new Response("No transactions found", { status: 404 })
   }
-  return json({ transactions, year, month })
+  return json({ transactions, year: fullYear, month: monthFixed, link })
 }
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData()
   const intent = formData.get("intent")
+
   switch (intent) {
     case "create-transaction":
       const type = formData.get("type") as TransactionType
@@ -71,8 +71,7 @@ export const action: ActionFunction = async ({ request }) => {
       const redirectURL = `/${year.slice(2, 4)}-${convertMonthStrTo2CharStr(
         monthFix
       )}/transactions`
-
-      return redirect(redirectURL)
+      return null
 
     case "delete-transaction":
       const id = formData.get("id") as string
@@ -104,7 +103,7 @@ export default function TransactionsRoute() {
   return (
     <div className="relative p-10 m-6 bg-base-100 rounded-box">
       <div className="text-[length:32px] font-bold">New Transaction</div>
-      <TransactionsForm month={data.month} year={data.year} />
+      <TransactionsForm month={data.month} year={data.year} link={data.link} />
     </div>
   )
 }

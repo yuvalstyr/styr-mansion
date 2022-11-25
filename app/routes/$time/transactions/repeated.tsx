@@ -2,10 +2,10 @@ import { Transaction } from "@prisma/client"
 import { ActionArgs, json, redirect } from "@remix-run/node"
 import { Link, useLoaderData } from "@remix-run/react"
 import { RepeatedTransactionsList } from "~/components/RepeatedTransactionsForm"
-import { repeatedTransactions } from "~/logic/repeatedTransactions"
+import { repeatedTransactions } from "~/logic/repeatedTransData"
 import { db } from "~/utils/db.server"
 import { getTransactionsFromFormData } from "~/utils/form"
-import { getCurrentPeriodPath } from "~/utils/time"
+import { getCurrentDatePeriodPath } from "~/utils/time"
 
 export async function action({ request }: ActionArgs) {
   const formData = await request.formData()
@@ -14,13 +14,13 @@ export async function action({ request }: ActionArgs) {
   await db.transaction.createMany({
     data: transactions,
   })
-  const { link } = getCurrentPeriodPath("transactions")
+  const { link } = getCurrentDatePeriodPath("transactions")
   return redirect(link)
 }
 
 export async function loader() {
   const { currentMonthStr, currentFullYear, link } =
-    getCurrentPeriodPath("transactions")
+    getCurrentDatePeriodPath("transactions")
 
   // create transactions list
   const transactions = repeatedTransactions.map((t) => {

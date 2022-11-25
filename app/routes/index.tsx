@@ -3,16 +3,16 @@ import { json } from "@remix-run/node"
 import { Link, useLoaderData } from "@remix-run/react"
 import { GoToIcon } from "~/components/components"
 import { getTotalsMap, MORAN_RAN } from "~/logic/cost-balancer"
-import { convertMonthToMonthPeriod, getMonthValueByName } from "~/utils/time"
+import {
+  convertMonthToMonthPeriod,
+  getCurrentDatePeriodPath,
+  getMonthValueByName,
+} from "~/utils/time"
 import { NavBar } from "../components/NavBar"
 
 export const loader = async () => {
   // current link is /{year}-{month}/transactions
-  const currentFullYear = new Date().getFullYear().toString()
-  const currentYear = currentFullYear.slice(2, 4)
-  const currentMonth = new Date().getMonth() + 1
-  const currentMonthStr = convertMonthToMonthPeriod(currentMonth)
-  const currentLinkPath = `/${currentYear}-${currentMonthStr}/transactions`
+  const { link: currentLinkPath } = getCurrentDatePeriodPath("transactions")
   //  calc remaining for all time
   const summaryMaps = await getTotalsMap()
   const unbalanced = []

@@ -4,7 +4,7 @@ import {
   TransactionOwner,
   TransactionType,
 } from "@prisma/client"
-import { ActionFunction, json, LoaderArgs, redirect } from "@remix-run/node"
+import { ActionFunction, json, LoaderArgs } from "@remix-run/node"
 import {
   Outlet,
   useLoaderData,
@@ -18,6 +18,7 @@ import {
   deleteTransaction,
   getTransactionsListByYearMonth,
 } from "~/models/transactions.server"
+import { debugRemix } from "~/utils/debug"
 import { convertMonthStrTo2CharStr } from "~/utils/form"
 
 export async function loader({ params, request }: LoaderArgs) {
@@ -46,6 +47,7 @@ export async function loader({ params, request }: LoaderArgs) {
   return json({ transactions, year, month })
 }
 export const action: ActionFunction = async ({ request }) => {
+  debugRemix()
   const formData = await request.formData()
   const intent = formData.get("intent")
   switch (intent) {
@@ -80,8 +82,8 @@ export const action: ActionFunction = async ({ request }) => {
       const redirectURL = `/${year.slice(2, 4)}-${convertMonthStrTo2CharStr(
         monthFix
       )}/transactions`
-
-      return redirect(redirectURL)
+      console.log("here")
+      return json({})
 
     case "delete-transaction":
       const id = formData.get("id") as string

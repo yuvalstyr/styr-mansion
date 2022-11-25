@@ -1,5 +1,6 @@
 import { Transaction } from "@prisma/client"
 import { Form, Link, useLocation, useTransition } from "@remix-run/react"
+import { useWindowSize } from "usehooks-ts"
 import { LabelText } from "~/components/components"
 import { checkIfOnPath } from "~/routes/$time/transactions"
 import { getOptions } from "~/utils/form"
@@ -8,23 +9,24 @@ type IProps = {
   transaction?: Transaction
   year?: string
   month?: string
+  link: string
 }
 
 export function TransactionsForm(props: IProps) {
-  const { transaction: t, month, year } = props
+  const { transaction: t, month, year, link } = props
+  const { width } = useWindowSize()
   const location = useLocation()
   const isOnNew = checkIfOnPath(location.pathname, "new")
-  console.log({ month: Number(month), year })
+  const isMediumScreen = width < 1440
   //  remix hooks
   const transition = useTransition()
 
   const isSubmitting = Boolean(transition.submission)
-
   return (
     <Form
       method="post"
       className="grid grid-cols-1 gap-x-4 gap-y-2 lg:grid-cols-2"
-      action={isOnNew ? `./` : `./`}
+      action={isMediumScreen ? link : `${link}/new`}
     >
       <div className="min-w-[100px]">
         <div className="flex flex-wrap items-center gap-1">
@@ -128,7 +130,7 @@ export function TransactionsForm(props: IProps) {
           name="year"
           key={t?.id ?? "new"}
           className="select w-full max-w-xs bg-gray-300 text-black"
-          defaultValue={t?.year || Number(year) + 2000}
+          defaultValue={t?.year || Number(year)}
         >
           <option value="" className="disabled">
             --Please choose Year--

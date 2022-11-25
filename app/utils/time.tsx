@@ -47,16 +47,43 @@ export function getMonthValueByName(monthInput: number) {
   return undefined
 }
 
-export function getCurrentPeriodPath(path: string) {
+export function getLinkByYearMonthAndPath(
+  year: string,
+  month: string,
+  path: string
+) {
+  return `/${year}-${month}/${path}`
+}
+
+// current link is /{year}-{month}/{path}
+export function getCurrentDatePeriodPath(path: string) {
   const currentFullYear = new Date().getFullYear().toString()
-  const currentYear = currentFullYear.slice(2, 4)
   const currentMonth = new Date().getMonth() + 1
+  const currentYear = currentFullYear.slice(2, 4)
   const currentMonthStr = convertMonthToMonthPeriod(currentMonth)
   return {
-    link: `/${currentYear}-${currentMonthStr}/${path}`,
+    link: getLinkByYearMonthAndPath(currentYear, currentMonthStr, path),
     currentYear,
     currentFullYear,
     currentMonthStr,
     currentMonth,
+  }
+}
+
+// get time as param and create link to /{year}-{month}/{path}
+export function getLinkByTime(time: string, path: string) {
+  const [year, month] = time.split("-")
+  const fullYear = year === "00" ? undefined : String(Number(year) + 2000)
+  // if month is 00, then get all months, if month string is start with 0, then remove 0
+  const monthFixed = month === "00" ? undefined : String(Number(month))
+  const months = monthFixed
+    ? [monthFixed, String(Number(monthFixed) + 1)]
+    : undefined
+
+  return {
+    link: getLinkByYearMonthAndPath(year, month, path),
+    fullYear,
+    monthFixed,
+    months,
   }
 }
