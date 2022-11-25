@@ -1,9 +1,9 @@
-import { Transaction } from "@prisma/client"
+import { Transaction, TransactionAction } from "@prisma/client"
 import { v4 as uuid } from "uuid"
 
 export const repeatedTransactions: Transaction[] = [
   {
-    action: "MONTHLY_BILL",
+    action: TransactionAction.MONTHLY_BILL,
     amount: 5800,
     description: "rent for front department",
     month: "please fill",
@@ -15,7 +15,7 @@ export const repeatedTransactions: Transaction[] = [
     id: uuid(),
   },
   {
-    action: "MONTHLY_BILL",
+    action: TransactionAction.MONTHLY_BILL,
     amount: 8000,
     description: "rent for big house",
     month: "please fill",
@@ -27,7 +27,7 @@ export const repeatedTransactions: Transaction[] = [
     id: uuid(),
   },
   {
-    action: "MONTHLY_BILL",
+    action: TransactionAction.MONTHLY_BILL,
     amount: 3800,
     description: "rent for basement department",
     month: "please fill",
@@ -39,7 +39,7 @@ export const repeatedTransactions: Transaction[] = [
     id: uuid(),
   },
   {
-    action: "MONTHLY_BILL",
+    action: TransactionAction.MONTHLY_BILL,
     amount: 450,
     description: "arnona department",
     month: "please fill",
@@ -51,9 +51,9 @@ export const repeatedTransactions: Transaction[] = [
     id: uuid(),
   },
   {
-    action: "MONTHLY_BILL",
+    action: TransactionAction.MONTHLY_BILL,
     amount: 385,
-    description: "arnona department",
+    description: "arnona basement",
     month: "please fill",
     owner: "Tenant",
     type: "DEPOSIT",
@@ -63,7 +63,7 @@ export const repeatedTransactions: Transaction[] = [
     id: uuid(),
   },
   {
-    action: "MONTHLY_BILL",
+    action: TransactionAction.MONTHLY_BILL,
     amount: 1304,
     description: "rent for basement department",
     month: "please fill",
@@ -75,7 +75,7 @@ export const repeatedTransactions: Transaction[] = [
     id: uuid(),
   },
   {
-    action: "MONTHLY_BILL",
+    action: TransactionAction.MONTHLY_BILL,
     amount: 8000,
     description: "rent for front department",
     month: "please fill",
@@ -87,7 +87,7 @@ export const repeatedTransactions: Transaction[] = [
     id: uuid(),
   },
   {
-    action: "MONTHLY_BILL",
+    action: TransactionAction.MONTHLY_BILL,
     amount: 1304,
     description: "arnona",
     month: "please fill",

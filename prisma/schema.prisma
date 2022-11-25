@@ -19,6 +19,7 @@ enum TransactionType {
 enum TransactionAction {
   RENT
   MONTHLY_BILL
+  ELECTRICITY
   FIX
   CONSTRUCTION
   OTHER
