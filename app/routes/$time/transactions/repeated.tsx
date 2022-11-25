@@ -1,11 +1,11 @@
 import { Transaction } from "@prisma/client"
 import { ActionArgs, json, redirect } from "@remix-run/node"
 import { Link, useLoaderData } from "@remix-run/react"
-import { RepeatedTransactionsList } from "~/components/RepeatedTransactionsList"
+import { RepeatedTransactionsList } from "~/components/RepeatedTransactionsForm"
 import { repeatedTransactions } from "~/logic/repeatedTransactions"
 import { db } from "~/utils/db.server"
 import { getTransactionsFromFormData } from "~/utils/form"
-import { convertMonthToMonthPeriod, getCurrentPeriodPath } from "~/utils/time"
+import { getCurrentPeriodPath } from "~/utils/time"
 
 export async function action({ request }: ActionArgs) {
   const formData = await request.formData()
@@ -14,14 +14,13 @@ export async function action({ request }: ActionArgs) {
   await db.transaction.createMany({
     data: transactions,
   })
-  return redirect(getCurrentPeriodPath("transactions"))
+  const { link } = getCurrentPeriodPath("transactions")
+  return redirect(link)
 }
 
 export async function loader() {
-  const currentLinkPath = getCurrentPeriodPath("transactions")
-  const currentFullYear = new Date().getFullYear().toString()
-  const currentMonth = new Date().getMonth() + 1
-  const currentMonthStr = convertMonthToMonthPeriod(currentMonth)
+  const { currentMonthStr, currentFullYear, link } =
+    getCurrentPeriodPath("transactions")
 
   // create transactions list
   const transactions = repeatedTransactions.map((t) => {
@@ -33,7 +32,7 @@ export async function loader() {
       updatedAt: new Date(),
     }
   })
-  return json({ backLink: currentLinkPath, transactions })
+  return json({ backLink: link, transactions })
 }
 
 export default function RepeatedRoute() {

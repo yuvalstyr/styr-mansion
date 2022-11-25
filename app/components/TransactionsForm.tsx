@@ -24,6 +24,7 @@ export function TransactionsForm(props: IProps) {
     <Form
       method="post"
       className="grid grid-cols-1 gap-x-4 gap-y-2 lg:grid-cols-2"
+      action={isOnNew ? `./` : `./`}
     >
       <div className="min-w-[100px]">
         <div className="flex flex-wrap items-center gap-1">
@@ -94,6 +95,7 @@ export function TransactionsForm(props: IProps) {
           defaultValue={t?.amount}
           className={"input w-full max-w-xs bg-gray-300 text-black"}
           placeholder="please enter amount"
+          min="0"
         />
       </div>
       <div className="min-w-[100px]">

@@ -52,5 +52,11 @@ export function getCurrentPeriodPath(path: string) {
   const currentYear = currentFullYear.slice(2, 4)
   const currentMonth = new Date().getMonth() + 1
   const currentMonthStr = convertMonthToMonthPeriod(currentMonth)
-  return `/${currentYear}-${currentMonthStr}/${path}`
+  return {
+    link: `/${currentYear}-${currentMonthStr}/${path}`,
+    currentYear,
+    currentFullYear,
+    currentMonthStr,
+    currentMonth,
+  }
 }
