@@ -1,5 +1,4 @@
 import {
-  Transaction,
   TransactionAction,
   TransactionOwner,
   TransactionType,
@@ -194,17 +193,16 @@ export function getTransactionsFromFormData(
   }
   const filteredRows = rows.filter((row) => row.include)
   const transactions = filteredRows.map((row) => {
-    const { type, action, owner, amount, description, month, year } =
-      row as unknown as Transaction
+    const { type, action, owner, amount, description, month, year } = row
     return {
       type: type,
       action: action,
       owner: owner,
-      amount: amount,
+      amount: Number(amount),
       description: description,
       month: month,
       year: year,
     }
-  })
+  }) as TransactionInput[]
   return transactions
 }
