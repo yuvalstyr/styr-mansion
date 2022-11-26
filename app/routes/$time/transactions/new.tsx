@@ -1,5 +1,4 @@
 import {
-  Transaction,
   TransactionAction,
   TransactionOwner,
   TransactionType,
@@ -11,7 +10,6 @@ import { TransactionsForm } from "~/components/TransactionsForm"
 import {
   createTransaction,
   deleteTransaction,
-  getTransactionsListByYearMonth,
 } from "~/models/transactions.server"
 import { convertMonthStrTo2CharStr } from "~/utils/form"
 import { getLinkByTime } from "~/utils/time"
@@ -19,21 +17,9 @@ import { getLinkByTime } from "~/utils/time"
 export async function loader({ params }: LoaderArgs) {
   const { time } = params
   invariant(typeof time === "string", "time must be a string")
-  const { fullYear, months, monthFixed, link } = getLinkByTime(
-    time,
-    "transactions"
-  )
+  const { fullYear, monthFixed, link } = getLinkByTime(time, "transactions")
 
-  const transactions = await getTransactionsListByYearMonth({
-    year: fullYear,
-    months,
-  })
-
-  // check if got transactions
-  if (!transactions) {
-    throw new Response("No transactions found", { status: 404 })
-  }
-  return json({ transactions, year: fullYear, month: monthFixed, link })
+  return json({ year: fullYear, month: monthFixed, link })
 }
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData()
@@ -91,15 +77,6 @@ export default function TransactionsRoute() {
   const transition = useTransition()
   const isBusy = transition.state === "submitting"
 
-  // covert transactions serialized to model
-  const transactions = data.transactions?.map((t) => {
-    const transaction: Transaction = {
-      ...t,
-      createdAt: new Date(t.createdAt),
-      updatedAt: new Date(t.updatedAt),
-    }
-    return transaction
-  })
   return (
     <div className="relative p-10 m-6 bg-base-100 rounded-box">
       <div className="text-[length:32px] font-bold">New Transaction</div>

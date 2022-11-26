@@ -3,21 +3,24 @@ import {
   TransactionOwner,
   TransactionType,
 } from "@prisma/client"
-import { ActionFunction, LoaderArgs, redirect } from "@remix-run/node"
+import { ActionFunction, json, LoaderArgs, redirect } from "@remix-run/node"
 import { Outlet, useLoaderData } from "@remix-run/react"
 import invariant from "tiny-invariant"
 import { TransactionsForm } from "~/components/TransactionsForm"
 import { updateTransaction } from "~/models/transactions.server"
 import { db } from "~/utils/db.server"
 import { convertMonthStrTo2CharStr } from "~/utils/form"
+import { getLinkByTime } from "~/utils/time"
 
 export async function loader({ params }: LoaderArgs) {
-  const id = params.transactionID
+  const { transactionID: id, time } = params
+  invariant(typeof time === "string", "time must be a string")
+  invariant(typeof id === "string", "id must be a string")
   const transaction = await db.transaction.findFirst({ where: { id } })
-  if (!transaction) {
-    return { transaction: null }
-  }
-  return { transaction }
+
+  const { link } = getLinkByTime(time, "transactions")
+
+  return json({ transaction, link })
 }
 
 export const action: ActionFunction = async ({ request, params }) => {
@@ -57,7 +60,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 export default function UpdateTransactionRoute() {
   const data = useLoaderData<typeof loader>()
-  const { transaction } = data
+  const { transaction, link } = data
 
   if (!transaction) {
     return (
@@ -75,7 +78,7 @@ export default function UpdateTransactionRoute() {
   return (
     <div className="relative p-10 m-6 bg-base-100 rounded-box">
       <div className="text-[length:32px] font-bold">Update Transactions</div>
-      <TransactionsForm transaction={t} />
+      <TransactionsForm transaction={t} link={link} />
       <Outlet />
     </div>
   )
