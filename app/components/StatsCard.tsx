@@ -1,4 +1,9 @@
-import { CashIcon, DollarIcon, ScaleIcon } from "~/components/components"
+import {
+  CashIcon,
+  DollarIcon,
+  ScaleIcon,
+  WithdrawalIcon,
+} from "~/components/components"
 
 export interface StatsCardProps {
   profit: number
@@ -42,6 +47,16 @@ export function StatsCard(props: StatsCardProps) {
             returning costs
           </div>
         </div>
+        <div className="stat max-w-1/6">
+          <div className="stat-figure text-error">
+            <WithdrawalIcon />
+          </div>
+          <div className="stat-title text-sm">Withdrawal</div>
+          <div className="stat-value">{Math.round(withdrawal)}</div>
+          <div className="stat-desc invisible lg:visible max-w-[100px]">
+            already withdrawn
+          </div>
+        </div>
 
         <div className="stat max-w-1/6">
           <div className="stat-figure text-secondary">
@@ -50,7 +65,7 @@ export function StatsCard(props: StatsCardProps) {
           <div className="stat-title text-sm">Remains</div>
           <div className="stat-value">{Math.round(remains)}</div>
           <div className="stat-desc invisible lg:visible max-w-[100px]">
-            withdrawal funds
+            left to withdrawal
           </div>
         </div>
       </div>
