@@ -6,7 +6,7 @@ import { repeatedTransactions } from "~/logic/repeatedTransData"
 import { TransactionInput } from "~/models/transactions.server"
 import { db } from "~/utils/db.server"
 import { getTransactionsFromFormData } from "~/utils/form"
-import { getCurrentDatePeriodPath } from "~/utils/time"
+import { getCurrentDatePeriodPath, getLinkByTime } from "~/utils/time"
 
 export async function loader({ params }: ActionArgs) {
   const { time } = params
@@ -14,15 +14,14 @@ export async function loader({ params }: ActionArgs) {
 
   const [_, month] = time.split("-")
   const months = [Number(month), Number(month) + 1]
-  const { currentMonthStr, currentFullYear, link } =
-    getCurrentDatePeriodPath("transactions")
+  const { link, fullYear, monthFixed } = getLinkByTime(time, "transactions")
 
   // create transactions list
   const transactions = repeatedTransactions.map((t) => {
     return {
       ...t,
-      month: currentMonthStr,
-      year: currentFullYear,
+      month: monthFixed,
+      year: fullYear,
       createdAt: new Date(),
       updatedAt: new Date(),
     }
