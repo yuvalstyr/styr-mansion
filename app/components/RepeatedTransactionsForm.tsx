@@ -8,6 +8,7 @@ type IProps = {
   transactions: TransactionInput[]
   backLink: string
   months: number[]
+  redirectLink: string
 }
 
 export function RepeatedTransactionsForm({
