@@ -3,7 +3,6 @@ import { useLoaderData } from "@remix-run/react"
 import invariant from "tiny-invariant"
 import { RepeatedTransactionsForm } from "~/components/RepeatedTransactionsForm"
 import { repeatedTransactions } from "~/logic/repeatedTransData"
-import { TransactionInput } from "~/models/transactions.server"
 import { db } from "~/utils/db.server"
 import { getTransactionsFromFormData } from "~/utils/form"
 import { getCurrentDatePeriodPath, getLinkByTime } from "~/utils/time"
@@ -15,6 +14,8 @@ export async function loader({ params }: ActionArgs) {
   const [_, month] = time.split("-")
   const months = [Number(month), Number(month) + 1]
   const { link, fullYear, monthFixed } = getLinkByTime(time, "transactions")
+  invariant(typeof fullYear === "string", "fullYear must be a string")
+  invariant(typeof monthFixed === "string", "monthFixed must be a string")
 
   // create transactions list
   const transactions = repeatedTransactions.map((t) => {
@@ -22,8 +23,6 @@ export async function loader({ params }: ActionArgs) {
       ...t,
       month: monthFixed,
       year: fullYear,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     }
   })
   return json({ backLink: link, transactions, months })
@@ -42,12 +41,8 @@ export async function action({ request }: ActionArgs) {
 
 export default function RepeatedRoute() {
   const data = useLoaderData<typeof loader>()
-  const transactions = data.transactions?.map((t) => {
-    const transaction: TransactionInput = {
-      ...t,
-    }
-    return transaction
-  })
+  const transactions = data.transactions
+
   return (
     <div className="modal modal-open">
       <div className="w-[90vw] bg-base-100 rounded-lg">

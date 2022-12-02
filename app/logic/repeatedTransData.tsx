@@ -35,7 +35,7 @@ export const repeatedTransactions: TransactionInput[] = [
     description: "arnona department",
     month: "please fill",
     owner: "Tenant",
-    type: "DEPOSIT",
+    type: "EXPENSE",
     year: "please fill",
   },
   {
@@ -44,16 +44,7 @@ export const repeatedTransactions: TransactionInput[] = [
     description: "arnona basement",
     month: "please fill",
     owner: "Tenant",
-    type: "DEPOSIT",
-    year: "please fill",
-  },
-  {
-    action: TransactionAction.MONTHLY_BILL,
-    amount: 1304,
-    description: "rent for basement department",
-    month: "please fill",
-    owner: "Tenant",
-    type: "DEPOSIT",
+    type: "EXPENSE",
     year: "please fill",
   },
   {
