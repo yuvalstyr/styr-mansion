@@ -2701,12 +2701,12 @@ body[dir="rtl"] .checkbox:checked,
   margin-right: 0.5rem;
 }
 
-.mt-2 {
-  margin-top: 0.5rem;
-}
-
 .mt-3 {
   margin-top: 0.75rem;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
 }
 
 .mt-0 {
@@ -2725,12 +2725,12 @@ body[dir="rtl"] .checkbox:checked,
   margin-left: 0.5rem;
 }
 
-.-mt-20 {
-  margin-top: -5rem;
-}
-
 .mb-1 {
   margin-bottom: 0.25rem;
+}
+
+.-mt-20 {
+  margin-top: -5rem;
 }
 
 .block {
@@ -2785,12 +2785,16 @@ body[dir="rtl"] .checkbox:checked,
   width: 90vw;
 }
 
+.min-w-\[150px\] {
+  min-width: 150px;
+}
+
 .min-w-\[100px\] {
   min-width: 100px;
 }
 
-.min-w-\[150px\] {
-  min-width: 150px;
+.max-w-sm {
+  max-width: 24rem;
 }
 
 .max-w-xs {
@@ -2799,10 +2803,6 @@ body[dir="rtl"] .checkbox:checked,
 
 .max-w-\[100px\] {
   max-width: 100px;
-}
-
-.max-w-sm {
-  max-width: 24rem;
 }
 
 .max-w-\[150px\] {
@@ -2836,10 +2836,6 @@ body[dir="rtl"] .checkbox:checked,
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-}
-
-.grid-flow-row {
-  grid-auto-flow: row;
 }
 
 .grid-flow-col {
@@ -2966,12 +2962,12 @@ body[dir="rtl"] .checkbox:checked,
   border-color: rgb(209 213 219 / var(--tw-border-opacity));
 }
 
-.border-opacity-20 {
-  --tw-border-opacity: 0.2;
-}
-
 .border-opacity-30 {
   --tw-border-opacity: 0.3;
+}
+
+.border-opacity-20 {
+  --tw-border-opacity: 0.2;
 }
 
 .bg-base-100 {
@@ -3093,6 +3089,11 @@ body[dir="rtl"] .checkbox:checked,
   line-height: 1.75rem;
 }
 
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
 .text-sm {
   font-size: 0.875rem;
   line-height: 1.25rem;
@@ -3101,11 +3102,6 @@ body[dir="rtl"] .checkbox:checked,
 .text-4xl {
   font-size: 2.25rem;
   line-height: 2.5rem;
-}
-
-.text-xs {
-  font-size: 0.75rem;
-  line-height: 1rem;
 }
 
 .text-\[length\:32px\] {
@@ -3159,6 +3155,11 @@ body[dir="rtl"] .checkbox:checked,
   color: hsl(var(--bc) / var(--tw-text-opacity));
 }
 
+.text-primary-content {
+  --tw-text-opacity: 1;
+  color: hsl(var(--pc) / var(--tw-text-opacity));
+}
+
 .text-black {
   --tw-text-opacity: 1;
   color: rgb(0 0 0 / var(--tw-text-opacity));
@@ -3181,11 +3182,6 @@ body[dir="rtl"] .checkbox:checked,
 
 .text-transparent {
   color: transparent;
-}
-
-.text-primary-content {
-  --tw-text-opacity: 1;
-  color: hsl(var(--pc) / var(--tw-text-opacity));
 }
 
 .text-white {

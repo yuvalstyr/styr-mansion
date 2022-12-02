@@ -1,7 +1,7 @@
-import { Transaction, TransactionAction } from "@prisma/client"
-import { v4 as uuid } from "uuid"
+import { TransactionAction } from "@prisma/client"
+import { TransactionInput } from "~/models/transactions.server"
 
-export const repeatedTransactions: Transaction[] = [
+export const repeatedTransactions: TransactionInput[] = [
   {
     action: TransactionAction.MONTHLY_BILL,
     amount: 5800,
@@ -10,9 +10,6 @@ export const repeatedTransactions: Transaction[] = [
     owner: "Tenant",
     type: "DEPOSIT",
     year: "please fill",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    id: uuid(),
   },
   {
     action: TransactionAction.MONTHLY_BILL,
@@ -22,9 +19,6 @@ export const repeatedTransactions: Transaction[] = [
     owner: "Tenant",
     type: "DEPOSIT",
     year: "please fill",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    id: uuid(),
   },
   {
     action: TransactionAction.MONTHLY_BILL,
@@ -34,9 +28,6 @@ export const repeatedTransactions: Transaction[] = [
     owner: "Tenant",
     type: "DEPOSIT",
     year: "please fill",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    id: uuid(),
   },
   {
     action: TransactionAction.MONTHLY_BILL,
@@ -46,9 +37,6 @@ export const repeatedTransactions: Transaction[] = [
     owner: "Tenant",
     type: "DEPOSIT",
     year: "please fill",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    id: uuid(),
   },
   {
     action: TransactionAction.MONTHLY_BILL,
@@ -58,9 +46,6 @@ export const repeatedTransactions: Transaction[] = [
     owner: "Tenant",
     type: "DEPOSIT",
     year: "please fill",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    id: uuid(),
   },
   {
     action: TransactionAction.MONTHLY_BILL,
@@ -70,9 +55,6 @@ export const repeatedTransactions: Transaction[] = [
     owner: "Tenant",
     type: "DEPOSIT",
     year: "please fill",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    id: uuid(),
   },
   {
     action: TransactionAction.MONTHLY_BILL,
@@ -82,9 +64,6 @@ export const repeatedTransactions: Transaction[] = [
     owner: "Ran",
     type: "WITHDRAWAL",
     year: "please fill",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    id: uuid(),
   },
   {
     action: TransactionAction.MONTHLY_BILL,
@@ -94,8 +73,5 @@ export const repeatedTransactions: Transaction[] = [
     owner: "Ran",
     type: "WITHDRAWAL",
     year: "please fill",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    id: uuid(),
   },
 ]

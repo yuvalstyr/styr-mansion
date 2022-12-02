@@ -1,5 +1,5 @@
 import { TransactionOwner, TransactionType } from "@prisma/client"
-import { StyrSummary } from "~/logic/cost-balancer"
+
 import {
   getDBYearAndMonth,
   getTransactionsListByYearMonthGrouped,

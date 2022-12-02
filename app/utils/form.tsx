@@ -4,6 +4,7 @@ import {
   TransactionType,
 } from "@prisma/client"
 import { add, format } from "date-fns"
+import invariant from "tiny-invariant"
 import { TransactionInput } from "~/models/transactions.server"
 import { monthsPeriodObj } from "./time"
 
@@ -166,8 +167,9 @@ export function getTransactionsFromFormData(
   const owners = data.getAll("owner")
   const amounts = data.getAll("amount")
   const descriptions = data.getAll("description")
-  const months = data.getAll("month")
   const years = data.getAll("year")
+  const monthSelect = data.get("month-select")
+  invariant(monthSelect, "monthSelect is required")
 
   for (let i = 0; i < types.length; i++) {
     const include = includes[i] === "on"
@@ -176,7 +178,7 @@ export function getTransactionsFromFormData(
     const owner = owners[i].toString()
     const amount = amounts[i].toString()
     const description = descriptions[i].toString()
-    const month = months[i].toString()
+    const month = monthSelect.toString()
     const year = years[i].toString()
     if (type && action && owner && amount && description) {
       rows.push({

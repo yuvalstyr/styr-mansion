@@ -1,10 +1,11 @@
-import { Transaction } from "@prisma/client"
 import { useLocation, useTransition } from "@remix-run/react"
+import { v4 as uuid } from "uuid"
+import { TransactionInput } from "~/models/transactions.server"
 import { checkIfOnPath } from "~/routes/$time/transactions"
 import { getOptions } from "~/utils/form"
 
 type IProps = {
-  transaction?: Transaction
+  transaction?: TransactionInput
 }
 
 export function RepeatedTransactionsFormRow(props: IProps) {
@@ -30,7 +31,7 @@ export function RepeatedTransactionsFormRow(props: IProps) {
           placeholder=" "
           name="type"
           className="select w-full max-w-xs bg-gray-300 text-black"
-          key={t?.id ?? "new"}
+          key={uuid()}
           defaultValue={t?.type}
         >
           <option value="" className="disabled">
@@ -41,7 +42,7 @@ export function RepeatedTransactionsFormRow(props: IProps) {
       </div>
       <div className="min-w-[100px] mr-2 mt-2">
         <select
-          key={t?.id ?? "new"}
+          key={uuid()}
           placeholder=" "
           name="action"
           className="select w-full max-w-xs bg-gray-300 text-black"
@@ -58,7 +59,7 @@ export function RepeatedTransactionsFormRow(props: IProps) {
           placeholder=" "
           name="owner"
           defaultValue={t?.owner}
-          key={t?.id ?? "new"}
+          key={uuid()}
           className="select w-full max-w-xs bg-gray-300 text-black"
         >
           <option value="" className="disabled">
@@ -71,6 +72,7 @@ export function RepeatedTransactionsFormRow(props: IProps) {
         <input
           type="number"
           name="amount"
+          key={uuid()}
           defaultValue={t?.amount}
           className={"input w-full max-w-xs bg-gray-300 text-black"}
           placeholder="please enter amount"
@@ -80,20 +82,14 @@ export function RepeatedTransactionsFormRow(props: IProps) {
         <input
           name="description"
           defaultValue={t?.description}
-          key={t?.id ?? "new"}
+          key={uuid()}
           placeholder="Please enter description"
           className="input w-full max-w-xs bg-gray-300 text-black"
         />
       </div>
       <input
-        name="month"
-        key={t?.month ?? "new"}
-        defaultValue={t?.month}
-        className="hidden"
-      />
-      <input
         name="year"
-        key={t?.year ?? "new"}
+        key={uuid()}
         defaultValue={t?.year}
         className="hidden"
       />
