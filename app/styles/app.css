@@ -2927,6 +2927,15 @@ body[dir="rtl"] .checkbox:checked,
   overflow-x: auto;
 }
 
+.break-normal {
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.break-words {
+  overflow-wrap: break-word;
+}
+
 .rounded-full {
   border-radius: 9999px;
 }
@@ -3219,6 +3228,10 @@ body[dir="rtl"] .checkbox:checked,
 
 .duration-300 {
   transition-duration: 300ms;
+}
+
+.first-letter\:capitalize::first-letter {
+  text-transform: capitalize;
 }
 
 .hover\:bg-green-600:hover {

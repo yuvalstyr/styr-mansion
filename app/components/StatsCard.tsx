@@ -33,8 +33,8 @@ export function StatsCard(props: StatsCardProps) {
           </div>
           <div className="stat-title text-sm">Profit</div>
           <div className="stat-value">{Math.round(profit)}</div>
-          <div className="stat-desc invisible lg:visible max-w-[100px]">
-            net income after expense reduction
+          <div className="stat-desc break-normal invisible lg:visible max-w-[100px]">
+            net income
           </div>
         </div>
         <div className="stat max-w-1/6">
@@ -43,8 +43,8 @@ export function StatsCard(props: StatsCardProps) {
           </div>
           <div className="stat-title text-sm">Expense</div>
           <div className="stat-value">{Math.round(expense)}</div>
-          <div className="stat-desc invisible lg:visible max-w-[100px]">
-            returning costs
+          <div className="stat-desc break-normal invisible lg:visible max-w-[100px]">
+            costs for refund
           </div>
         </div>
         <div className="stat max-w-1/6">
@@ -53,7 +53,7 @@ export function StatsCard(props: StatsCardProps) {
           </div>
           <div className="stat-title text-sm">Withdrawal</div>
           <div className="stat-value">{Math.round(withdrawal)}</div>
-          <div className="stat-desc invisible lg:visible max-w-[100px]">
+          <div className="stat-desc break-normal invisible lg:visible max-w-[100px]">
             already withdrawn
           </div>
         </div>
@@ -64,8 +64,8 @@ export function StatsCard(props: StatsCardProps) {
           </div>
           <div className="stat-title text-sm">Remains</div>
           <div className="stat-value">{Math.round(remains)}</div>
-          <div className="stat-desc invisible lg:visible max-w-[100px]">
-            left to withdrawal
+          <div className="stat-desc break-normal invisible lg:visible max-w-[100px]">
+            left to withdraw
           </div>
         </div>
       </div>
