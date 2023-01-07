@@ -18,7 +18,6 @@ import {
   deleteTransaction,
   getTransactionsListByYearMonth,
 } from "~/models/transactions.server"
-import { debugRemix } from "~/utils/debug"
 import { convertMonthStrTo2CharStr } from "~/utils/form"
 
 export async function loader({ params, request }: LoaderArgs) {
@@ -47,7 +46,6 @@ export async function loader({ params, request }: LoaderArgs) {
   return json({ transactions, year, month })
 }
 export const action: ActionFunction = async ({ request }) => {
-  debugRemix()
   const formData = await request.formData()
   const intent = formData.get("intent")
   switch (intent) {

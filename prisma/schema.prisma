@@ -44,3 +44,20 @@ model Transaction {
   createdAt   DateTime          @default(now())
   updatedAt   DateTime          @updatedAt
 }
+
+model Electricity {
+  id                  String   @id @default(cuid())
+  totalBill           Float
+  frontMeasurement    Float
+  frontConsumption    Float
+  frontCost           Float
+  basementMeasurement Float
+  basementConsumption Float
+  basementCost        Float
+  houseCost           Float
+  rate                Float
+  month               String
+  year                String
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}

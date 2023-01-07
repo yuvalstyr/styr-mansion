@@ -16,20 +16,44 @@ export function LabelText({ children }: { children: React.ReactNode }) {
 }
 
 export function InputFloatingLabel({
-  children,
+  label,
+  name,
 }: {
-  children: React.ReactNode
+  label: string
+  name: string
 }) {
   return (
-    <div className="relative">
+    <div className="relative mt-2">
       <input
         type="text"
-        className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+        className="input block placeholder:block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-transparent focus:outline-none focus:ring-0 focus:border-transparent peer"
         placeholder=" "
+        name={name}
       />
-      <label className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
-        Floating outlined
+      <label className="absolute text-md dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0]   px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
+        {label}
       </label>
+    </div>
+  )
+}
+
+interface InputWithLabelProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  name: string
+  label: string
+}
+
+export function InputWithLabel({ name, label, ...props }: InputWithLabelProps) {
+  return (
+    <div className="flex flex-col">
+      <LabelText>
+        <label> {`${label}`}:</label>
+      </LabelText>
+      <input
+        name={name}
+        className="input w-full max-w-xs bg-gray-300 text-black"
+        {...props}
+      />
     </div>
   )
 }
@@ -217,7 +241,7 @@ export function WithdrawalIcon(props: React.SVGProps<SVGSVGElement>) {
     <svg
       stroke="currentColor"
       fill="currentColor"
-      stroke-width="0"
+      strokeWidth="0"
       viewBox="0 0 16 16"
       height={24}
       width={24}
@@ -227,5 +251,22 @@ export function WithdrawalIcon(props: React.SVGProps<SVGSVGElement>) {
       <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1H1zm7 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"></path>
       <path d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V5zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2H3z"></path>
     </svg>
+  )
+}
+
+export function ErrorFallback({
+  children = "There was a problem. Sorry.",
+}: {
+  children?: React.ReactNode
+}) {
+  return (
+    <div className="relative h-full">
+      <div className="absolute inset-0 flex justify-center bg-red-100 pt-4 text-red-500">
+        <div className="text-red-brand text-center">
+          <div className="text-lg font-bold">Oh snap!</div>
+          <div className="px-2 text-base">{children}</div>
+        </div>
+      </div>
+    </div>
   )
 }

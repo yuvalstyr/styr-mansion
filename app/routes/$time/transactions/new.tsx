@@ -12,14 +12,14 @@ import {
   deleteTransaction,
 } from "~/models/transactions.server"
 import { convertMonthStrTo2CharStr } from "~/utils/form"
-import { getLinkByTime } from "~/utils/time"
+import { getTimeParameters } from "~/utils/time"
 
 export async function loader({ params }: LoaderArgs) {
   const { time } = params
   invariant(typeof time === "string", "time must be a string")
-  const { fullYear, monthFixed, link } = getLinkByTime(time, "transactions")
+  const { year, month, link } = getTimeParameters(time, "transactions")
 
-  return json({ year: fullYear, month: monthFixed, link })
+  return json({ year, month, link })
 }
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData()

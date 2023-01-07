@@ -70,20 +70,23 @@ export function getCurrentDatePeriodPath(path: string) {
   }
 }
 
+export function convertTimeToYearMonth(time: string) {
+  const [y, m] = time.split("-")
+  // if month or year is 00, then get all months/years, if month string is start with 0, then remove 0
+  const year = y === "00" ? undefined : String(Number(y) + 2000)
+  const month = m === "00" ? undefined : String(Number(m))
+  return { year, month, yearStr: y, monthStr: m }
+}
+
 // get time as param and create link to /{year}-{month}/{path}
-export function getLinkByTime(time: string, path: string) {
-  const [year, month] = time.split("-")
-  const fullYear = year === "00" ? undefined : String(Number(year) + 2000)
-  // if month is 00, then get all months, if month string is start with 0, then remove 0
-  const monthFixed = month === "00" ? undefined : String(Number(month))
-  const months = monthFixed
-    ? [monthFixed, String(Number(monthFixed) + 1)]
-    : undefined
+export function getTimeParameters(time: string, path: string) {
+  const { month, year, monthStr, yearStr } = convertTimeToYearMonth(time)
+  const months = month ? [month, String(Number(year) + 1)] : undefined
 
   return {
-    link: getLinkByYearMonthAndPath(year, month, path),
-    fullYear,
-    monthFixed,
+    link: getLinkByYearMonthAndPath(yearStr, monthStr, path),
+    year,
+    month,
     months,
   }
 }

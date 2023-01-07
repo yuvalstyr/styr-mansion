@@ -7,7 +7,7 @@ import { RepeatedTransactionsFormRow } from "./RepeatedTransactionsFormRow"
 type IProps = {
   transactions: TransactionInput[]
   backLink: string
-  months: number[]
+  months: string[]
   redirectLink: string
 }
 

@@ -27,7 +27,7 @@ export function StatsCard(props: StatsCardProps) {
         </div>
       </div>
       <div className="stats shadow w-full">
-        <div className="stat max-w-1/6">
+        <div className="stat max-w-1/8">
           <div className="stat-figure text-success">
             <DollarIcon />
           </div>
@@ -37,7 +37,7 @@ export function StatsCard(props: StatsCardProps) {
             net income
           </div>
         </div>
-        <div className="stat max-w-1/6">
+        <div className="stat max-w-1/8">
           <div className="stat-figure text-error">
             <CashIcon />
           </div>
@@ -47,7 +47,7 @@ export function StatsCard(props: StatsCardProps) {
             costs for refund
           </div>
         </div>
-        <div className="stat max-w-1/6">
+        <div className="stat max-w-1/8">
           <div className="stat-figure text-error">
             <WithdrawalIcon />
           </div>

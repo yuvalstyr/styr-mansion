@@ -10,15 +10,14 @@ import { TransactionsForm } from "~/components/TransactionsForm"
 import { updateTransaction } from "~/models/transactions.server"
 import { db } from "~/utils/db.server"
 import { convertMonthStrTo2CharStr } from "~/utils/form"
-import { getLinkByTime } from "~/utils/time"
+import { getTimeParameters } from "~/utils/time"
 
 export async function loader({ params }: LoaderArgs) {
   const { transactionID: id, time } = params
   invariant(typeof time === "string", "time must be a string")
+  const { link } = getTimeParameters(time, "transactions")
   invariant(typeof id === "string", "id must be a string")
   const transaction = await db.transaction.findFirst({ where: { id } })
-
-  const { link } = getLinkByTime(time, "transactions")
 
   return json({ transaction, link })
 }

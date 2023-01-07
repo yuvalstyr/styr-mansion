@@ -71,6 +71,22 @@ async function seed() {
       })
     })
   )
+  const electricity = getElectricity()
+  await db.electricity.create({
+    data: {
+      totalBill: electricity.totalBill,
+      frontMeasurement: electricity.frontMeasurement,
+      frontConsumption: electricity.frontConsumption,
+      frontCost: electricity.frontCost,
+      basementMeasurement: electricity.basementMeasurement,
+      basementConsumption: electricity.basementConsumption,
+      basementCost: electricity.basementCost,
+      houseCost: electricity.houseCost,
+      rate: electricity.rate,
+      month: electricity.month,
+      year: electricity.year,
+    },
+  })
 }
 
 seed()
@@ -113,4 +129,20 @@ function getTransactions() {
       owner: "Ran",
     },
   ]
+}
+
+function getElectricity() {
+  return {
+    totalBill: 2580,
+    frontMeasurement: 10000,
+    frontConsumption: 2500,
+    frontCost: 250,
+    basementMeasurement: 10000,
+    basementConsumption: 2500,
+    basementCost: 250,
+    houseCost: 2080,
+    rate: 125,
+    month: "11",
+    year: "2022",
+  }
 }

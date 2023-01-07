@@ -2570,6 +2570,20 @@ body[dir="rtl"] .checkbox:checked,
   text-shadow: 0 1px rgb(0 0 0 / var(--glass-text-shadow-opacity, 5%));
 }
 
+.divider-vertical {
+  flex-direction: row;
+}
+
+.divider-vertical:before {
+  height: 0.125rem;
+  width: 100%;
+}
+
+.divider-vertical:after {
+  height: 0.125rem;
+  width: 100%;
+}
+
 .avatar.online:before {
   content: "";
   position: absolute;
@@ -2639,6 +2653,15 @@ body[dir="rtl"] .checkbox:checked,
   border-bottom-right-radius: var(--rounded-btn, 0.5rem);
 }
 
+.divider-vertical {
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  height: 1rem;
+  width: auto;
+}
+
 .table-compact :where(th, td) {
   padding: 0.5rem;
   font-size: 0.875rem;
@@ -2659,6 +2682,13 @@ body[dir="rtl"] .checkbox:checked,
 
 .sticky {
   position: sticky;
+}
+
+.inset-0 {
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
 }
 
 .top-0 {
@@ -2757,8 +2787,16 @@ body[dir="rtl"] .checkbox:checked,
   height: 100vh;
 }
 
+.h-full {
+  height: 100%;
+}
+
 .h-\[20vh\] {
   height: 20vh;
+}
+
+.h-1 {
+  height: 0.25rem;
 }
 
 .max-h-screen {
@@ -2932,10 +2970,6 @@ body[dir="rtl"] .checkbox:checked,
   word-break: normal;
 }
 
-.break-words {
-  overflow-wrap: break-word;
-}
-
 .rounded-full {
   border-radius: 9999px;
 }
@@ -2964,11 +2998,6 @@ body[dir="rtl"] .checkbox:checked,
 .border-gray-500 {
   --tw-border-opacity: 1;
   border-color: rgb(107 114 128 / var(--tw-border-opacity));
-}
-
-.border-gray-300 {
-  --tw-border-opacity: 1;
-  border-color: rgb(209 213 219 / var(--tw-border-opacity));
 }
 
 .border-opacity-30 {
@@ -3003,9 +3032,14 @@ body[dir="rtl"] .checkbox:checked,
   background-color: transparent;
 }
 
-.bg-white {
+.bg-red-100 {
   --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  background-color: rgb(254 226 226 / var(--tw-bg-opacity));
+}
+
+.bg-primary {
+  --tw-bg-opacity: 1;
+  background-color: hsl(var(--p) / var(--tw-bg-opacity));
 }
 
 .bg-gradient-to-br {
@@ -3080,6 +3114,10 @@ body[dir="rtl"] .checkbox:checked,
   padding-bottom: 0.5rem;
 }
 
+.text-center {
+  text-align: center;
+}
+
 .font-sans {
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
@@ -3121,9 +3159,19 @@ body[dir="rtl"] .checkbox:checked,
   font-size: 12px;
 }
 
+.text-base {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
 .text-2xl {
   font-size: 1.5rem;
   line-height: 2rem;
+}
+
+.text-3xl {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
 }
 
 .font-extrabold {
@@ -3203,9 +3251,9 @@ body[dir="rtl"] .checkbox:checked,
   color: rgb(17 24 39 / var(--tw-text-opacity));
 }
 
-.text-gray-500 {
+.text-red-500 {
   --tw-text-opacity: 1;
-  color: rgb(107 114 128 / var(--tw-text-opacity));
+  color: rgb(239 68 68 / var(--tw-text-opacity));
 }
 
 .shadow {
@@ -3230,8 +3278,12 @@ body[dir="rtl"] .checkbox:checked,
   transition-duration: 300ms;
 }
 
-.first-letter\:capitalize::first-letter {
-  text-transform: capitalize;
+.placeholder\:block::-moz-placeholder {
+  display: block;
+}
+
+.placeholder\:block::placeholder {
+  display: block;
 }
 
 .hover\:bg-green-600:hover {
@@ -3244,9 +3296,8 @@ body[dir="rtl"] .checkbox:checked,
   background-color: rgb(185 28 28 / var(--tw-bg-opacity));
 }
 
-.focus\:border-blue-600:focus {
-  --tw-border-opacity: 1;
-  border-color: rgb(37 99 235 / var(--tw-border-opacity));
+.focus\:border-transparent:focus {
+  border-color: transparent;
 }
 
 .focus\:bg-green-400:focus {
@@ -3331,11 +3382,6 @@ body[dir="rtl"] .checkbox:checked,
     border-color: rgb(75 85 99 / var(--tw-border-opacity));
   }
 
-  .dark\:bg-gray-900 {
-    --tw-bg-opacity: 1;
-    background-color: rgb(17 24 39 / var(--tw-bg-opacity));
-  }
-
   .dark\:text-white {
     --tw-text-opacity: 1;
     color: rgb(255 255 255 / var(--tw-text-opacity));
@@ -3346,9 +3392,8 @@ body[dir="rtl"] .checkbox:checked,
     color: rgb(156 163 175 / var(--tw-text-opacity));
   }
 
-  .dark\:focus\:border-blue-500:focus {
-    --tw-border-opacity: 1;
-    border-color: rgb(59 130 246 / var(--tw-border-opacity));
+  .dark\:focus\:border-transparent:focus {
+    border-color: transparent;
   }
 
   .peer:focus ~ .peer-focus\:dark\:text-blue-500 {

@@ -6,25 +6,22 @@ import { repeatedTransactions } from "~/logic/repeatedTransData"
 import { db } from "~/utils/db.server"
 import { debugRemix } from "~/utils/debug"
 import { getTransactionsFromFormData } from "~/utils/form"
-import { getLinkByTime } from "~/utils/time"
+import { getTimeParameters } from "~/utils/time"
 
 export async function loader({ params }: ActionArgs) {
   debugRemix()
   const { time } = params
   invariant(typeof time === "string", "time must be a string")
-
-  const [_, month] = time.split("-")
-  const months = [Number(month), Number(month) + 1]
-  const { link, fullYear, monthFixed } = getLinkByTime(time, "transactions")
-  invariant(typeof fullYear === "string", "fullYear must be a string")
-  invariant(typeof monthFixed === "string", "monthFixed must be a string")
-
+  const { link, year, month, months } = getTimeParameters(time, "transactions")
+  invariant(typeof months === "object", "months must be an array")
+  invariant(typeof year === "string", "year must be a string")
+  invariant(typeof month === "string", "month must be a string")
   // create transactions list
   const transactions = repeatedTransactions.map((t) => {
     return {
       ...t,
-      month: monthFixed,
-      year: fullYear,
+      month,
+      year,
     }
   })
   return json({ backLink: link, transactions, months })
@@ -39,7 +36,7 @@ export async function action({ request, params }: ActionArgs) {
   await db.transaction.createMany({
     data: transactions,
   })
-  const { link } = getLinkByTime(time, "transactions")
+  const { link } = getTimeParameters(time, "transactions")
   return redirect(link)
 }
 
