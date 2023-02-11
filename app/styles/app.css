@@ -2727,6 +2727,10 @@ body[dir="rtl"] .checkbox:checked,
   margin: 1.5rem;
 }
 
+.m-0 {
+  margin: 0px;
+}
+
 .mr-2 {
   margin-right: 0.5rem;
 }

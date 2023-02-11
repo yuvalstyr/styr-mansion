@@ -89,8 +89,6 @@ async function seed() {
   })
 }
 
-seed()
-
 function getTransactions() {
   return [
     {
@@ -146,3 +144,5 @@ function getElectricity() {
     year: "2022",
   }
 }
+
+seed()
