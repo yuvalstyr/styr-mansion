@@ -53,8 +53,14 @@ export function RepeatedTransactionsForm({
           <label className="mr-2">Amount</label>
           <label className="mr-2">Description</label>
 
-          {transactions?.map((t) => {
-            return <RepeatedTransactionsFormRow transaction={t} key={uuid()} />
+          {transactions?.map((t, i) => {
+            return (
+              <RepeatedTransactionsFormRow
+                transaction={t}
+                key={uuid()}
+                index={i}
+              />
+            )
           })}
           <button type="submit" className="btn btn-primary col-start-4 mt-3">
             Save

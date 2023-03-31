@@ -4,7 +4,97 @@ import invariant from "tiny-invariant"
 import { ErrorFallback, InputFloatingLabel } from "~/components/components"
 import { getLastMonthMeasurements } from "~/models/electricity.server"
 import { db } from "~/utils/db.server"
+import { debugRemix } from "~/utils/debug"
 import { convertTimeToYearMonth, getTimeParameters } from "~/utils/time"
+
+async function handleElectricityTransactions({
+  month,
+  year,
+  basementAmount,
+  frontAmount,
+  mainAmount,
+}: {
+  year: string
+  month: string
+  basementAmount: number
+  frontAmount: number
+  mainAmount: number
+}) {
+  //  check if transactions exist
+  const transactions = await db.transaction.findMany({
+    where: { action: "ELECTRICITY", year, month },
+  })
+  //  if there is not a transaction, create one and return
+  if (transactions.length === 0) {
+    // create electricity transactions
+    await db.transaction.create({
+      data: {
+        year,
+        month,
+        action: "ELECTRICITY",
+        amount: frontAmount,
+        description: "Electricity bill for front apartment",
+        type: "EXPENSE",
+        owner: "Tenant",
+      },
+    })
+    await db.transaction.create({
+      data: {
+        year,
+        month,
+        action: "ELECTRICITY",
+        amount: basementAmount,
+        description: "Electricity bill for basement apartment",
+        type: "EXPENSE",
+        owner: "Tenant",
+      },
+    })
+    //  create for main house
+    await db.transaction.create({
+      data: {
+        year,
+        month,
+        action: "ELECTRICITY",
+        amount: mainAmount,
+        description: "Electricity bill for main house",
+        type: "WITHDRAWAL",
+        owner: "Ran",
+      },
+    })
+
+    return { message: "created", status: 201 }
+  }
+
+  //  update transactions
+  const tenantTransactions = transactions.filter((t) => t.owner === "Tenant")
+  const ownerTransaction = transactions.filter((t) => t.owner !== "Tenant")[0]
+
+  // update tenant transactions
+  await db.transaction.update({
+    where: { id: tenantTransactions[0].id },
+    data: {
+      amount: frontAmount,
+      description: "Electricity bill for front apartment",
+    },
+  })
+  await db.transaction.update({
+    where: { id: tenantTransactions[1].id },
+    data: {
+      amount: basementAmount,
+      description: "Electricity bill for basement apartment",
+    },
+  })
+
+  //  update owners transaction
+  await db.transaction.update({
+    where: { id: ownerTransaction.id },
+    data: {
+      amount: mainAmount,
+    },
+  })
+
+  return { message: "updated", status: 204 }
+}
 
 export async function loader({ params }: LoaderArgs) {
   const { time } = params
@@ -22,10 +112,12 @@ export async function loader({ params }: LoaderArgs) {
 }
 
 export async function action({ request, params }: ActionArgs) {
+  debugRemix()
   const formData = await request.formData()
   const intent = formData.get("intent")
   switch (intent) {
     case "calculate":
+      // validate form
       const { time } = params
       invariant(typeof time === "string", "time must be a string")
       const { year, month } = convertTimeToYearMonth(time)
@@ -43,10 +135,18 @@ export async function action({ request, params }: ActionArgs) {
         "basement must be a string"
       )
 
+      //  get previous months measurements and validate
       const lastBill = await getLastMonthMeasurements(month, year)
       if (!lastBill) {
         throw new Response("No last bill", { status: 500 })
       }
+      if (
+        Number(frontMeasurement) < lastBill.frontMeasurement ||
+        Number(basementMeasurement) < lastBill.basementMeasurement
+      ) {
+        throw new Response("Invalid measurements", { status: 400 })
+      }
+      //  calculate consumption and cost
       const basementConsumption =
         Number(basementMeasurement) - lastBill.basementMeasurement
       const basementCost = (basementConsumption * Number(rate)) / 100
@@ -54,7 +154,8 @@ export async function action({ request, params }: ActionArgs) {
         Number(frontMeasurement) - lastBill.frontMeasurement
       const frontCost = (frontConsumption * Number(rate)) / 100
       const houseCost = Number(totalBill) - frontCost - basementCost
-      // find if bill exists
+
+      // find if electricity measurements exists
       const electricity = await db.electricity.findFirst({
         where: { year, month },
       })
@@ -74,25 +175,35 @@ export async function action({ request, params }: ActionArgs) {
             totalBill: Number(totalBill),
           },
         })
-        return { message: "updated", status: 204 }
+      } else {
+        // if bill does not exist, create
+        await db.electricity.create({
+          data: {
+            year,
+            month,
+            frontMeasurement: Number(frontMeasurement),
+            frontConsumption,
+            frontCost,
+            basementMeasurement: Number(basementMeasurement),
+            basementConsumption,
+            basementCost,
+            houseCost,
+            rate: Number(rate),
+            totalBill: Number(totalBill),
+          },
+        })
       }
-      // if bill does not exist, create
-      await db.electricity.create({
-        data: {
-          year,
-          month,
-          frontMeasurement: Number(frontMeasurement),
-          frontConsumption,
-          frontCost,
-          basementMeasurement: Number(basementMeasurement),
-          basementConsumption,
-          basementCost,
-          houseCost,
-          rate: Number(rate),
-          totalBill: Number(totalBill),
-        },
+
+      //  handle transactions
+      const transactions = await handleElectricityTransactions({
+        basementAmount: basementCost,
+        frontAmount: frontCost,
+        mainAmount: houseCost,
+        month,
+        year,
       })
-      return { message: "created", status: 201 }
+
+      return transactions
   }
 }
 

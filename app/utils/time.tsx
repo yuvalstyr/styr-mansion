@@ -81,7 +81,7 @@ export function convertTimeToYearMonth(time: string) {
 // get time as param and create link to /{year}-{month}/{path}
 export function getTimeParameters(time: string, path: string) {
   const { month, year, monthStr, yearStr } = convertTimeToYearMonth(time)
-  const months = month ? [month, String(Number(year) + 1)] : undefined
+  const months = month ? [month, String(Number(month) + 1)] : undefined
 
   return {
     link: getLinkByYearMonthAndPath(yearStr, monthStr, path),

@@ -4,12 +4,10 @@ import invariant from "tiny-invariant"
 import { RepeatedTransactionsForm } from "~/components/RepeatedTransactionsForm"
 import { repeatedTransactions } from "~/logic/repeatedTransData"
 import { db } from "~/utils/db.server"
-import { debugRemix } from "~/utils/debug"
 import { getTransactionsFromFormData } from "~/utils/form"
 import { getTimeParameters } from "~/utils/time"
 
 export async function loader({ params }: ActionArgs) {
-  debugRemix()
   const { time } = params
   invariant(typeof time === "string", "time must be a string")
   const { link, year, month, months } = getTimeParameters(time, "transactions")

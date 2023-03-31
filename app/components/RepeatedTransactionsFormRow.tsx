@@ -1,4 +1,4 @@
-import { useLocation, useTransition } from "@remix-run/react"
+import { useLocation, useNavigation } from "@remix-run/react"
 import { v4 as uuid } from "uuid"
 import { TransactionInput } from "~/models/transactions.server"
 import { checkIfOnPath } from "~/routes/$time/transactions"
@@ -6,6 +6,7 @@ import { getOptions } from "~/utils/form"
 
 type IProps = {
   transaction?: TransactionInput
+  index?: number
 }
 
 export function RepeatedTransactionsFormRow(props: IProps) {
@@ -13,15 +14,15 @@ export function RepeatedTransactionsFormRow(props: IProps) {
   const location = useLocation()
   const isOnNew = checkIfOnPath(location.pathname, "new")
   //  remix hooks
-  const transition = useTransition()
+  const transition = useNavigation()
 
-  const isSubmitting = Boolean(transition.submission)
+  const isSubmitting = Boolean(transition.state === "submitting")
   return (
     <>
       <div className="min-w-[100px] mr-2 mt-2 max-w-xs">
         <input
           type="checkbox"
-          name="include"
+          name={`include-${props.index}`}
           className="checkbox checkbox-primary"
           defaultChecked={true}
         />

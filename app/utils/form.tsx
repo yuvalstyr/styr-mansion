@@ -5,6 +5,7 @@ import {
 } from "@prisma/client"
 import { add, format } from "date-fns"
 import invariant from "tiny-invariant"
+import { repeatedTransactions } from "~/logic/repeatedTransData"
 import { TransactionInput } from "~/models/transactions.server"
 import { monthsPeriodObj } from "./time"
 
@@ -161,7 +162,11 @@ export function getTransactionsFromFormData(
   data: FormData
 ): TransactionInput[] {
   const rows = []
-  const includes = data.getAll("include")
+  //  loop over the number of repeated transactions
+  const includes = []
+  for (let i = 0; i < repeatedTransactions.length; i++) {
+    includes[i] = data.get(`include-${i}`) ? "on" : "off"
+  }
   const types = data.getAll("type")
   const actions = data.getAll("action")
   const owners = data.getAll("owner")
