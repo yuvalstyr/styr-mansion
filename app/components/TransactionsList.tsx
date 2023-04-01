@@ -37,6 +37,16 @@ export function TransactionsList({ transactions, isBusy }: IProps) {
               Repeated
             </button>
           </Link>
+          <Link to="electricity">
+            <button
+              type="submit"
+              name="intent"
+              value="create-transaction"
+              className="justify-self-end btn btn-primary max-w-[150px] min-w-[150px]"
+            >
+              Electricity
+            </button>
+          </Link>
         </div>
       </div>
       <div className="overflow-x-auto">

@@ -1,5 +1,5 @@
 import { Transaction } from "@prisma/client"
-import { Form, Link, useLocation, useTransition } from "@remix-run/react"
+import { Form, Link, useLocation, useNavigation } from "@remix-run/react"
 import { useWindowSize } from "usehooks-ts"
 import { LabelText } from "~/components/components"
 import { checkIfOnPath } from "~/routes/$time/transactions"
@@ -19,9 +19,10 @@ export function TransactionsForm(props: IProps) {
   const isOnNew = checkIfOnPath(location.pathname, "new")
   const isMediumScreen = width < 1440
   //  remix hooks
-  const transition = useTransition()
+  const transition = useNavigation()
 
-  const isSubmitting = Boolean(transition.submission)
+  const isSubmitting = transition.state === "submitting"
+
   return (
     <Form
       method="post"

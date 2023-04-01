@@ -9,7 +9,7 @@ import {
   Outlet,
   useLoaderData,
   useLocation,
-  useTransition,
+  useNavigation,
 } from "@remix-run/react"
 import invariant from "tiny-invariant"
 import { TransactionsList } from "~/components/TransactionsList"
@@ -108,7 +108,7 @@ export function checkIfOnPath(url: string, path: string) {
 
 export default function TransactionsRoute() {
   const data = useLoaderData<typeof loader>()
-  const transition = useTransition()
+  const transition = useNavigation()
   const isBusy = transition.state === "submitting"
   const location = useLocation()
 

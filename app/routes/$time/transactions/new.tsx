@@ -4,7 +4,7 @@ import {
   TransactionType,
 } from "@prisma/client"
 import { ActionFunction, json, LoaderArgs } from "@remix-run/node"
-import { useLoaderData, useTransition } from "@remix-run/react"
+import { useLoaderData, useNavigation } from "@remix-run/react"
 import invariant from "tiny-invariant"
 import { TransactionsForm } from "~/components/TransactionsForm"
 import {
@@ -74,7 +74,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 export default function TransactionsRoute() {
   const data = useLoaderData<typeof loader>()
-  const transition = useTransition()
+  const transition = useNavigation()
   const isBusy = transition.state === "submitting"
 
   return (
