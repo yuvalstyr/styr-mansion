@@ -2782,12 +2782,20 @@ html {
   margin: 0px;
 }
 
+.m-3 {
+  margin: 0.75rem;
+}
+
 .m-6 {
   margin: 1.5rem;
 }
 
 .-mt-20 {
   margin-top: -5rem;
+}
+
+.-mt-5 {
+  margin-top: -1.25rem;
 }
 
 .mb-1 {
@@ -2800,6 +2808,10 @@ html {
 
 .ml-2 {
   margin-left: 0.5rem;
+}
+
+.ml-3 {
+  margin-left: 0.75rem;
 }
 
 .mr-2 {
@@ -2816,6 +2828,10 @@ html {
 
 .mt-3 {
   margin-top: 0.75rem;
+}
+
+.mt-5 {
+  margin-top: 1.25rem;
 }
 
 .mt-6 {

@@ -44,19 +44,25 @@ interface InputWithLabelProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   name: string
   label: string
+  divClassName?: string
+  inputClassName?: string
 }
 
-export function InputWithLabel({ name, label, ...props }: InputWithLabelProps) {
+export function InputWithLabel({
+  name,
+  label,
+  inputClassName,
+  divClassName,
+  ...props
+}: InputWithLabelProps) {
+  const classInput = `input w-full max-w-xs bg-gray-300 text-black ${inputClassName}`
+  const classDiv = `flex flex-col ${divClassName}`
   return (
-    <div className="flex flex-col">
+    <div className={classDiv}>
       <LabelText>
         <label> {`${label}`}:</label>
       </LabelText>
-      <input
-        name={name}
-        className="input w-full max-w-xs bg-gray-300 text-black"
-        {...props}
-      />
+      <input name={name} className={classInput} {...props} />
     </div>
   )
 }

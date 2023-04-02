@@ -19,8 +19,8 @@ export function TransactionItem({
       <td>{action}</td>
       <td>{owner}</td>
       <td>{amount}</td>
-      <td>{year}</td>
       <td>{formatMonth(month)}</td>
+      <td>{year}</td>
       <td>{description}</td>
       <td>
         <div className="flex">

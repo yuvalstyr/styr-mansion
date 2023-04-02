@@ -19,8 +19,9 @@ import {
   getTransactionsListByYearMonth,
 } from "~/models/transactions.server"
 import { convertMonthStrTo2CharStr } from "~/utils/form"
-
+//  TODO - add a way to filter transactions, need to find how to trigger this loader
 export async function loader({ params, request }: LoaderArgs) {
+  console.log("loader")
   const { time } = params
   invariant(typeof time === "string", "time must be a string")
   const [year, month] = time.split("-")
@@ -48,6 +49,7 @@ export async function loader({ params, request }: LoaderArgs) {
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData()
   const intent = formData.get("intent")
+  console.log({ intent })
   switch (intent) {
     case "create-transaction":
       const type = formData.get("type") as TransactionType

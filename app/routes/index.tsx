@@ -1,6 +1,7 @@
 import { TransactionOwner } from "@prisma/client"
 import { json } from "@remix-run/node"
 import { Link, useLoaderData } from "@remix-run/react"
+import { v4 as uuid } from "uuid"
 import { GoToIcon } from "~/components/components"
 import { getTotalsMap, MORAN_RAN } from "~/logic/cost-balancer"
 import {
@@ -73,7 +74,7 @@ export default function StatisticRoute() {
               const period = getMonthValueByName(monthInt)
               const isDebt = Number(item.remains) < 0
               return (
-                <tr key={period + item.owner}>
+                <tr key={uuid()}>
                   <td>
                     <div className="button stat-figure text-secondary">
                       <Link

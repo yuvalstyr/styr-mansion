@@ -104,26 +104,39 @@ export function getTimeSelectFormProps({
   return { title: "No good", yearInput: undefined, monthInput: undefined }
 }
 
-export function getOptions(enumType: TransactionsEnum) {
+export function getOptions(enumType: TransactionsEnum, withEmpty = false) {
+  let options = []
   switch (enumType) {
     case "ACTION":
-      return Object.values(TransactionAction).map((key) => (
+      options = Object.values(TransactionAction).map((key) => (
         <option key={key} value={key}>
           {key}
         </option>
       ))
+      if (withEmpty) {
+        options.unshift(<option key="empty" value=""></option>)
+      }
+      return options
     case "TYPE":
-      return Object.values(TransactionType).map((key) => (
+      options = Object.values(TransactionType).map((key) => (
         <option key={key} value={key}>
           {key}
         </option>
       ))
+      if (withEmpty) {
+        options.unshift(<option key="empty" value=""></option>)
+      }
+      return options
     case "OWNER":
-      return Object.values(TransactionOwner).map((key) => (
+      options = Object.values(TransactionOwner).map((key) => (
         <option key={key} value={key}>
           {key}
         </option>
       ))
+      if (withEmpty) {
+        options.unshift(<option key="empty" value=""></option>)
+      }
+      return options
     case "MONTH_PERIOD":
       return Object.entries(monthsPeriodObj).map(([value, month]) => {
         return (
