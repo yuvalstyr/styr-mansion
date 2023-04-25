@@ -22,7 +22,7 @@ export const repeatedTransactions: TransactionInput[] = [
   },
   {
     action: TransactionAction.MONTHLY_BILL,
-    amount: 3800,
+    amount: 3900,
     description: "rent for basement department",
     month: "please fill",
     owner: "Tenant",

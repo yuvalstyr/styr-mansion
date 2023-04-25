@@ -4,7 +4,7 @@ import {
   TransactionOwner,
   TransactionType,
 } from "@prisma/client"
-import { ActionFunction, json, LoaderArgs } from "@remix-run/node"
+import { ActionFunction, LoaderArgs, json } from "@remix-run/node"
 import {
   Outlet,
   useLoaderData,
@@ -18,10 +18,8 @@ import {
   deleteTransaction,
   getTransactionsListByYearMonth,
 } from "~/models/transactions.server"
-import { convertMonthStrTo2CharStr } from "~/utils/form"
 //  TODO - add a way to filter transactions, need to find how to trigger this loader
 export async function loader({ params, request }: LoaderArgs) {
-  console.log("loader")
   const { time } = params
   invariant(typeof time === "string", "time must be a string")
   const [year, month] = time.split("-")
@@ -30,11 +28,7 @@ export async function loader({ params, request }: LoaderArgs) {
   const months = monthFixed
     ? [monthFixed, String(Number(monthFixed) + 1)]
     : undefined
-  const url = new URL(request.url).pathname
-  const routes = url.split("/")
-  const isOnTransactions = ["transactions", "new"].includes(
-    routes[routes.length - 1]
-  )
+
   const transactions = await getTransactionsListByYearMonth({
     year: yearFixed,
     months,
@@ -49,7 +43,7 @@ export async function loader({ params, request }: LoaderArgs) {
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData()
   const intent = formData.get("intent")
-  console.log({ intent })
+  console.log("here")
   switch (intent) {
     case "create-transaction":
       const type = formData.get("type") as TransactionType
@@ -69,7 +63,7 @@ export const action: ActionFunction = async ({ request }) => {
       if (typeof amount !== "string" || typeof description !== "string") {
         return `Form not submitted correctly.`
       }
-      await createTransaction({
+      const created = await createTransaction({
         action,
         type,
         owner,
@@ -78,12 +72,8 @@ export const action: ActionFunction = async ({ request }) => {
         month: month,
         year: year,
       })
-      const monthFix = Number(month) % 2 ? month : String(Number(month) - 1)
-      const redirectURL = `/${year.slice(2, 4)}-${convertMonthStrTo2CharStr(
-        monthFix
-      )}/transactions`
-      console.log("here")
-      return json({})
+
+      return json({ created })
 
     case "delete-transaction":
       const id = formData.get("id") as string
@@ -126,6 +116,7 @@ export default function TransactionsRoute() {
     }
     return transaction
   })
+
   return (
     <section className="flex flex-1 max-h-[90vh] justify-center">
       <div
