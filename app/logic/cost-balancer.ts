@@ -164,8 +164,10 @@ function fromGroupTransactionsSummary(
             return balance
           }
         case "DEPOSIT":
-          balance.DEPOSIT["all"] += amount
-          return balance
+          if (transaction.owner === "Tenant") {
+            balance.DEPOSIT["all"] += amount
+            return balance
+          }
         case "EXPENSE":
           switch (transaction.owner) {
             case TransactionOwner.Moran:
