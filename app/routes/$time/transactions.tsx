@@ -43,7 +43,6 @@ export async function loader({ params, request }: LoaderArgs) {
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData()
   const intent = formData.get("intent")
-  console.log("here")
   switch (intent) {
     case "create-transaction":
       const type = formData.get("type") as TransactionType

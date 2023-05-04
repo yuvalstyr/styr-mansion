@@ -3,12 +3,13 @@ import {
   TransactionOwner,
   TransactionType,
 } from "@prisma/client"
-import { ActionFunction, json, LoaderArgs, redirect } from "@remix-run/node"
+import { ActionFunction, LoaderArgs, json, redirect } from "@remix-run/node"
 import { Outlet, useLoaderData } from "@remix-run/react"
 import invariant from "tiny-invariant"
 import { TransactionsForm } from "~/components/TransactionsForm"
 import { updateTransaction } from "~/models/transactions.server"
 import { db } from "~/utils/db.server"
+import { debugRemix } from "~/utils/debug"
 import { convertMonthStrTo2CharStr } from "~/utils/form"
 import { getTimeParameters } from "~/utils/time"
 
@@ -23,6 +24,7 @@ export async function loader({ params }: LoaderArgs) {
 }
 
 export const action: ActionFunction = async ({ request, params }) => {
+  debugRemix()
   const form = await request.formData()
   const type = form.get("type") as TransactionType
   const action = form.get("action") as TransactionAction
@@ -32,6 +34,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   const month = form.get("month") ?? "00"
   const year = form.get("year") ?? "00"
   const id = params.transactionID
+  invariant(typeof id === "string", "type must be a string")
   invariant(typeof month === "string", "month must be a string")
   invariant(typeof year === "string", "year must be a string")
   if (typeof amount !== "string" || typeof description !== "string") {
@@ -47,7 +50,7 @@ export const action: ActionFunction = async ({ request, params }) => {
       month: String(Number(month)),
       year: String(Number(year)),
     },
-    where: { id: id ?? "" },
+    where: { id: id },
   })
   const monthFix = Number(month) % 2 ? month : String(Number(month) - 1)
   const redirectURL = `/${year.slice(2, 4)}-${convertMonthStrTo2CharStr(

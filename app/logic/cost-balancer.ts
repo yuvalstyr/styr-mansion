@@ -5,7 +5,6 @@ import {
   getTransactionsListByYearMonthGrouped,
   TransactionsGrouped,
 } from "~/models/transactions.server"
-import { debugRemix } from "~/utils/debug"
 
 export const MORAN_RAN = TransactionOwner.Moran + "+" + TransactionOwner.Ran
 
@@ -72,7 +71,6 @@ function mapToStyrSummary(summaryMap: Summary) {
     summaryMap.EXPENSE[TransactionOwner.Yuval] +
     summaryMap.EXPENSE[TransactionOwner.Tenant]
   const profit = summaryMap.DEPOSIT.all - costPerPeriod
-
   //  balance expenses between yuval and moranran
   const expenseMoranRan = summaryMap.EXPENSE[MORAN_RAN] * 0.41
   const expenseYuval = summaryMap.EXPENSE[TransactionOwner.Yuval] * 0.59
@@ -91,7 +89,10 @@ function mapToStyrSummary(summaryMap: Summary) {
       withdrawal: summaryMap.WITHDRAWAL[MORAN_RAN],
       expense: summaryMap.EXPENSE[MORAN_RAN],
       remains:
-        profitMoranRan + moranRanBalance - summaryMap.WITHDRAWAL[MORAN_RAN],
+        profitMoranRan +
+        moranRanBalance -
+        summaryMap.WITHDRAWAL[MORAN_RAN] +
+        summaryMap.DEPOSIT[MORAN_RAN],
     },
     [TransactionOwner.Yuval]: {
       profit: profitYuval,
@@ -101,7 +102,8 @@ function mapToStyrSummary(summaryMap: Summary) {
       remains:
         profitYuval +
         yuvalBalance -
-        summaryMap.WITHDRAWAL[TransactionOwner.Yuval],
+        summaryMap.WITHDRAWAL[TransactionOwner.Yuval] +
+        summaryMap.DEPOSIT[TransactionOwner.Yuval],
     },
   }
   return { profit, styrSummary }
@@ -121,7 +123,6 @@ async function getTotalsPerPeriodMap(
 }
 
 export async function getTotalsMap() {
-  debugRemix()
   const dbTimes = await getDBYearAndMonth()
 
   const neededPeriods = []
@@ -164,9 +165,18 @@ function fromGroupTransactionsSummary(
             return balance
           }
         case "DEPOSIT":
-          if (transaction.owner === "Tenant") {
-            balance.DEPOSIT["all"] += amount
-            return balance
+          switch (transaction.owner) {
+            case TransactionOwner.Moran:
+            case TransactionOwner.Ran:
+              balance.DEPOSIT[MORAN_RAN] += amount
+              return balance
+            case TransactionOwner.Yuval:
+              balance.DEPOSIT[TransactionOwner.Yuval] += amount
+            case TransactionOwner.Tenant:
+              balance.DEPOSIT["all"] += amount
+              return balance
+            default:
+              throw new Error("unknown owner")
           }
         case "EXPENSE":
           switch (transaction.owner) {
@@ -184,7 +194,7 @@ function fromGroupTransactionsSummary(
       }
     },
     {
-      DEPOSIT: { all: 0 },
+      DEPOSIT: { all: 0, [MORAN_RAN]: 0, [TransactionOwner.Yuval]: 0 },
       EXPENSE: {
         [MORAN_RAN]: 0,
         [TransactionOwner.Yuval]: 0,

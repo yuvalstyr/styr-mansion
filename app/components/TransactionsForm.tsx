@@ -22,12 +22,10 @@ export function TransactionsForm(props: IProps) {
   const transition = useNavigation()
 
   const isSubmitting = transition.state === "submitting"
-
   return (
     <Form
       method="post"
       className="grid grid-cols-1 gap-x-4 gap-y-2 lg:grid-cols-2"
-      action={isMediumScreen ? link : `${link}/new`}
     >
       <div className="min-w-[100px]">
         <div className="flex flex-wrap items-center gap-1">
@@ -157,7 +155,6 @@ export function TransactionsForm(props: IProps) {
         <div className="grid justify-center grid-cols-2 gap-2">
           <button
             type="submit"
-            disabled={false}
             name="intent"
             value="create-transaction"
             className="justify-self-end btn btn-primary max-w-[150px] min-w-[150px]"
