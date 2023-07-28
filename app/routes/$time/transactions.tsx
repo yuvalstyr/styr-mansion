@@ -18,7 +18,6 @@ import {
   deleteTransaction,
   getTransactionsListByYearMonth,
 } from "~/models/transactions.server"
-//  TODO - add a way to filter transactions, need to find how to trigger this loader
 export async function loader({ params, request }: LoaderArgs) {
   const { time } = params
   invariant(typeof time === "string", "time must be a string")

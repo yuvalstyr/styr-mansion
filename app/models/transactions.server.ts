@@ -79,6 +79,7 @@ export function getTransactionsListByYearMonth({
       month: { in: months },
       year: year,
     },
+    orderBy: { type: "asc" },
   })
 }
 
