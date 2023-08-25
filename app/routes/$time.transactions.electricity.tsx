@@ -1,11 +1,12 @@
 import type { ActionArgs, LoaderArgs } from "@remix-run/node"
-import { Form, Link, useCatch, useLoaderData } from "@remix-run/react"
+import { Form, Link, useLoaderData } from "@remix-run/react"
 import invariant from "tiny-invariant"
-import { ErrorFallback, InputFloatingLabel } from "~/components/components"
+import { InputFloatingLabel } from "~/components/components"
 import { getLastMonthMeasurements } from "~/models/electricity.server"
 import { db } from "~/utils/db.server"
 import { debugRemix } from "~/utils/debug"
 import { convertTimeToYearMonth, getTimeParameters } from "~/utils/time"
+import { ErrorBoundary } from "./_index"
 
 async function handleElectricityTransactions({
   month,
@@ -277,21 +278,4 @@ export default function ElectricityRoute() {
   )
 }
 
-export function CatchBoundary() {
-  const caught = useCatch()
-  if (caught.status === 500) {
-    return (
-      <ErrorFallback>
-        For Calculate to work, you need to have a previous bill.
-      </ErrorFallback>
-    )
-  }
-
-  throw new Error(`Unexpected caught response with status: ${caught.status}`)
-}
-
-export function ErrorBoundary({ error }: { error: Error }) {
-  console.error(error)
-
-  return <ErrorFallback>There was a problem. Sorry.</ErrorFallback>
-}
+ErrorBoundary()

@@ -5,6 +5,7 @@ import { StatsCardList } from "~/components/StatsCardList"
 import { TimeSelectBar } from "~/components/TimeSelectBar"
 import { getPeriodSummary } from "~/logic/cost-balancer"
 import { convertMonthStrTo2CharStr, getTimeSelectFormProps } from "~/utils/form"
+import { ErrorBoundary } from "./_index"
 
 export async function loader({ params }: LoaderArgs) {
   const { time } = params
@@ -61,8 +62,4 @@ export default function PeriodSummaryRoute() {
   )
 }
 
-export function ErrorBoundary({ error }: { error: Error }) {
-  console.error(error)
-
-  return <div>Uh oh. I did a whoopsies</div>
-}
+ErrorBoundary()
