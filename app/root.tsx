@@ -1,4 +1,4 @@
-import type { LinksFunction, MetaFunction } from "@remix-run/node"
+import type { LinksFunction, V2_MetaFunction } from "@remix-run/node"
 import {
   Links,
   LiveReload,
@@ -13,11 +13,11 @@ export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }]
 }
 
-export const meta: MetaFunction = () => ({
-  charset: "utf-8",
-  viewport: "width=device-width,initial-scale=1",
-  title: "Styr Mansion",
-})
+export const meta: V2_MetaFunction = () => [
+  { charset: "utf-8" },
+  { viewport: "width=device-width,initial-scale=1" },
+  { title: "Styr Mansion" },
+]
 
 function Document({
   children,
