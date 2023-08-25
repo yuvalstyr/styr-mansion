@@ -6,6 +6,8 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  isRouteErrorResponse,
+  useRouteError,
 } from "@remix-run/react"
 import styles from "./styles/app.css"
 
@@ -18,6 +20,29 @@ export const meta: V2_MetaFunction = () => [
   { viewport: "width=device-width,initial-scale=1" },
   { title: "Styr Mansion" },
 ]
+
+export function ErrorBoundary() {
+  const error = useRouteError()
+  if (isRouteErrorResponse(error)) return <div>Uh oh. I did a whoopsies</div>
+
+  // Don't forget to typecheck with your own logic.
+  // Any value can be thrown, not just errors!
+  let errorMessage = "Unknown error"
+  if (isDefinitelyAnError(error)) {
+    errorMessage = error.message
+  }
+  return (
+    <div>
+      <h1>Uh oh ...</h1>
+      <p>Something went wrong.</p>
+      <pre>{errorMessage}</pre>
+    </div>
+  )
+}
+
+export function isDefinitelyAnError(error: unknown): error is Error {
+  return error instanceof Error
+}
 
 function Document({
   children,

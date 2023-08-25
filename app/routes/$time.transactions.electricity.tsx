@@ -6,7 +6,6 @@ import { getLastMonthMeasurements } from "~/models/electricity.server"
 import { db } from "~/utils/db.server"
 import { debugRemix } from "~/utils/debug"
 import { convertTimeToYearMonth, getTimeParameters } from "~/utils/time"
-import { ErrorBoundary } from "./_index"
 
 async function handleElectricityTransactions({
   month,
@@ -277,5 +276,3 @@ export default function ElectricityRoute() {
     </div>
   )
 }
-
-ErrorBoundary()

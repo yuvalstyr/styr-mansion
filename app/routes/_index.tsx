@@ -1,11 +1,6 @@
 import { TransactionOwner } from "@prisma/client"
 import { json } from "@remix-run/node"
-import {
-  Link,
-  isRouteErrorResponse,
-  useLoaderData,
-  useRouteError,
-} from "@remix-run/react"
+import { Link, useLoaderData } from "@remix-run/react"
 import { v4 as uuid } from "uuid"
 import { GoToIcon } from "~/components/components"
 import { MORAN_RAN, getTotalsMap } from "~/logic/cost-balancer"
@@ -106,28 +101,4 @@ export default function StatisticRoute() {
       </div>
     </div>
   )
-}
-
-export function ErrorBoundary() {
-  const error = useRouteError()
-  console.error(error)
-  if (isRouteErrorResponse(error)) return <div>Uh oh. I did a whoopsies</div>
-
-  // Don't forget to typecheck with your own logic.
-  // Any value can be thrown, not just errors!
-  let errorMessage = "Unknown error"
-  if (isDefinitelyAnError(error)) {
-    errorMessage = error.message
-  }
-  return (
-    <div>
-      <h1>Uh oh ...</h1>
-      <p>Something went wrong.</p>
-      <pre>{errorMessage}</pre>
-    </div>
-  )
-}
-
-export function isDefinitelyAnError(error: unknown): error is Error {
-  return error instanceof Error
 }
