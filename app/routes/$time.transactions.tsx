@@ -115,8 +115,8 @@ export default function TransactionsRoute() {
     return transaction
   })
   console.log(transactions)
-  // sort by type, action, owner, month, year, amount
 
+  // sort by type, action, owner, month, year, amount
   transactions.sort((a, b) => {
     // Sort by year
     if (a.year !== b.year) {
@@ -140,8 +140,14 @@ export default function TransactionsRoute() {
       return actionComparison
     }
 
+    // Sort by type
+    const typeComparison = a.type.localeCompare(b.type)
+    if (typeComparison !== 0) {
+      return typeComparison
+    }
+
     // Sort by amount (ascending)
-    return a.amount - b.amount
+    return b.amount - a.amount
   })
 
   return (
