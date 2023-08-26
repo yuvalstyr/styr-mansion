@@ -1,5 +1,5 @@
-import { Form } from "@remix-run/react"
-import { LabelText } from "~/components/components"
+import { Form, Link } from "@remix-run/react"
+import { HomeIcon, LabelText } from "~/components/components"
 import { FormTitleResponse, getOptions } from "~/utils/form"
 
 export function TimeSelectBar({
@@ -10,9 +10,14 @@ export function TimeSelectBar({
   return (
     <Form method="post">
       <div className="bg-base-100 grid grid-cols-[3fr,4fr] border-base-content border-2 border-opacity-20 items-center">
-        <h1 className="font-serif text-4xl leading-normal font-extrabold text-transparent bg-clip-text from-primary to-secondary text-primary-content bg-gradient-to-br  mt-0 mb-2">
-          {title ?? "no title"}
-        </h1>
+        <div className="flex flex-wrap items-center gap-1 ml-2">
+          <Link to={`/`} className="btn btn-secondary rounded-full mr-4">
+            <HomeIcon />
+          </Link>
+          <h1 className="font-serif text-4xl leading-normal font-extrabold text-transparent bg-clip-text from-primary to-secondary text-primary-content bg-gradient-to-br  mt-0 mb-2">
+            {title ?? "no title"}
+          </h1>
+        </div>
         <div className="grid grid-cols-3 gap-1 items-center lg:grid-cols-[minmax(200px,1fr),minmax(200px,1fr),2fr] mt-0 mb-2">
           <div className="min-w-[150px]">
             <div className="flex flex-wrap items-center ">
