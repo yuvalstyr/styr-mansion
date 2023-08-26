@@ -60,9 +60,3 @@ export default function PeriodSummaryRoute() {
     </main>
   )
 }
-
-export function ErrorBoundary({ error }: { error: Error }) {
-  console.error(error)
-
-  return <div>Uh oh. I did a whoopsies</div>
-}

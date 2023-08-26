@@ -114,6 +114,41 @@ export default function TransactionsRoute() {
     }
     return transaction
   })
+  console.log(transactions)
+
+  // sort by type, action, owner, month, year, amount
+  transactions.sort((a, b) => {
+    // Sort by year
+    if (a.year !== b.year) {
+      return Number(a.year) - Number(b.year)
+    }
+
+    // Sort by month
+    if (a.month !== b.month) {
+      return Number(a.month) - Number(b.month)
+    }
+
+    // Sort by owner
+    const ownerComparison = a.owner.localeCompare(b.owner)
+    if (ownerComparison !== 0) {
+      return ownerComparison
+    }
+
+    // Sort by action
+    const actionComparison = a.action.localeCompare(b.action)
+    if (actionComparison !== 0) {
+      return actionComparison
+    }
+
+    // Sort by type
+    const typeComparison = a.type.localeCompare(b.type)
+    if (typeComparison !== 0) {
+      return typeComparison
+    }
+
+    // Sort by amount (ascending)
+    return b.amount - a.amount
+  })
 
   return (
     <section className="flex flex-1 max-h-[90vh] justify-center">

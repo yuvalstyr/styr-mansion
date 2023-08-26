@@ -3,7 +3,7 @@ import { json } from "@remix-run/node"
 import { Link, useLoaderData } from "@remix-run/react"
 import { v4 as uuid } from "uuid"
 import { GoToIcon } from "~/components/components"
-import { getTotalsMap, MORAN_RAN } from "~/logic/cost-balancer"
+import { MORAN_RAN, getTotalsMap } from "~/logic/cost-balancer"
 import {
   convertMonthToMonthPeriod,
   getCurrentDatePeriodPath,
@@ -101,10 +101,4 @@ export default function StatisticRoute() {
       </div>
     </div>
   )
-}
-
-export function ErrorBoundary({ error }: { error: Error }) {
-  console.error(error)
-
-  return <div>Uh oh. I did a whoopsies</div>
 }

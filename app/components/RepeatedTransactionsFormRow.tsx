@@ -1,7 +1,7 @@
 import { useLocation, useNavigation } from "@remix-run/react"
 import { v4 as uuid } from "uuid"
 import { TransactionInput } from "~/models/transactions.server"
-import { checkIfOnPath } from "~/routes/$time/transactions"
+import { checkIfOnPath } from "~/routes/$time.transactions"
 import { getOptions } from "~/utils/form"
 
 type IProps = {

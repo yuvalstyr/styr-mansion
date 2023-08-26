@@ -2,7 +2,7 @@ import { Transaction } from "@prisma/client"
 import { Form, Link, useLocation, useNavigation } from "@remix-run/react"
 import { useWindowSize } from "usehooks-ts"
 import { LabelText } from "~/components/components"
-import { checkIfOnPath } from "~/routes/$time/transactions"
+import { checkIfOnPath } from "~/routes/$time.transactions"
 import { getOptions } from "~/utils/form"
 
 type IProps = {
