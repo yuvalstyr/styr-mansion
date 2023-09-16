@@ -1,4 +1,4 @@
-import { Prisma, Transaction } from "@prisma/client"
+import type { Prisma, Transaction } from "@prisma/client"
 import { db } from "~/utils/db.server"
 
 export type TransactionInput = Omit<

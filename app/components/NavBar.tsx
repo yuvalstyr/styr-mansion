@@ -4,10 +4,11 @@ import { useWindowSize } from "usehooks-ts"
 export function NavBar({ transactionsLink }: { transactionsLink: string }) {
   const { width } = useWindowSize()
   const isMediumScreen = width < 1440
+
   return (
     <nav className="navbar bg-base-100 sticky top-0 z-30">
       <div className="flex-1 font-sans text-lg ">
-        <a className="btn btn-ghost normal-case text-3xl">
+      <a className="btn btn-ghost normal-case text-3xl" href="home">
           <span className="text-primary">Styr</span>
           <span className="text-base-content">Mansion</span>
         </a>
