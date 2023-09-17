@@ -1,11 +1,10 @@
-import { TransactionOwner, TransactionType } from "@prisma/client"
-
+import  {  TransactionType } from "@prisma/client"
+import {TransactionOwner} from "prisma/prisma-client"
 import {
   getDBYearAndMonth,
   getTransactionsListByYearMonthGrouped,
-  TransactionsGrouped,
 } from "~/models/transactions.server"
-
+import { TransactionsGrouped } from "~/models/transactions.server"
 export const MORAN_RAN = TransactionOwner.Moran + "+" + TransactionOwner.Ran
 
 export type TenantSummary = {

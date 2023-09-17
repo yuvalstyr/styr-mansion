@@ -11,7 +11,7 @@ export function NavBar({ transactionsLink }: { transactionsLink: string }) {
       <a className="btn btn-ghost normal-case text-3xl" href="home">
           <span className="text-primary">Styr</span>
           <span className="text-base-content">Mansion</span>
-        </a>
+       </a>
       </div>
       <div>
         <div className="btn gap-1 normal-case btn-ghost">
