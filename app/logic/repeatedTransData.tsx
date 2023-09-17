@@ -4,7 +4,7 @@ import { TransactionInput } from "~/models/transactions.server"
 export const repeatedTransactions: TransactionInput[] = [
   {
     action: TransactionAction.MONTHLY_BILL,
-    amount: 5700,
+    amount: 11400,
     description: "rent for front department",
     month: "please fill",
     owner: "Tenant",
@@ -13,7 +13,7 @@ export const repeatedTransactions: TransactionInput[] = [
   },
   {
     action: TransactionAction.MONTHLY_BILL,
-    amount: 8000,
+    amount: 16000,
     description: "rent for big house",
     month: "please fill",
     owner: "Tenant",
@@ -22,7 +22,7 @@ export const repeatedTransactions: TransactionInput[] = [
   },
   {
     action: TransactionAction.MONTHLY_BILL,
-    amount: 3900,
+    amount: 7900,
     description: "rent for basement department",
     month: "please fill",
     owner: "Tenant",
@@ -31,7 +31,7 @@ export const repeatedTransactions: TransactionInput[] = [
   },
   {
     action: TransactionAction.MONTHLY_BILL,
-    amount: 450,
+    amount: 900,
     description: "arnona department",
     month: "please fill",
     owner: "Tenant",
@@ -40,7 +40,7 @@ export const repeatedTransactions: TransactionInput[] = [
   },
   {
     action: TransactionAction.MONTHLY_BILL,
-    amount: 385,
+    amount: 750,
     description: "arnona basement",
     month: "please fill",
     owner: "Tenant",
@@ -49,7 +49,7 @@ export const repeatedTransactions: TransactionInput[] = [
   },
   {
     action: TransactionAction.MONTHLY_BILL,
-    amount: 8000,
+    amount: 16000,
     description: "rent for front department",
     month: "please fill",
     owner: "Ran",
@@ -58,7 +58,7 @@ export const repeatedTransactions: TransactionInput[] = [
   },
   {
     action: TransactionAction.MONTHLY_BILL,
-    amount: 1304,
+    amount: 2600,
     description: "arnona",
     month: "please fill",
     owner: "Ran",
