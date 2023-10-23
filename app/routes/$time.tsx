@@ -1,4 +1,4 @@
-import { ActionFunction, LoaderArgs, redirect } from "@remix-run/node"
+import { ActionFunction, LoaderFunctionArgs, redirect } from "@remix-run/node"
 import { Outlet, useLoaderData } from "@remix-run/react"
 import invariant from "tiny-invariant"
 import { StatsCardList } from "~/components/StatsCardList"
@@ -6,7 +6,7 @@ import { TimeSelectBar } from "~/components/TimeSelectBar"
 import { getPeriodSummary } from "~/logic/cost-balancer"
 import { convertMonthStrTo2CharStr, getTimeSelectFormProps } from "~/utils/form"
 
-export async function loader({ params }: LoaderArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
   const { time } = params
   invariant(typeof time === "string", "time must be a string")
   const [year, month] = time.split("-")

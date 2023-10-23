@@ -1,4 +1,4 @@
-import type { ActionArgs, LoaderArgs } from "@remix-run/node"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node"
 import { Form, Link, useLoaderData } from "@remix-run/react"
 import invariant from "tiny-invariant"
 import { InputFloatingLabel } from "~/components/components"
@@ -96,7 +96,7 @@ async function handleElectricityTransactions({
   return { message: "updated", status: 204 }
 }
 
-export async function loader({ params }: LoaderArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
   const { time } = params
   invariant(typeof time === "string", "time must be a string")
   const { year, month } = convertTimeToYearMonth(time)
@@ -111,7 +111,7 @@ export async function loader({ params }: LoaderArgs) {
   return { title, electricity, link }
 }
 
-export async function action({ request, params }: ActionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   debugRemix()
   const formData = await request.formData()
   const intent = formData.get("intent")

@@ -1,4 +1,4 @@
-import { ActionArgs, json, redirect } from "@remix-run/node"
+import { ActionFunctionArgs, json, redirect } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
 import invariant from "tiny-invariant"
 import { RepeatedTransactionsForm } from "~/components/RepeatedTransactionsForm"
@@ -7,7 +7,7 @@ import { db } from "~/utils/db.server"
 import { getTransactionsFromFormData } from "~/utils/form"
 import { getTimeParameters } from "~/utils/time"
 
-export async function loader({ params }: ActionArgs) {
+export async function loader({ params }: ActionFunctionArgs) {
   const { time } = params
   invariant(typeof time === "string", "time must be a string")
   const { link, year, month, months } = getTimeParameters(time, "transactions")
@@ -25,7 +25,7 @@ export async function loader({ params }: ActionArgs) {
   return json({ backLink: link, transactions, months })
 }
 
-export async function action({ request, params }: ActionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   const formData = await request.formData()
   const transactions = getTransactionsFromFormData(formData)
   const { time } = params

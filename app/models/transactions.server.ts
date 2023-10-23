@@ -1,14 +1,20 @@
-import type { Prisma, Transaction } from "@prisma/client"
+import {
+  TransactionAction,
+  TransactionOwner,
+  TransactionType,
+  type Transaction,
+} from "@prisma/client"
 import { db } from "~/utils/db.server"
 
 export type TransactionInput = Omit<
   Transaction,
   "id" | "createdAt" | "updatedAt"
 >
-export type TransactionsGrouped = Prisma.PickArray<
-  Prisma.TransactionGroupByOutputType,
-  ("type" | "action" | "owner")[]
-> & {
+
+export type TransactionsGrouped = {
+  owner: TransactionOwner
+  type: TransactionType
+  action: TransactionAction
   _sum: {
     amount: number | null
   }

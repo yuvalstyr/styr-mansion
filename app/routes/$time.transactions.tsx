@@ -4,7 +4,7 @@ import {
   TransactionOwner,
   TransactionType,
 } from "@prisma/client"
-import { ActionFunction, LoaderArgs, json } from "@remix-run/node"
+import { ActionFunction, LoaderFunctionArgs, json } from "@remix-run/node"
 import {
   Outlet,
   useLoaderData,
@@ -18,7 +18,8 @@ import {
   deleteTransaction,
   getTransactionsListByYearMonth,
 } from "~/models/transactions.server"
-export async function loader({ params, request }: LoaderArgs) {
+
+export async function loader({ params, request }: LoaderFunctionArgs) {
   const { time } = params
   invariant(typeof time === "string", "time must be a string")
   const [year, month] = time.split("-")

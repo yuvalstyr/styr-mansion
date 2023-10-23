@@ -1,10 +1,10 @@
-import  {  TransactionType } from "@prisma/client"
-import {TransactionOwner} from "prisma/prisma-client"
+import { TransactionType } from "@prisma/client"
+import { TransactionOwner } from "prisma/prisma-client"
+import type { TransactionsGrouped } from "~/models/transactions.server"
 import {
   getDBYearAndMonth,
   getTransactionsListByYearMonthGrouped,
 } from "~/models/transactions.server"
-import { TransactionsGrouped } from "~/models/transactions.server"
 export const MORAN_RAN = TransactionOwner.Moran + "+" + TransactionOwner.Ran
 
 export type TenantSummary = {
@@ -152,7 +152,11 @@ function fromGroupTransactionsSummary(
 ): Summary {
   return transactions.reduce(
     (balance, transaction) => {
-      const amount = transaction._sum.amount
+      const amount = transaction
+        ? transaction._sum
+          ? transaction._sum.amount ?? 0
+          : 0
+        : 0
       if (!amount) return balance
       switch (transaction.type) {
         case "WITHDRAWAL":

@@ -3,7 +3,7 @@ import {
   TransactionOwner,
   TransactionType,
 } from "@prisma/client"
-import { ActionFunction, json, LoaderArgs } from "@remix-run/node"
+import { ActionFunction, LoaderFunctionArgs, json } from "@remix-run/node"
 import { useLoaderData, useNavigation } from "@remix-run/react"
 import invariant from "tiny-invariant"
 import { TransactionsForm } from "~/components/TransactionsForm"
@@ -14,7 +14,7 @@ import {
 import { convertMonthStrTo2CharStr } from "~/utils/form"
 import { getTimeParameters } from "~/utils/time"
 
-export async function loader({ params }: LoaderArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
   const { time } = params
   invariant(typeof time === "string", "time must be a string")
   const { year, month, link } = getTimeParameters(time, "transactions")
