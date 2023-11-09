@@ -1,6 +1,6 @@
 import { Form, Link } from "@remix-run/react"
 import { v4 as uuid } from "uuid"
-import { TransactionInput } from "~/models/transactions.server"
+import type { TransactionInput } from "~/models/transactions.server"
 import { LabelText } from "./components"
 import { RepeatedTransactionsFormRow } from "./RepeatedTransactionsFormRow"
 

@@ -19,7 +19,7 @@ import {
   getTransactionsListByYearMonth,
 } from "~/models/transactions.server"
 
-export async function loader({ params, request }: LoaderFunctionArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
   const { time } = params
   invariant(typeof time === "string", "time must be a string")
   const [year, month] = time.split("-")
@@ -154,9 +154,8 @@ export default function TransactionsRoute() {
   return (
     <section className="flex flex-1 max-h-[90vh] justify-center">
       <div
-        className={`flex-1  overflow-auto ${
-          isOnTransactions || isOnRepeated ? "block" : "hidden lg:block"
-        }`}
+        className={`flex-1  overflow-auto ${isOnTransactions || isOnRepeated ? "block" : "hidden lg:block"
+          }`}
       >
         <TransactionsList isBusy={isBusy} transactions={transactions} />
       </div>
