@@ -154,8 +154,9 @@ export default function TransactionsRoute() {
   return (
     <section className="flex flex-1 max-h-[90vh] justify-center">
       <div
-        className={`flex-1  overflow-auto ${isOnTransactions || isOnRepeated ? "block" : "hidden lg:block"
-          }`}
+        className={`flex-1  overflow-auto ${
+          isOnTransactions || isOnRepeated ? "block" : "hidden lg:block"
+        }`}
       >
         <TransactionsList isBusy={isBusy} transactions={transactions} />
       </div>
