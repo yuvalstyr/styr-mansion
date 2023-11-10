@@ -16,12 +16,18 @@ import { TransactionsList } from "~/components/TransactionsList"
 import {
   createTransaction,
   deleteTransaction,
+  getAllTransactions,
   getTransactionsListByYearMonth,
 } from "~/models/transactions.server"
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { time } = params
   invariant(typeof time === "string", "time must be a string")
+  if (time === "all") {
+    const allTransactions = await getAllTransactions()
+    console.log("length", allTransactions.length)
+    return json({ transactions: allTransactions, year: "all", month: "all" })
+  }
   const [year, month] = time.split("-")
   const yearFixed = year === "00" ? undefined : String(Number(year) + 2000)
   const monthFixed = month === "00" ? undefined : String(Number(month))
@@ -115,7 +121,6 @@ export default function TransactionsRoute() {
     }
     return transaction
   })
-  console.log(transactions)
 
   // sort by type, action, owner, month, year, amount
   transactions.sort((a, b) => {

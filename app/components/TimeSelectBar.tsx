@@ -18,7 +18,7 @@ export function TimeSelectBar({
             {title ?? "no title"}
           </h1>
         </div>
-        <div className="grid grid-cols-3 gap-1 items-center lg:grid-cols-[minmax(200px,1fr),minmax(200px,1fr),2fr] mt-0 mb-2">
+        <div className="grid grid-cols-3 gap-1 items-center lg:grid-cols-[minmax(200px,1fr),minmax(200px,1fr),3fr,3fr] mt-0 mb-2">
           <div className="min-w-[150px]">
             <div className="flex flex-wrap items-center ">
               <LabelText>
@@ -50,12 +50,19 @@ export function TimeSelectBar({
               {getOptions("YEAR")}
             </select>
           </div>
-          <button
-            className="btn btn-primary max-w-[150px] min-w-[150px] mt-6 ml-2 rounded-lg"
-            type="submit"
-          >
-            Select
-          </button>
+          <div>
+            <button
+              className="btn btn-primary max-w-[150px] min-w-[150px] mt-6 ml-2 rounded-lg"
+              type="submit"
+            >
+              Select
+            </button>
+            <Link to={"/all/transactions"}>
+              <button className="btn btn-primary max-w-[150px] min-w-[150px] mt-6 ml-2 rounded-lg">
+                all
+              </button>
+            </Link>
+          </div>
         </div>
       </div>
     </Form>
