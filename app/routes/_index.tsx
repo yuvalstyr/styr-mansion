@@ -45,7 +45,7 @@ export const loader = async () => {
     }
 
     if (ranMoran.remains < -2 && ranMoran.remains > 2) {
-      ranMoran.remains = 0
+      ranMoranRemains = 0
     }
 
     if (yuvalRemains || ranMoranRemains) {
