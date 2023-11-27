@@ -44,7 +44,7 @@ export const loader = async () => {
       yuvalRemains = 0
     }
 
-    if (ranMoran.remains < -2 && ranMoran.remains > 2) {
+    if (ranMoranRemains < -2 && ranMoranRemains > 2) {
       ranMoranRemains = 0
     }
 
@@ -56,7 +56,7 @@ export const loader = async () => {
 
     if (ranMoranRemains) {
       unbalanced[yearPeriod][MORAN_RAN] = {
-        year,
+        yearranMoran.remains ,
         month,
         owner: MORAN_RAN,
         remains: ranMoran.remains.toFixed(0),
