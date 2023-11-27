@@ -56,7 +56,7 @@ export const loader = async () => {
 
     if (ranMoranRemains) {
       unbalanced[yearPeriod][MORAN_RAN] = {
-        yearranMoran.remains ,
+        year,
         month,
         owner: MORAN_RAN,
         remains: ranMoran.remains.toFixed(0),
