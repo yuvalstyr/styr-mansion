@@ -51,7 +51,7 @@ export const loader = async () => {
       }
     }
 
-    if (ranMoranRemains) {
+    if (ranMoranHasRemains) {
       unbalanced[yearPeriod][MORAN_RAN] = {
         year,
         month,
@@ -60,7 +60,8 @@ export const loader = async () => {
       }
       totals[MORAN_RAN] += ranMoranRemains
     }
-    if (yuvalRemains) {
+
+    if (yuvalHasRemains) {
       unbalanced[yearPeriod][TransactionOwner.Yuval] = {
         year,
         month,
@@ -70,13 +71,11 @@ export const loader = async () => {
       totals[TransactionOwner.Yuval] += yuvalRemains
     }
   }
-
   return json({ unbalanced, currentLinkPath, totals })
 }
 
 export default function StatisticRoute() {
   const { unbalanced, currentLinkPath, totals } = useLoaderData<typeof loader>()
-  console.log({ unbalanced, totals })
   return (
     <div className="grid justify-items-center from-primary">
       <NavBar transactionsLink={currentLinkPath} />
@@ -101,25 +100,23 @@ export default function StatisticRoute() {
               const yuval = unbalanced[key][
                 TransactionOwner.Yuval
               ] as unbalanced
-              const monthInt = Number(
-                moranRan?.month !== undefined ? moranRan?.month : 1
-              )
+              const monthInt = getMonthFromUnblanced(moranRan, yuval)
+              const year = getYearFromUnblanced(moranRan, yuval)
               const period = getMonthValueByName(monthInt)
               return (
                 <tr key={uuid()}>
                   <td>
                     <div className="button stat-figure text-secondary">
                       <Link
-                        to={`/${moranRan?.year.slice(
-                          2,
-                          4
-                        )}-${convertMonthToMonthPeriod(monthInt)}/transactions`}
+                        to={`/${year}-${convertMonthToMonthPeriod(
+                          monthInt
+                        )}/transactions`}
                       >
                         <GoToIcon />
                       </Link>
                     </div>
                   </td>
-                  <td>{moranRan?.year}</td>
+                  <td>{Number(year) + 2000}</td>
                   <td>{period}</td>
                   <td
                     className={`${
@@ -166,4 +163,16 @@ export default function StatisticRoute() {
       </div>
     </div>
   )
+}
+function getMonthFromUnblanced(moranRan: unbalanced, yuval: unbalanced) {
+  const ranMonth = moranRan?.month
+  if (ranMonth) return Number(ranMonth)
+
+  return Number(yuval?.month)
+}
+
+function getYearFromUnblanced(moranRan: unbalanced, yuval: unbalanced) {
+  const ranYear = moranRan?.year
+  if (ranYear) return ranYear.slice(2, 4)
+  return yuval?.year.slice(2, 4)
 }
