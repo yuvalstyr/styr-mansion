@@ -37,18 +37,15 @@ export const loader = async () => {
     const styrSummary = summary.StyrSummary.styrSummary
     const ranMoran = styrSummary[MORAN_RAN]
     const yuval = styrSummary[TransactionOwner.Yuval]
-    let yuvalRemains = Number(yuval.remains.toFixed(0))
-    let ranMoranRemains = Number(ranMoran.remains.toFixed(0))
+    const yuvalRemains = Number(yuval.remains.toFixed(0))
+    const ranMoranRemains = Number(ranMoran.remains.toFixed(0))
+
     //add a check if yuval or ranMoran remains are between -2 to 2, it's considered 0
-    if (yuvalRemains > -2 && yuvalRemains < 2) {
-      yuvalRemains = 0
-    }
 
-    if (ranMoranRemains < -2 && ranMoranRemains > 2) {
-      ranMoranRemains = 0
-    }
+    const yuvalHasRemains = yuvalRemains > 2 || yuvalRemains < -2
+    const ranMoranHasRemains = ranMoranRemains > 2 || ranMoranRemains < -2
 
-    if (yuvalRemains || ranMoranRemains) {
+    if (yuvalHasRemains || ranMoranHasRemains) {
       if (!unbalanced[yearPeriod]) {
         unbalanced[yearPeriod] = {}
       }
