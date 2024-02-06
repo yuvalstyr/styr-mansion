@@ -175,6 +175,7 @@ function fromGroupTransactionsSummary(
               return balance
             case TransactionOwner.Yuval:
               balance.DEPOSIT[TransactionOwner.Yuval] += amount
+              return balance
             case TransactionOwner.Tenant:
               balance.DEPOSIT["all"] += amount
               return balance
