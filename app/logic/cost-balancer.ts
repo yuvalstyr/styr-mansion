@@ -17,7 +17,6 @@ export type TenantSummary = {
 export type StyrSummary = {
   [x: string]: {
     profit: number
-    balance: number
     withdrawal: number
     expense: number
     remains: number
@@ -65,18 +64,12 @@ function mapToTenantSummary(
 }
 
 function mapToStyrSummary(summaryMap: Summary) {
+  console.log({ summaryMap })
   const costPerPeriod =
     summaryMap.EXPENSE[MORAN_RAN] +
     summaryMap.EXPENSE[TransactionOwner.Yuval] +
     summaryMap.EXPENSE[TransactionOwner.Tenant]
   const profit = summaryMap.DEPOSIT.all - costPerPeriod
-  //  balance expenses between yuval and moranran
-  const expenseMoranRan = summaryMap.EXPENSE[MORAN_RAN] * 0.41
-  const expenseYuval = summaryMap.EXPENSE[TransactionOwner.Yuval] * 0.59
-
-  //  balance withdrawal between yuval and moranran
-  const yuvalBalance = expenseYuval - expenseMoranRan
-  const moranRanBalance = yuvalBalance * -1
 
   const profitYuval = profit * 0.41
   const profitMoranRan = profit * 0.59
@@ -84,25 +77,23 @@ function mapToStyrSummary(summaryMap: Summary) {
   const styrSummary: StyrSummary = {
     [MORAN_RAN]: {
       profit: profitMoranRan,
-      balance: moranRanBalance,
       withdrawal: summaryMap.WITHDRAWAL[MORAN_RAN],
       expense: summaryMap.EXPENSE[MORAN_RAN],
       remains:
         profitMoranRan +
-        moranRanBalance -
-        summaryMap.WITHDRAWAL[MORAN_RAN] +
-        summaryMap.DEPOSIT[MORAN_RAN],
+        summaryMap.DEPOSIT[MORAN_RAN] +
+        summaryMap.EXPENSE[MORAN_RAN] -
+        summaryMap.WITHDRAWAL[MORAN_RAN],
     },
     [TransactionOwner.Yuval]: {
       profit: profitYuval,
-      balance: yuvalBalance,
       withdrawal: summaryMap.WITHDRAWAL[TransactionOwner.Yuval],
       expense: summaryMap.EXPENSE[TransactionOwner.Yuval],
       remains:
         profitYuval +
-        yuvalBalance -
-        summaryMap.WITHDRAWAL[TransactionOwner.Yuval] +
-        summaryMap.DEPOSIT[TransactionOwner.Yuval],
+        summaryMap.DEPOSIT[TransactionOwner.Yuval] +
+        summaryMap.EXPENSE[TransactionOwner.Yuval] -
+        summaryMap.WITHDRAWAL[TransactionOwner.Yuval],
     },
   }
   return { profit, styrSummary }
