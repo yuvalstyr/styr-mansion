@@ -4,7 +4,7 @@ import { TransactionInput } from "~/models/transactions.server"
 export const repeatedTransactions: TransactionInput[] = [
   {
     action: TransactionAction.MONTHLY_BILL,
-    amount: 11400,
+    amount: 12800,
     description: "rent for front department",
     month: "please fill",
     owner: "Tenant",
@@ -22,7 +22,7 @@ export const repeatedTransactions: TransactionInput[] = [
   },
   {
     action: TransactionAction.MONTHLY_BILL,
-    amount: 7900,
+    amount: 8800,
     description: "rent for basement department",
     month: "please fill",
     owner: "Tenant",
